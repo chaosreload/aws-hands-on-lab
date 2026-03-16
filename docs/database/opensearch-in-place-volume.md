@@ -187,6 +187,14 @@ aws opensearch update-domain-config \
 !!! tip "待补充"
     Round 2 的逐步扩容测试（100GB → 1TB → 3TB）将在 6h cooldown 后继续执行，届时更新本节数据。
 
+### CloudWatch 节点数监控：确认无 Blue/Green
+
+下图是扩容期间 CloudWatch `Nodes` 指标（1 分钟粒度，Maximum 统计）的实际数据。Blue/Green 部署的典型特征是节点数翻倍（1 → 2），而 DynamicUpdate 期间节点数保持不变。
+
+![CloudWatch Nodes Metric During Expansion](images/opensearch-nodes-during-expansion.png)
+
+两域在整个扩容过程中（橙色区域），节点数始终为 **1.0** — 没有任何节点翻倍，**铁证** DynamicUpdate 生效。
+
 ### 关键发现
 
 **1. 扩容幅度不影响耗时**
