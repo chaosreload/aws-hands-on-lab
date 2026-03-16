@@ -1,0 +1,80 @@
+site_name: AWS Hands-on Lab
+site_url: https://chaosreload.github.io/aws-hands-on-lab/
+site_description: AWS 动手实验室 — 从概念到实操的技术指南
+site_author: chaosreload
+repo_url: https://github.com/chaosreload/aws-hands-on-lab
+repo_name: chaosreload/aws-hands-on-lab
+
+theme:
+  name: material
+  language: zh
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep orange
+      accent: orange
+      toggle:
+        icon: material/brightness-7
+        name: 切换到暗色模式
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep orange
+      accent: orange
+      toggle:
+        icon: material/brightness-4
+        name: 切换到亮色模式
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.tabs.link
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search:
+      lang:
+        - zh
+        - en
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+nav:
+  - 首页: index.md
+  - AI/ML:
+    - ai-ml/index.md
+  - Compute:
+    - compute/index.md
+  - Networking:
+    - networking/index.md
+  - Storage:
+    - storage/index.md
+  - Database:
+    - database/index.md
+  - Security:
+    - security/index.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/chaosreload
