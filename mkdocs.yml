@@ -71,6 +71,7 @@ nav:
     - storage/index.md
   - Database:
     - database/index.md
+    - OpenSearch 原地扩容实测: database/opensearch-in-place-volume.md
   - Security:
     - security/index.md
 
