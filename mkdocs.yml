@@ -63,6 +63,7 @@ nav:
   - 首页: index.md
   - AI/ML:
     - ai-ml/index.md
+    - AgentCore Runtime Shell Command 实测: ai-ml/agentcore-runtime-shell-command.md
   - Compute:
     - compute/index.md
   - Networking:
