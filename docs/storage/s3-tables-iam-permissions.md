@@ -128,8 +128,29 @@ aws athena start-query-execution \
   --work-group primary
 ```
 
-!!! warning "必须用 Athena DDL 创建表"
-    虽然 `aws s3tables create-table` 也能创建表，但它不会设置 Iceberg metadata_location。通过 Athena DDL 创建的表才能正常 INSERT/SELECT。
+!!! tip "两种建表方式"
+    除了 Athena DDL，也可以用 `aws s3tables create-table` 创建表，但需要在 JSON 定义中包含完整的 `metadata.iceberg.schema`：
+    ```json
+    {
+        "tableBucketARN": "arn:aws:s3tables:us-east-1:ACCOUNT:bucket/my-analytics-tables",
+        "namespace": "mydata",
+        "name": "orders",
+        "format": "ICEBERG",
+        "metadata": {
+            "iceberg": {
+                "schema": {
+                    "fields": [
+                        {"name": "order_id", "type": "int", "required": true},
+                        {"name": "order_date", "type": "date"},
+                        {"name": "amount", "type": "double"},
+                        {"name": "customer", "type": "string"}
+                    ]
+                }
+            }
+        }
+    }
+    ```
+    如果省略 `metadata` 参数，表会缺少 Iceberg `metadata_location`，导致 INSERT/SELECT 报错。
 
 ### Step 4: 写入和查询数据
 
@@ -174,12 +195,12 @@ aws athena start-query-execution \
 
 ## 踩坑记录
 
-!!! warning "用 Athena DDL 创建表，不要用 S3 Tables API"
-    `aws s3tables create-table` 创建的表没有 Iceberg `metadata_location` 属性。INSERT 时会报错：
+!!! warning "用 S3 Tables API 建表时必须带 schema"
+    如果用 `aws s3tables create-table` 但省略了 `metadata.iceberg.schema` 参数，表会缺少 Iceberg `metadata_location` 属性。INSERT 时会报错：
     ```
     ICEBERG_INVALID_METADATA: Table is missing [metadata_location] property
     ```
-    必须通过 Athena 的 `CREATE TABLE` DDL 创建。
+    解决方法：在 `create-table` 的 JSON 定义中包含完整的 `metadata` 字段（见 Step 3），或者用 Athena DDL 创建。
 
 !!! warning "大写名称自动转小写"
     文档说表名和列名必须全小写，否则查询会失败。但实测通过 Athena DDL 创建时：
@@ -252,7 +273,7 @@ aws s3 rb s3://your-athena-results-bucket --force
 
 1. **新项目默认 IAM-only** — 简单够用，别过度设计
 2. **表名列名全小写** — 虽然 Athena DDL 会自动转换，但养成好习惯
-3. **用 Athena DDL 建表** — S3 Tables API 建的表缺 Iceberg metadata
+3. **建表时带完整 schema** — 无论用 Athena DDL 还是 S3 Tables API，都要确保表有完整的 Iceberg schema 定义
 4. **每个 Region 只需集成一次** — 创建 `s3tablescatalog` 后，所有 table bucket 自动出现在 Data Catalog
 
 ## 参考链接
