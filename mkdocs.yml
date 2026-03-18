@@ -70,6 +70,7 @@ nav:
     - networking/index.md
   - Storage:
     - storage/index.md
+    - S3 Tables IAM-only 权限实测: storage/s3-tables-iam-permissions.md
   - Database:
     - database/index.md
     - OpenSearch 原地扩容实测: database/opensearch-in-place-volume.md
