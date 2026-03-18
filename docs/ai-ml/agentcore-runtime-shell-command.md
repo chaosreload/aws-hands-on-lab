@@ -62,6 +62,15 @@ InvokeAgentRuntimeCommand─→│  Shell 命令执行（确定性）    │
 - **文件系统持久**：同一 session 内，文件跨命令共享
 - **不阻塞 agent**：命令执行和 agent 推理可以并发
 
+### API 限制
+
+| 参数 | 限制 | 说明 |
+|------|------|------|
+| command 大小 | 1 byte ~ 64 KB | 超过会返回 ValidationException |
+| timeout | 1 ~ 3600 秒 | 最大 1 小时 |
+| session ID | ≥ 33 字符 | 建议使用 UUID |
+| API 速率 | 25 TPS | 超过会返回 ThrottlingException，需实现指数退避 |
+
 ## 动手实践
 
 ### Step 1: 创建 AgentCore 项目
@@ -227,11 +236,14 @@ run_command('/bin/bash -c "seq 1 100000"', timeout=60)
 | 超时精度 | ±0.3s | timeout=5 → 实际 5.26s |
 | 最大输出验证 | 100k 行 / 589KB | 无截断，每行一个 delta |
 | contentDelta 粒度 | 每行一个事件 | stdout 和 stderr 各自独立事件 |
+| command 大小上限 | 64 KB | 官方文档限制（ValidationException） |
+| timeout 上限 | 3600s（1 小时） | 官方文档限制 |
+| API 速率限制 | 25 TPS | 超过返回 ThrottlingException |
 
 ## 踩坑记录
 
-!!! warning "必须使用 BedrockAgentCoreApp SDK"
-    自定义 HTTP 服务器（如 Flask）不能直接作为 AgentCore Runtime 容器。必须使用官方 `bedrock-agentcore` SDK 的 `BedrockAgentCoreApp` 实现标准接口，否则所有命令返回 500。
+!!! warning "Agent 必须实现标准端点契约"
+    AgentCore Runtime 要求 agent 容器实现 `/invocations` POST 和 `/ping` GET 两个端点（[服务契约文档](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-service-contract.html)）。你可以用任何 Web 框架（FastAPI、Flask 等）实现，也可以用官方 `bedrock-agentcore` SDK 的 `BedrockAgentCoreApp`（自动处理端点注册）。如果使用 Direct Code Deploy，则需要 `@app.entrypoint` 注解或手动实现端点。
 
 !!! warning "仅支持 arm64 架构"
     AgentCore Runtime microVM 运行在 arm64（Graviton）上。如果用容器部署，Docker 镜像必须是 `linux/arm64`。使用 Direct Code Deploy 则由平台自动处理。
@@ -242,8 +254,8 @@ run_command('/bin/bash -c "seq 1 100000"', timeout=60)
 !!! warning "新 API 需要最新 SDK"
     AWS CLI v2.33 尚未包含 `invoke-agent-runtime-command` 子命令。需要通过 boto3 ≥ 1.42.70 直接调用 Python API。
 
-!!! warning "Region 支持"
-    公告说支持 14 个 Region 包括 Singapore，但实测 `ap-southeast-1` 的 Control Plane 返回 `AccessDeniedException`。`us-east-1` 正常。如果遇到权限问题，换 Region 试试。
+!!! warning "注意 ARN 和 ECR URI 中的变量替换"
+    使用 AWS CLI 或脚本部署时，确保 IAM Role ARN 和 ECR URI 中的 Account ID、Region 正确填写。如果使用 shell 变量（如 `$ACCOUNT_ID`、`$REGION`），务必确认变量已正确导出，否则会得到 `AccessDeniedException`（ARN 格式错误导致鉴权失败）。本 Lab 支持 [14 个 Region](https://aws.amazon.com/about-aws/whats-new/2026/03/bedrock-agentcore-runtime-shell-command/)，包括 Singapore（ap-southeast-1）。
 
 !!! tip "response['stream'] 不是 response['body']"
     boto3 返回的事件流在 `response['stream']` 中（EventStream 类型），不是 `response['body']`。`contentDelta` 的输出字段是 `stdout` 和 `stderr`（不是 `text`）。
@@ -311,7 +323,7 @@ aws iam delete-role --role-name AgentCoreTestRole
 2. **利用流式输出做早期失败检测** — 测试失败不用等全部跑完，前几秒就能判断
 3. **状态编码进命令** — 跨命令无状态，用 `cd /x && export Y=Z && cmd` 模式
 4. **容器镜像装好工具** — 默认环境很精简，生产环境要在 Dockerfile 里装好所有依赖
-5. **设合理超时** — 默认 timeout 可能不够长（编译、大规模测试），按需调大
+5. **设合理超时** — timeout 范围 1~3600 秒（最大 1 小时），编译或大规模测试按需调大
 
 ### 与现有方案对比
 
