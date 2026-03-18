@@ -115,42 +115,54 @@ aws glue get-catalog --catalog-id s3tablescatalog --region us-east-1
 aws s3tables create-namespace \
   --table-bucket-arn "arn:aws:s3tables:us-east-1:ACCOUNT:bucket/my-analytics-tables" \
   --namespace mydata
-
-# 通过 Athena DDL 创建带 schema 的表
-aws athena start-query-execution \
-  --query-string 'CREATE TABLE mydata.orders (
-    order_id INT,
-    order_date DATE,
-    amount DOUBLE,
-    customer STRING
-  )' \
-  --query-execution-context '{"Catalog": "s3tablescatalog/my-analytics-tables", "Database": "mydata"}' \
-  --work-group primary
 ```
 
-!!! tip "两种建表方式"
-    除了 Athena DDL，也可以用 `aws s3tables create-table` 创建表，但需要在 JSON 定义中包含完整的 `metadata.iceberg.schema`：
-    ```json
-    {
-        "tableBucketARN": "arn:aws:s3tables:us-east-1:ACCOUNT:bucket/my-analytics-tables",
-        "namespace": "mydata",
-        "name": "orders",
-        "format": "ICEBERG",
-        "metadata": {
-            "iceberg": {
-                "schema": {
-                    "fields": [
-                        {"name": "order_id", "type": "int", "required": true},
-                        {"name": "order_date", "type": "date"},
-                        {"name": "amount", "type": "double"},
-                        {"name": "customer", "type": "string"}
-                    ]
-                }
+创建 `table-definition.json`：
+
+```json
+{
+    "tableBucketARN": "arn:aws:s3tables:us-east-1:ACCOUNT:bucket/my-analytics-tables",
+    "namespace": "mydata",
+    "name": "orders",
+    "format": "ICEBERG",
+    "metadata": {
+        "iceberg": {
+            "schema": {
+                "fields": [
+                    {"name": "order_id", "type": "int", "required": true},
+                    {"name": "order_date", "type": "date"},
+                    {"name": "amount", "type": "double"},
+                    {"name": "customer", "type": "string"}
+                ]
             }
         }
     }
+}
+```
+
+```bash
+aws s3tables create-table --cli-input-json file://table-definition.json --region us-east-1
+```
+
+!!! warning "必须包含 metadata.iceberg.schema"
+    如果省略 `metadata` 参数，表会缺少 Iceberg `metadata_location` 属性，INSERT 时会报错：
     ```
-    如果省略 `metadata` 参数，表会缺少 Iceberg `metadata_location`，导致 INSERT/SELECT 报错。
+    ICEBERG_INVALID_METADATA: Table is missing [metadata_location] property
+    ```
+
+??? note "也可以用 Athena DDL 创建"
+    ```bash
+    aws athena start-query-execution \
+      --query-string 'CREATE TABLE mydata.orders (
+        order_id INT,
+        order_date DATE,
+        amount DOUBLE,
+        customer STRING
+      )' \
+      --query-execution-context '{"Catalog": "s3tablescatalog/my-analytics-tables", "Database": "mydata"}' \
+      --work-group primary
+    ```
+    Athena DDL 会自动设置 Iceberg metadata，无需手动指定 schema JSON。但注意：通过 Athena 创建的表会继承 Table Bucket 的默认加密设置，无法自定义。
 
 ### Step 4: 写入和查询数据
 
@@ -195,12 +207,18 @@ aws athena start-query-execution \
 
 ## 踩坑记录
 
-!!! warning "用 S3 Tables API 建表时必须带 schema"
-    如果用 `aws s3tables create-table` 但省略了 `metadata.iceberg.schema` 参数，表会缺少 Iceberg `metadata_location` 属性。INSERT 时会报错：
+!!! warning "S3 Tables API 建表必须带完整 schema"
+    `aws s3tables create-table` 不带 `metadata.iceberg.schema` 时，表会缺少 Iceberg `metadata_location`。通过 Athena INSERT 会报错：
     ```
     ICEBERG_INVALID_METADATA: Table is missing [metadata_location] property
     ```
-    解决方法：在 `create-table` 的 JSON 定义中包含完整的 `metadata` 字段（见 Step 3），或者用 Athena DDL 创建。
+    **实测对比**：
+    
+    | 建表方式 | INSERT | SELECT |
+    |---------|--------|--------|
+    | `create-table` + 完整 schema | ✅ | ✅ |
+    | `create-table` 不带 metadata | ❌ metadata_location 缺失 | ❌ |
+    | Athena DDL `CREATE TABLE` | ✅ | ✅ |
 
 !!! warning "大写名称自动转小写"
     文档说表名和列名必须全小写，否则查询会失败。但实测通过 Athena DDL 创建时：
