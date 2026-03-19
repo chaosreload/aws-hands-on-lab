@@ -66,6 +66,7 @@ nav:
     - AgentCore Runtime Shell Command 实测: ai-ml/agentcore-runtime-shell-command.md
   - Compute:
     - compute/index.md
+    - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
   - Networking:
     - networking/index.md
   - Storage:
