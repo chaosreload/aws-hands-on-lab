@@ -65,6 +65,7 @@ nav:
     - ai-ml/index.md
     - AgentCore Runtime Shell Command 实测: ai-ml/agentcore-runtime-shell-command.md
     - Bedrock TTFT + Quota 可观测性实测: ai-ml/bedrock-ttft-quota-observability.md
+    - Bedrock MiniMax M2.5 vs GLM 5 实测: ai-ml/bedrock-minimax-glm5-benchmark.md
   - Compute:
     - compute/index.md
     - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
