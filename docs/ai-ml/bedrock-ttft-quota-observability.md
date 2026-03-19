@@ -21,7 +21,7 @@
 | `TimeToFirstToken` | 服务端测量的 TTFT（ms） | ConverseStream, InvokeModelWithResponseStream |
 | `EstimatedTPMQuotaUsage` | 考虑 burndown 后的实际 quota 消耗 | 所有 inference API |
 
-**零配置、零成本、自动发射。** 这篇文章用 7 个测试验证它们是否靠谱。
+**零配置、零成本、自动上报。** 这篇文章用 7 个测试验证它们是否靠谱。
 
 ## 前置条件
 
@@ -118,7 +118,7 @@ print(f"Input: {usage['inputTokens']}, Output: {usage['outputTokens']}")
 
 ### Step 2: 在 CloudWatch 查看 Metrics
 
-等待约 2 分钟后，用 CLI 确认 metrics 已发射：
+等待约 2 分钟后，用 CLI 确认 metrics 已上报：
 
 ```bash
 # 列出可用的 TimeToFirstToken metrics
@@ -213,7 +213,7 @@ aws cloudwatch put-metric-alarm \
 
 ### Streaming vs Non-streaming
 
-| API | 发射 TTFT? | 发射 Quota? |
+| API | 上报 TTFT? | 上报 Quota? |
 |-----|-----------|------------|
 | ConverseStream | ✅ Yes | ✅ Yes |
 | Converse | ❌ No（正确行为） | ✅ Yes |
@@ -241,7 +241,7 @@ aws cloudwatch put-metric-alarm \
 |------|------|------|------|
 | Bedrock inference (Claude Sonnet 4.6) | ~$3/$15 per 1M input/output tokens | ~331 input + 236 output tokens | < $0.01 |
 | Bedrock inference (Nova Lite) | ~$0.06/$0.24 per 1M input/output tokens | ~12 input + 8 output tokens | < $0.01 |
-| CloudWatch metrics | 免费（自动发射） | - | $0.00 |
+| CloudWatch metrics | 免费（自动上报） | - | $0.00 |
 | CloudWatch alarms | 免费层（10 个） | 2 个 | $0.00 |
 | **合计** | | | **< $0.01** |
 
@@ -255,7 +255,7 @@ aws cloudwatch delete-alarms \
 ```
 
 !!! tip "无持久资源"
-    本 Lab 只使用了 on-demand Bedrock inference 和 CloudWatch（自动发射），除了 CloudWatch alarms 外没有创建任何持久资源。删除 alarms 后即完成清理。
+    本 Lab 只使用了 on-demand Bedrock inference 和 CloudWatch（自动上报），除了 CloudWatch alarms 外没有创建任何持久资源。删除 alarms 后即完成清理。
 
 ## 结论与建议
 
