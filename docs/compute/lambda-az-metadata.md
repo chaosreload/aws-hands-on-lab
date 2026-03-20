@@ -1,4 +1,4 @@
-# Lambda AZ Metadata: Same-AZ Routing Cuts Redis Latency by 51%
+# Lambda AZ Metadata：同 AZ 路由实测，Redis 延迟降低 51%
 
 !!! info "Lab 信息"
     - **难度**: ⭐⭐ 中级
