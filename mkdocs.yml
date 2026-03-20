@@ -69,6 +69,7 @@ nav:
   - Compute:
     - compute/index.md
     - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
+    - Lambda AZ Metadata 同 AZ 路由实测: compute/lambda-az-metadata.md
   - Networking:
     - networking/index.md
   - Storage:
