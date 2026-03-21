@@ -1,4 +1,4 @@
-# Amazon Bedrock AgentCore Runtime WebRTC 双向流实战：用 KVS TURN 构建实时语音 Agent
+# AgentCore WebRTC 双向流：KVS TURN 实时语音 Agent 实战
 
 !!! info "Lab 信息"
     - **难度**: ⭐⭐ 中级
