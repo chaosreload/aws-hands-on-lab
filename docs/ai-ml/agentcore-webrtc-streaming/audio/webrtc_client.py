@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Python WebRTC client for AgentCore voice agent end-to-end testing.
+v3: Properly handles stereo frames from aiortc Opus decoder.
 
 Replaces browser: sends TTS audio via WebRTC, records agent response.
 Uses AgentCore Runtime API for signaling (ICE config + SDP exchange).
@@ -10,6 +11,7 @@ import base64
 import fractions
 import json
 import struct
+import subprocess
 import sys
 import time
 import uuid
@@ -22,27 +24,28 @@ from aiortc import (
     RTCSessionDescription,
 )
 from aiortc.mediastreams import AudioFrame, MediaStreamTrack
-import av
+import numpy as np
 
 # === Configuration ===
-AGENT_ARN = "arn:aws:bedrock-agentcore:us-east-1:595842667825:runtime/bot-6KP2KQ5hWC"
+AGENT_ARN = "arn:aws:bedrock-agentcore:us-east-1:595842667825:runtime/webrtc_audio_fix-H8l8sS76kI"
 REGION = "us-east-1"
 PROFILE = "weichaol-testenv2-awswhatsnewtest"
 INPUT_WAV = "/tmp/question_16k.wav"
 OUTPUT_WAV = "/tmp/response.wav"
-QUESTION_COPY = "/tmp/question_sent.wav"  # copy of what we actually sent
+QUESTION_COPY = "/tmp/question_sent.wav"
+RAW_OUTPUT_WAV = "/tmp/response_raw.wav"
 
 # Audio constants
-INPUT_SAMPLE_RATE = 16000  # What we send (matches Nova Sonic input)
-OUTPUT_SAMPLE_RATE = 24000  # What Nova Sonic produces
+INPUT_SAMPLE_RATE = 16000
+OUTPUT_SAMPLE_RATE = 24000  # Nova Sonic output rate
 FRAME_DURATION_MS = 20
 INPUT_SAMPLES_PER_FRAME = INPUT_SAMPLE_RATE * FRAME_DURATION_MS // 1000  # 320
 BYTES_PER_SAMPLE = 2
 
 # Timing
-MAX_WAIT_RESPONSE_S = 30  # Max seconds to wait for agent response
-SILENCE_AFTER_AUDIO_S = 2  # Silence after sending audio before we stop
-POST_RESPONSE_SILENCE_S = 3  # After response starts, wait this long after last audio
+MAX_WAIT_RESPONSE_S = 30
+SILENCE_AFTER_AUDIO_S = 2
+POST_RESPONSE_SILENCE_S = 3
 
 
 class FileAudioTrack(MediaStreamTrack):
@@ -60,9 +63,7 @@ class FileAudioTrack(MediaStreamTrack):
 
     @staticmethod
     def _load_wav(path):
-        """Load 16kHz 16-bit mono PCM from WAV file."""
         with open(path, 'rb') as f:
-            # Skip WAV header (44 bytes)
             f.read(44)
             return f.read()
 
@@ -70,22 +71,19 @@ class FileAudioTrack(MediaStreamTrack):
         if self._start_time is None:
             self._start_time = time.time()
 
-        # Pace to real-time
         target = self._start_time + self._frame_count * (FRAME_DURATION_MS / 1000)
         delay = target - time.time()
         if delay > 0:
             await asyncio.sleep(delay)
 
-        frame_bytes = INPUT_SAMPLES_PER_FRAME * BYTES_PER_SAMPLE  # 640 bytes per 20ms
+        frame_bytes = INPUT_SAMPLES_PER_FRAME * BYTES_PER_SAMPLE
 
         if self._offset < len(self._pcm_data):
             chunk = self._pcm_data[self._offset:self._offset + frame_bytes]
             self._offset += frame_bytes
-            # Pad if last chunk is short
             if len(chunk) < frame_bytes:
                 chunk += b'\x00' * (frame_bytes - len(chunk))
         else:
-            # Send silence after audio finishes
             chunk = b'\x00' * frame_bytes
             if not self._finished:
                 self._finished = True
@@ -105,61 +103,171 @@ class FileAudioTrack(MediaStreamTrack):
 
 
 class AudioRecorder:
-    """Records incoming WebRTC audio frames to a buffer."""
+    """Records incoming WebRTC audio frames - properly handles stereo Opus decode."""
 
     def __init__(self):
-        self._chunks = []
+        self._chunks = []  # list of numpy arrays (mono int16)
         self._first_audio_time = None
         self._last_audio_time = None
         self._frame_count = 0
-        self._resampler = av.AudioResampler(format='s16', layout='mono', rate=OUTPUT_SAMPLE_RATE)
+        self._native_sample_rate = None
+        self._logged_first = False
 
     def add_frame(self, frame):
-        """Add an audio frame, skip silence."""
-        # Convert to expected format
-        resampled = self._resampler.resample(frame)
-        for rf in resampled:
-            pcm = bytes(rf.planes[0])
-            # Check if frame has audio (not just silence)
-            samples = struct.unpack(f'<{len(pcm)//2}h', pcm)
-            max_amp = max(abs(s) for s in samples) if samples else 0
+        """Add an audio frame, convert to mono numpy array."""
+        self._native_sample_rate = frame.sample_rate
 
-            if max_amp > 100:  # threshold for non-silence
+        # Log first frame properties
+        if not self._logged_first:
+            print(f"[RX] First frame: rate={frame.sample_rate}, format={frame.format.name}, "
+                  f"layout={frame.layout.name}, samples={frame.samples}, "
+                  f"planes={len(frame.planes)}, plane_sizes={[len(bytes(p)) for p in frame.planes]}")
+
+        # Use to_ndarray() for proper format handling
+        try:
+            arr = frame.to_ndarray()
+            # arr shape depends on format:
+            # - packed (s16): shape = (1, samples * channels) or (samples, channels)
+            # - planar (s16p): shape = (channels, samples)
+
+            if not self._logged_first:
+                print(f"[RX] ndarray: shape={arr.shape}, dtype={arr.dtype}, "
+                      f"min={arr.min()}, max={arr.max()}")
+                self._logged_first = True
+
+            # Convert to mono int16
+            if arr.dtype != np.int16:
+                # Float format - convert to int16
+                arr = (arr * 32767).clip(-32768, 32767).astype(np.int16)
+
+            # Flatten and handle stereo → mono
+            if arr.ndim == 1:
+                mono = arr
+            elif arr.ndim == 2:
+                if arr.shape[0] <= arr.shape[1]:
+                    # Shape (channels, samples) - planar
+                    mono = arr.mean(axis=0).astype(np.int16)
+                else:
+                    # Shape (samples, channels) - packed interleaved
+                    mono = arr.mean(axis=1).astype(np.int16)
+            else:
+                mono = arr.flatten()
+
+            max_amp = int(np.max(np.abs(mono)))
+
+            if self._frame_count < 5 or self._frame_count % 200 == 0:
+                print(f"[RX] Frame {self._frame_count}: mono_samples={len(mono)}, "
+                      f"max={max_amp}, mean={np.mean(np.abs(mono)):.0f}")
+
+            if max_amp > 100:
                 if self._first_audio_time is None:
                     self._first_audio_time = time.time()
                 self._last_audio_time = time.time()
 
-            self._chunks.append(pcm)
+            self._chunks.append(mono)
             self._frame_count += 1
 
-    def save_wav(self, path):
-        """Save recorded audio as WAV file."""
+        except Exception as e:
+            if not self._logged_first:
+                self._logged_first = True
+            # Fallback: raw bytes
+            pcm = bytes(frame.planes[0])
+            print(f"[RX] to_ndarray failed ({e}), raw fallback: {len(pcm)} bytes")
+            arr = np.frombuffer(pcm, dtype=np.int16)
+            self._chunks.append(arr)
+            self._frame_count += 1
+
+    def save_wav(self, raw_path, output_path, target_rate=24000):
+        """Save recorded audio: raw WAV at native rate, then ffmpeg convert."""
         if not self._chunks:
             print("[RX] No audio recorded!")
             return
 
-        pcm_data = b''.join(self._chunks)
-        sample_rate = OUTPUT_SAMPLE_RATE
-        data_size = len(pcm_data)
+        # Concatenate all mono chunks
+        mono_data = np.concatenate(self._chunks)
+        pcm_data = mono_data.tobytes()
+        native_rate = self._native_sample_rate or 48000
 
+        # Save raw WAV at native sample rate (properly mono)
+        self._write_wav(raw_path, pcm_data, native_rate)
+        raw_duration = len(mono_data) / native_rate
+        print(f"[RX] Saved raw: {raw_path} ({raw_duration:.2f}s, {native_rate}Hz, "
+              f"{len(pcm_data)} bytes, {self._frame_count} frames, "
+              f"total_samples={len(mono_data)})")
+
+        # Use ffmpeg for reliable conversion to target rate
+        if native_rate != target_rate:
+            cmd = [
+                'ffmpeg', '-y', '-hide_banner', '-loglevel', 'warning',
+                '-i', raw_path,
+                '-ar', str(target_rate),
+                '-ac', '1',
+                '-acodec', 'pcm_s16le',
+                output_path
+            ]
+            print(f"[RX] Converting {native_rate}Hz → {target_rate}Hz via ffmpeg...")
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            if result.returncode != 0:
+                print(f"[RX] ffmpeg error: {result.stderr}")
+                import shutil
+                shutil.copy2(raw_path, output_path)
+            else:
+                print(f"[RX] Saved converted: {output_path}")
+        else:
+            import shutil
+            shutil.copy2(raw_path, output_path)
+            print(f"[RX] Native rate matches target, copied directly")
+
+        # Verify with ffprobe
+        try:
+            probe = subprocess.run(
+                ['ffprobe', '-v', 'error', '-show_entries',
+                 'stream=sample_rate,channels,duration,codec_name',
+                 '-of', 'json', output_path],
+                capture_output=True, text=True
+            )
+            if probe.returncode == 0:
+                info = json.loads(probe.stdout)
+                stream = info.get('streams', [{}])[0]
+                print(f"[RX] Verified: codec={stream.get('codec_name')}, "
+                      f"rate={stream.get('sample_rate')}, "
+                      f"channels={stream.get('channels')}, "
+                      f"duration={stream.get('duration')}s")
+        except Exception as e:
+            print(f"[RX] ffprobe check skipped: {e}")
+
+        # Audio quality stats
+        try:
+            stats = subprocess.run(
+                ['ffmpeg', '-i', output_path, '-af',
+                 'volumedetect', '-f', 'null', '-'],
+                capture_output=True, text=True
+            )
+            for line in stats.stderr.split('\n'):
+                if 'mean_volume' in line or 'max_volume' in line:
+                    print(f"[RX] {line.strip()}")
+        except:
+            pass
+
+    @staticmethod
+    def _write_wav(path, pcm_data, sample_rate):
+        """Write raw mono PCM data as a WAV file."""
+        data_size = len(pcm_data)
         with open(path, 'wb') as f:
             f.write(b'RIFF')
             f.write(struct.pack('<I', 36 + data_size))
             f.write(b'WAVE')
             f.write(b'fmt ')
             f.write(struct.pack('<I', 16))
-            f.write(struct.pack('<H', 1))   # PCM
-            f.write(struct.pack('<H', 1))   # mono
+            f.write(struct.pack('<H', 1))    # PCM
+            f.write(struct.pack('<H', 1))    # mono
             f.write(struct.pack('<I', sample_rate))
             f.write(struct.pack('<I', sample_rate * 2))
-            f.write(struct.pack('<H', 2))   # block align
-            f.write(struct.pack('<H', 16))  # bits
+            f.write(struct.pack('<H', 2))    # block align
+            f.write(struct.pack('<H', 16))   # bits per sample
             f.write(b'data')
             f.write(struct.pack('<I', data_size))
             f.write(pcm_data)
-
-        duration = data_size / (sample_rate * 2)
-        print(f"[RX] Saved {path}: {duration:.2f}s, {data_size} bytes, {self._frame_count} frames")
 
     @property
     def has_audio(self):
@@ -205,7 +313,6 @@ async def main():
     ice_servers = []
     for s in ice_response.get('iceServers', []):
         urls = s.get('urls', [])
-        # Use only TURN (not STUN) for relay
         turn_urls = [u for u in urls if u.startswith('turn:')]
         if turn_urls:
             ice_servers.append(RTCIceServer(
@@ -221,7 +328,6 @@ async def main():
     pc = RTCPeerConnection(config)
     recorder = AudioRecorder()
 
-    # Track incoming audio
     @pc.on("track")
     def on_track(track):
         print(f"    Received remote track: {track.kind}")
@@ -236,16 +342,14 @@ async def main():
     async def on_conn_state():
         print(f"    Connection state: {pc.connectionState}")
 
-    # Add our audio track
     audio_track = FileAudioTrack(INPUT_WAV)
     pc.addTrack(audio_track)
 
-    # Create offer
     offer = await pc.createOffer()
     await pc.setLocalDescription(offer)
     print(f"    Local SDP created ({len(offer.sdp)} bytes)")
 
-    # === Step 3: Exchange SDP via AgentCore ===
+    # === Step 3: Exchange SDP ===
     print("\n[3] Exchanging SDP offer/answer...")
     offer_payload = {
         "action": "offer",
@@ -263,7 +367,6 @@ async def main():
     pc_id = answer_response.get('pc_id')
     print(f"    Remote pc_id: {pc_id}")
 
-    # Set remote description
     answer = RTCSessionDescription(
         sdp=answer_response['sdp'],
         type=answer_response['type']
@@ -271,11 +374,10 @@ async def main():
     await pc.setRemoteDescription(answer)
     print(f"    Remote SDP set ({len(answer_response['sdp'])} bytes)")
 
-    # === Step 4: Wait for connection + stream audio ===
+    # === Step 4: Wait for connection ===
     print("\n[4] Waiting for WebRTC connection...")
     t_connect_start = time.time()
 
-    # Wait for connection
     for i in range(60):
         await asyncio.sleep(0.5)
         state = pc.connectionState
@@ -292,23 +394,20 @@ async def main():
         await pc.close()
         return
 
-    # Audio is already streaming via FileAudioTrack
+    # === Step 5: Stream audio ===
     print("\n[5] Streaming audio to agent...")
     audio_duration = len(audio_track._pcm_data) / (INPUT_SAMPLE_RATE * BYTES_PER_SAMPLE)
     print(f"    Audio duration: {audio_duration:.2f}s")
 
-    # Wait for audio to finish sending + some silence
     while not audio_track.audio_finished:
         await asyncio.sleep(0.1)
 
     print(f"    Audio sent. Waiting for agent response...")
 
-    # Wait for response with timeout
     t_wait_start = time.time()
     while time.time() - t_wait_start < MAX_WAIT_RESPONSE_S:
         await asyncio.sleep(0.5)
         if recorder.has_audio:
-            # Got response audio, wait for it to finish
             if recorder.seconds_since_last_audio > POST_RESPONSE_SILENCE_S:
                 print(f"    Response complete (silence detected)")
                 break
@@ -318,17 +417,15 @@ async def main():
         else:
             print(f"    No response audio received within {MAX_WAIT_RESPONSE_S}s")
 
-    # === Step 5: Save results ===
+    # === Step 6: Save results ===
     print("\n[6] Saving audio files...")
-    # Save the question audio (copy)
     import shutil
     shutil.copy2(INPUT_WAV, QUESTION_COPY)
     print(f"[TX] Saved {QUESTION_COPY}")
 
-    # Save response
-    recorder.save_wav(OUTPUT_WAV)
+    recorder.save_wav(RAW_OUTPUT_WAV, OUTPUT_WAV, target_rate=OUTPUT_SAMPLE_RATE)
 
-    # === Step 6: Disconnect ===
+    # === Step 7: Disconnect ===
     print("\n[7] Disconnecting...")
     try:
         disconnect_payload = {"action": "disconnect", "data": {"pc_id": pc_id}}
@@ -349,11 +446,15 @@ async def main():
     print(f"Audio sent:           {audio_duration:.2f}s")
     if recorder._first_audio_time:
         first_audio_delay = recorder._first_audio_time - t_connected
+        response_duration = recorder._last_audio_time - recorder._first_audio_time
         print(f"First response audio: {first_audio_delay:.2f}s after connect")
+        print(f"Response duration:    {response_duration:.2f}s")
     else:
         print(f"First response audio: NONE")
     print(f"Response frames:      {recorder._frame_count}")
+    print(f"Native sample rate:   {recorder._native_sample_rate}Hz")
     print(f"Question file:        {QUESTION_COPY}")
+    print(f"Response file (raw):  {RAW_OUTPUT_WAV}")
     print(f"Response file:        {OUTPUT_WAV}")
 
 

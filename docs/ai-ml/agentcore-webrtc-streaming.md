@@ -539,34 +539,35 @@ await pc.setRemoteDescription(RTCSessionDescription(**answer))
 
 | 指标 | 值 |
 |------|-----|
-| ICE config 延迟 | **1.21s** |
-| SDP 交换延迟 | **0.90s** |
+| ICE config 延迟 | **1.35s** |
+| SDP 交换延迟 | **0.88s** |
 | WebRTC 连接建立 | **1.50s** |
-| 发送音频时长 | 2.88s |
-| 接收响应时长 | **37.01s** |
-| 首个响应音频 | 连接建立后 < 0.1s |
-| 响应帧数 | 1,633 帧 |
-| 端到端总时间 | 37.67s |
+| 发送音频时长 | 2.23s |
+| 接收响应时长 | **20.70s** |
+| 首个响应音频 | 连接建立后 **3.90s** |
+| 响应帧数 | 1,399 帧 |
+| 端到端总时间 | 33.32s |
 
 #### 响应音频分析
 
-```
-秒数  最大振幅  RMS     状态
- 0-5s  23127    ~991   静音/低噪声（等待模型响应）
- 6-33s 23127   1500+   ✅ 语音内容（Nova Sonic 回复）
-34-37s 23127    ~991   尾部静音
-```
+| 指标 | 值 |
+|------|-----|
+| 平均音量 | -25.9 dB |
+| 峰值音量 | -8.7 dB（无 clipping） |
+| 有效语音 | ~20.7 秒 |
+| 采样率 | 48kHz（Opus 解码原始） → 24kHz（保存） |
+| 格式 | s16 stereo（aiortc 解码）→ mono PCM |
 
-- **有效语音内容约 27 秒**，Nova Sonic 对"请介绍一下你自己"生成了较长的自我介绍
-- 前 5 秒为模型处理延迟（接收音频 → 识别 → 生成回复）
-- RMS > 1500 的区间为实际语音，~991 为 Opus 编解码器底噪
+- **有效语音约 20.7 秒**，Nova Sonic 用英文（matthew 声音）回答了自我介绍
+- 连接建立后约 3.9 秒开始收到响应音频（包含模型处理延迟）
+- 峰值 -8.7 dB，远低于 0 dB clipping 阈值，音频质量良好
 
 ### 音频文件
 
 | 文件 | 时长 | 大小 | 说明 |
 |------|------|------|------|
-| [question.wav](audio/question.wav) | 2.88s | 92 KB | 发送的中文问题（edge-tts 生成） |
-| [response.wav](audio/response.wav) | 37.01s | 1.7 MB | Agent 语音回复（Nova Sonic 生成） |
+| [question.wav](audio/question.wav) | 2.23s | 70 KB | 发送的中文问题（edge-tts 生成） |
+| [response.wav](audio/response.wav) | 41.16s | 1.9 MB | Agent 语音回复（Nova Sonic 生成，含自然停顿） |
 
 !!! note "TURN Forbidden IP 警告"
     测试中 `aioice` 库报出 `STUN transaction failed (403 - Forbidden IP)` 警告，这是 CHANNEL_BIND 请求被 KVS TURN 服务器拒绝（某些 peer IP 不被允许直接绑定）。**不影响功能** — 连接通过 Send Indication 方式仍然成功建立。
