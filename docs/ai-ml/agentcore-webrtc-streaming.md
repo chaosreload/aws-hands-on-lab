@@ -411,6 +411,166 @@ aws ec2 describe-vpcs --vpc-ids $VPC_ID 2>&1 | grep -q "does not exist" && echo 
     Lab 完成后请执行清理步骤，避免 NAT Gateway 持续计费（$0.045/hr ≈ $32/月）。
 
 ## 结论与建议
+## 端到端语音对话验证（Python WebRTC 客户端）
+
+上面的测试验证了 API 层面的 ICE config 获取和 SDP 交换，但没有真正发送和接收音频。本节使用 Python 脚本替代浏览器，实现完整的端到端语音对话验证。
+
+### 测试架构
+
+```
+┌─────────────────────────┐
+│  Python WebRTC Client   │
+│  (dev-server)           │
+│                         │
+│  1. edge-tts 生成音频    │
+│  2. aiortc WebRTC 连接   │
+│  3. 发送 PCM 音频        │
+│  4. 录制响应音频          │
+└────────┬────────────────┘
+         │ UDP (TURN relay)
+         ▼
+┌─────────────────────────┐
+│  KVS TURN Server        │
+│  (AWS managed)          │
+└────────┬────────────────┘
+         │ UDP (TURN relay)
+         ▼
+┌─────────────────────────┐
+│  AgentCore Runtime      │
+│  (VPC 私有子网)          │
+│                         │
+│  bot.py (aiortc)        │
+│    → Nova Sonic 双向流    │
+│    → 语音识别 + 生成      │
+└─────────────────────────┘
+```
+
+### 依赖安装
+
+```bash
+pip install edge-tts aiortc aiohttp av
+```
+
+### Step 1: 生成测试音频
+
+使用 Microsoft Edge TTS 生成中文问题音频，转换为 Nova Sonic 要求的 16kHz/16-bit/mono PCM：
+
+```python
+import edge_tts
+import av
+import struct
+
+# 生成中文语音
+text = "请介绍一下你自己"
+communicate = edge_tts.Communicate(text, "zh-CN-XiaoxiaoNeural")
+await communicate.save("/tmp/question.mp3")
+
+# 转换为 16kHz PCM WAV
+container = av.open("/tmp/question.mp3")
+resampler = av.AudioResampler(format='s16', layout='mono', rate=16000)
+pcm_data = bytearray()
+for frame in container.decode(audio=0):
+    for rf in resampler.resample(frame):
+        pcm_data.extend(bytes(rf.planes[0]))
+
+# 写入 WAV 文件（省略 header 代码）
+```
+
+生成结果：2.88 秒，92,224 字节。
+
+### Step 2: Python WebRTC 客户端核心代码
+
+关键组件：
+
+**FileAudioTrack** — 从 WAV 文件读取 PCM 数据，按 20ms 帧率实时发送：
+
+```python
+class FileAudioTrack(MediaStreamTrack):
+    kind = "audio"
+
+    async def recv(self):
+        # 按实时节奏返回 20ms 音频帧
+        frame_bytes = 320 * 2  # 16kHz * 20ms * 16bit
+        chunk = self._pcm_data[self._offset:self._offset + frame_bytes]
+        # ... 设置 pts、time_base，返回 AudioFrame
+```
+
+**AudioRecorder** — 录制远程音频 track，检测非静音帧：
+
+```python
+class AudioRecorder:
+    def add_frame(self, frame):
+        pcm = bytes(resampled_frame.planes[0])
+        samples = struct.unpack(f'<{len(pcm)//2}h', pcm)
+        max_amp = max(abs(s) for s in samples)
+        if max_amp > 100:  # 非静音阈值
+            self._last_audio_time = time.time()
+        self._chunks.append(pcm)
+```
+
+**信令流程** — 通过 AgentCore Runtime API 完成 ICE + SDP 交换：
+
+```python
+# 1. 获取 TURN credentials
+ice_response = invoke_agent(session, agent_arn, session_id, {"action": "ice_config"})
+
+# 2. 创建 PeerConnection，配置 TURN
+pc = RTCPeerConnection(RTCConfiguration(iceServers=ice_servers))
+pc.addTrack(FileAudioTrack("/tmp/question.wav"))
+
+# 3. SDP 交换
+offer = await pc.createOffer()
+await pc.setLocalDescription(offer)
+answer = invoke_agent(session, agent_arn, session_id, {
+    "action": "offer",
+    "data": {"sdp": offer.sdp, "type": offer.type, "turnOnly": True}
+})
+await pc.setRemoteDescription(RTCSessionDescription(**answer))
+
+# 4. 等待连接 + 自动流式传输音频
+# FileAudioTrack.recv() 按 20ms 节奏自动发送
+# on("track") 回调自动录制响应
+```
+
+!!! tip "payload 编码"
+    Python SDK (`boto3`) 的 `invoke_agent_runtime` 的 `payload` 参数接受 **raw bytes**（不是 base64），响应在 `response` 字段（不是 `body`）。这与 CLI 的 `--payload`（接受 base64）不同。
+
+### 测试结果
+
+| 指标 | 值 |
+|------|-----|
+| ICE config 延迟 | **1.21s** |
+| SDP 交换延迟 | **0.90s** |
+| WebRTC 连接建立 | **1.50s** |
+| 发送音频时长 | 2.88s |
+| 接收响应时长 | **37.01s** |
+| 首个响应音频 | 连接建立后 < 0.1s |
+| 响应帧数 | 1,633 帧 |
+| 端到端总时间 | 37.67s |
+
+#### 响应音频分析
+
+```
+秒数  最大振幅  RMS     状态
+ 0-5s  23127    ~991   静音/低噪声（等待模型响应）
+ 6-33s 23127   1500+   ✅ 语音内容（Nova Sonic 回复）
+34-37s 23127    ~991   尾部静音
+```
+
+- **有效语音内容约 27 秒**，Nova Sonic 对"请介绍一下你自己"生成了较长的自我介绍
+- 前 5 秒为模型处理延迟（接收音频 → 识别 → 生成回复）
+- RMS > 1500 的区间为实际语音，~991 为 Opus 编解码器底噪
+
+### 音频文件
+
+| 文件 | 时长 | 大小 | 说明 |
+|------|------|------|------|
+| [question.wav](audio/question.wav) | 2.88s | 92 KB | 发送的中文问题（edge-tts 生成） |
+| [response.wav](audio/response.wav) | 37.01s | 1.7 MB | Agent 语音回复（Nova Sonic 生成） |
+
+!!! note "TURN Forbidden IP 警告"
+    测试中 `aioice` 库报出 `STUN transaction failed (403 - Forbidden IP)` 警告，这是 CHANNEL_BIND 请求被 KVS TURN 服务器拒绝（某些 peer IP 不被允许直接绑定）。**不影响功能** — 连接通过 Send Indication 方式仍然成功建立。
+
 
 ### WebRTC 的价值
 
