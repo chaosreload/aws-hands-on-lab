@@ -76,6 +76,7 @@ nav:
   - Storage:
     - storage/index.md
     - S3 Tables IAM-only 权限实测: storage/s3-tables-iam-permissions.md
+    - AWS DataSync 集成 Secrets Manager：三种凭证管理模式实测对比: storage/datasync-secrets-manager.md
   - Database:
     - database/index.md
     - OpenSearch 原地扩容实测: database/opensearch-in-place-volume.md
