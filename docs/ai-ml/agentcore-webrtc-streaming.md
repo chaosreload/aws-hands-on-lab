@@ -555,8 +555,8 @@ await pc.setRemoteDescription(RTCSessionDescription(**answer))
 | 平均音量 | -25.9 dB |
 | 峰值音量 | -8.7 dB（无 clipping） |
 | 有效语音 | ~20.7 秒 |
-| 采样率 | 48kHz（Opus 解码原始） → 24kHz（保存） |
-| 格式 | s16 stereo（aiortc 解码）→ mono PCM |
+| 采样率 | 48kHz（Opus 解码原始），mono PCM |
+| 格式 | s16 packed stereo（aiortc 解码）→ deinterleave → mono PCM |
 
 - **有效语音约 20.7 秒**，Nova Sonic 用英文（matthew 声音）回答了自我介绍
 - 连接建立后约 3.9 秒开始收到响应音频（包含模型处理延迟）
@@ -567,7 +567,7 @@ await pc.setRemoteDescription(RTCSessionDescription(**answer))
 | 文件 | 时长 | 大小 | 说明 |
 |------|------|------|------|
 | [question.wav](audio/question.wav) | 2.23s | 70 KB | 发送的中文问题（edge-tts 生成） |
-| [response.wav](audio/response.wav) | 41.16s | 1.9 MB | Agent 语音回复（Nova Sonic 生成，含自然停顿） |
+| [response.wav](audio/response.wav) | 21.68s | 2.0 MB | Agent 语音回复（Nova Sonic matthew，48kHz mono） |
 
 !!! note "TURN Forbidden IP 警告"
     测试中 `aioice` 库报出 `STUN transaction failed (403 - Forbidden IP)` 警告，这是 CHANNEL_BIND 请求被 KVS TURN 服务器拒绝（某些 peer IP 不被允许直接绑定）。**不影响功能** — 连接通过 Send Indication 方式仍然成功建立。

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Python WebRTC client for AgentCore voice agent end-to-end testing.
-v3: Properly handles stereo frames from aiortc Opus decoder.
+v4: Fixed stereo→mono: aiortc Opus packed s16 interleave must reshape before channel merge.
 
 Replaces browser: sends TTS audio via WebRTC, records agent response.
 Uses AgentCore Runtime API for signaling (ICE config + SDP exchange).
@@ -140,18 +140,19 @@ class AudioRecorder:
                 # Float format - convert to int16
                 arr = (arr * 32767).clip(-32768, 32767).astype(np.int16)
 
-            # Flatten and handle stereo → mono
-            if arr.ndim == 1:
-                mono = arr
-            elif arr.ndim == 2:
-                if arr.shape[0] <= arr.shape[1]:
-                    # Shape (channels, samples) - planar
-                    mono = arr.mean(axis=0).astype(np.int16)
-                else:
-                    # Shape (samples, channels) - packed interleaved
-                    mono = arr.mean(axis=1).astype(np.int16)
+            # Flatten to 1D first
+            flat = arr.flatten().astype(np.int16)
+
+            # Detect stereo: aiortc Opus decoder outputs packed s16 stereo
+            # with L/R interleaved [L0,R0,L1,R1,...]. frame.layout.channels
+            # tells us the real channel count.
+            n_channels = len(frame.layout.channels)
+            if n_channels > 1 and len(flat) % n_channels == 0:
+                # Reshape to (samples, channels) and average → true mono
+                reshaped = flat.reshape(-1, n_channels)
+                mono = reshaped.mean(axis=1).astype(np.int16)
             else:
-                mono = arr.flatten()
+                mono = flat
 
             max_amp = int(np.max(np.abs(mono)))
 
