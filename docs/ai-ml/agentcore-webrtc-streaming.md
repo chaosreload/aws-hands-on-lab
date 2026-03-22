@@ -410,7 +410,6 @@ aws ec2 describe-vpcs --vpc-ids $VPC_ID 2>&1 | grep -q "does not exist" && echo 
 !!! danger "务必清理"
     Lab 完成后请执行清理步骤，避免 NAT Gateway 持续计费（$0.045/hr ≈ $32/月）。
 
-## 结论与建议
 ## 端到端语音对话验证（Python WebRTC 客户端）
 
 上面的测试验证了 API 层面的 ICE config 获取和 SDP 交换，但没有真正发送和接收音频。本节使用 Python 脚本替代浏览器，实现完整的端到端语音对话验证。
@@ -572,6 +571,10 @@ await pc.setRemoteDescription(RTCSessionDescription(**answer))
 !!! note "TURN Forbidden IP 警告"
     测试中 `aioice` 库报出 `STUN transaction failed (403 - Forbidden IP)` 警告，这是 CHANNEL_BIND 请求被 KVS TURN 服务器拒绝（某些 peer IP 不被允许直接绑定）。**不影响功能** — 连接通过 Send Indication 方式仍然成功建立。
 
+
+## 结论与建议
+
+AgentCore Runtime WebRTC 双向流是一个值得关注的新能力，但目前仍有较高的基础设施门槛。以下是我们通过端到端实测总结的关键判断。
 
 ### WebRTC 的价值
 
