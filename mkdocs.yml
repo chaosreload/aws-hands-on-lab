@@ -67,6 +67,7 @@ nav:
     - AgentCore WebRTC 双向流：KVS TURN 实时语音 Agent 实战: ai-ml/agentcore-webrtc-streaming.md
     - Bedrock TTFT + Quota 可观测性实测: ai-ml/bedrock-ttft-quota-observability.md
     - Bedrock MiniMax M2.5 vs GLM 5 实测: ai-ml/bedrock-minimax-glm5-benchmark.md
+    - 在 EC2 嵌套虚拟化上部署 Zeroboot：亚毫秒级 VM Sandbox Benchmark 实测: ai-ml/zeroboot-ec2-benchmark.md
   - Compute:
     - compute/index.md
     - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
