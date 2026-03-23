@@ -69,6 +69,7 @@ nav:
     - Bedrock MiniMax M2.5 vs GLM 5 实测: ai-ml/bedrock-minimax-glm5-benchmark.md
     - 在 EC2 嵌套虚拟化上部署 Zeroboot：亚毫秒级 VM Sandbox Benchmark 实测: ai-ml/zeroboot-ec2-benchmark.md
     - Zeroboot vs E2B 深度对比：AI Agent Sandbox 技术路线分析: ai-ml/zeroboot-vs-e2b.md
+    - Neuron DRA Driver：EKS 上 Trainium 拓扑感知调度实战: ai-ml/neuron-eks-dra-driver.md
   - Compute:
     - compute/index.md
     - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
