@@ -1,0 +1,72 @@
+{
+  "test_date": "2026-03-23T23:45-00:05Z",
+  "region": "us-east-1",
+  "account": "595842667825",
+  "agents": {
+    "sonnet46": {
+      "agent_id": "RA8QCBGDBC",
+      "model": "us.anthropic.claude-sonnet-4-6",
+      "model_name": "Claude Sonnet 4.6",
+      "non_streaming_results": [
+        {"prompt": "What is Amazon S3?", "elapsed_s": 4.158},
+        {"prompt": "Benefits of Lambda?", "elapsed_s": 5.309},
+        {"prompt": "What is VPC?", "elapsed_s": 3.595},
+        {"prompt": "What is DynamoDB?", "elapsed_s": 2.597}
+      ],
+      "streaming_results": [
+        {"prompt": "Bedrock features?", "elapsed_s": 4.089, "ttft_client_s": 2.167, "chunks": 38}
+      ],
+      "cloudwatch_metrics": {
+        "TotalTime_avg_ms": 3321,
+        "ModelLatency_avg_ms": 3043,
+        "Agent_overhead_ms": 278,
+        "InputTokenCount_avg": 266,
+        "OutputTokenCount_avg": 91,
+        "ModelInvocationCount": 5
+      }
+    },
+    "haiku45": {
+      "agent_id": "KWQZTJIHNX",
+      "model": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model_name": "Claude Haiku 4.5",
+      "non_streaming_results": [
+        {"prompt": "What is Amazon S3?", "elapsed_s": 2.061},
+        {"prompt": "Benefits of Lambda?", "elapsed_s": 2.594},
+        {"prompt": "What is VPC?", "elapsed_s": 2.093},
+        {"prompt": "What is DynamoDB?", "elapsed_s": 2.800}
+      ],
+      "streaming_results": [
+        {"prompt": "Bedrock features?", "elapsed_s": 2.321, "ttft_client_s": 1.314, "chunks": 40}
+      ],
+      "cloudwatch_metrics": {
+        "TotalTime_avg_ms": 2075,
+        "ModelLatency_avg_ms": 1790,
+        "Agent_overhead_ms": 285,
+        "InputTokenCount_avg": 231,
+        "OutputTokenCount_avg": 67,
+        "ModelInvocationCount": 5
+      }
+    },
+    "glm5": {
+      "agent_id": "VY6SUHBRAU",
+      "model": "zai.glm-5",
+      "model_name": "GLM 5",
+      "status": "INCOMPATIBLE",
+      "error": "validationException: This model does not support the stopSequences field"
+    },
+    "glm47": {
+      "agent_id": "Z620T3AM4M",
+      "model": "zai.glm-4.7",
+      "model_name": "GLM 4.7",
+      "status": "INCOMPATIBLE",
+      "error": "validationException: This model does not support the stopSequences field"
+    }
+  },
+  "findings": [
+    "Agent orchestration overhead stable at ~280ms regardless of model",
+    "Sonnet 4.6 vs Haiku 4.5: 37-41% latency difference",
+    "GLM 5 and GLM 4.7 incompatible with Bedrock Agents (stopSequences)",
+    "TTFT reported for both streaming and non-streaming calls",
+    "CW metrics propagation delay: ~3 minutes"
+  ]
+}

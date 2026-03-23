@@ -70,7 +70,7 @@ nav:
     - 在 EC2 嵌套虚拟化上部署 Zeroboot：亚毫秒级 VM Sandbox Benchmark 实测: ai-ml/zeroboot-ec2-benchmark.md
     - Zeroboot vs E2B 深度对比：AI Agent Sandbox 技术路线分析: ai-ml/zeroboot-vs-e2b.md
     - Neuron DRA Driver：EKS 上 Trainium 拓扑感知调度实战: ai-ml/neuron-eks-dra-driver.md
-    - 实测 Amazon Bedrock Agents CloudWatch 指标：13 个运行时指标全解析: ai-ml/bedrock-agents-cloudwatch-metrics.md
+    - 实测 Amazon Bedrock Agents CloudWatch 指标：多模型对比 + 13 个运行时指标全解析: ai-ml/bedrock-agents-cloudwatch-metrics.md
     - Amazon Nova Act 实测：用自然语言驱动浏览器自动化的 AI Agent 服务: ai-ml/nova-act-browser-automation.md
   - Compute:
     - compute/index.md
