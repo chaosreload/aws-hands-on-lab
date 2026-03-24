@@ -63,6 +63,7 @@ nav:
   - 首页: index.md
   - AI/ML:
     - ai-ml/index.md
+    - Amazon Bedrock AgentCore Policy 实战：用 Cedar 策略语言精准控制 Agent 工具调用: ai-ml/bedrock-agentcore-policy-ga.md
     - AgentCore Runtime Shell Command 实测: ai-ml/agentcore-runtime-shell-command.md
     - AgentCore WebRTC 双向流：KVS TURN 实时语音 Agent 实战: ai-ml/agentcore-webrtc-streaming.md
     - Bedrock TTFT + Quota 可观测性实测: ai-ml/bedrock-ttft-quota-observability.md
