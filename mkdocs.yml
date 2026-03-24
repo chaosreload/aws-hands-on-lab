@@ -74,6 +74,7 @@ nav:
     - 实测 Amazon Bedrock Agents CloudWatch 指标：多模型对比 + 13 个运行时指标全解析: ai-ml/bedrock-agents-cloudwatch-metrics.md
     - Amazon Nova Act 实测：用自然语言驱动浏览器自动化的 AI Agent 服务: ai-ml/nova-act-browser-automation.md
     - 实测 AWS MCP Server：用 AI 助手一键部署 ECS 和 Lambda 应用: ai-ml/mcp-serverless-containers.md
+    - Amazon Nova Pro Latency-Optimized Inference 实测：一个参数降低 33% 推理延迟: ai-ml/nova-pro-latency-optimized.md
   - Compute:
     - compute/index.md
     - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
