@@ -1,3 +1,6 @@
+---
+description: "Compare three AWS DataSync credential management modes with Secrets Manager integration for SMB, HDFS, and object storage locations."
+---
 # AWS DataSync 集成 Secrets Manager：三种凭证管理模式实测对比
 
 !!! info "Lab 信息"

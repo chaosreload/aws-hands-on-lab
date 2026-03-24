@@ -36,6 +36,7 @@ theme:
     repo: fontawesome/brands/github
 
 plugins:
+  - social
   - search:
       lang:
         - zh

@@ -1,3 +1,6 @@
+---
+description: "Test all 13 Amazon Bedrock Agents CloudWatch metrics with Claude Sonnet 4.6 vs Haiku 4.5 model comparison and undocumented findings."
+---
 # 实测 Amazon Bedrock Agents CloudWatch 指标：多模型对比 + 13 个运行时指标全解析
 
 !!! info "Lab 信息"

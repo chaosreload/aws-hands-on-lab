@@ -1,3 +1,6 @@
+---
+description: "Test AWS DMS Serverless automatic storage scaling beyond the 100GB limit with MySQL full load and CDC replication scenarios."
+---
 # AWS DMS Serverless 自动存储扩展实测：告别 100GB 限制
 
 !!! info "Lab 信息"

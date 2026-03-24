@@ -1,3 +1,6 @@
+---
+description: "Deploy AWS MCP Servers for ECS and Lambda — use AI coding assistants to build and deploy containerized apps with natural language."
+---
 # 实测 AWS MCP Server：用 AI 助手一键部署 ECS 和 Lambda 应用
 
 !!! info "Lab 信息"

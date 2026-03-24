@@ -1,3 +1,6 @@
+---
+description: "Deploy Zeroboot on EC2 nested virtualization and benchmark sub-millisecond microVM sandbox startup for AI agent code execution."
+---
 # 在 EC2 嵌套虚拟化上部署 Zeroboot：亚毫秒级 VM Sandbox Benchmark 实测
 
 !!! info "Lab 信息"

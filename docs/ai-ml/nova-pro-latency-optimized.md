@@ -1,3 +1,6 @@
+---
+description: "Benchmark Amazon Nova Pro latency-optimized inference on Bedrock — achieve 33% lower TTFT with a single API parameter change."
+---
 # Amazon Nova Pro Latency-Optimized Inference 实测：一个参数降低 33% 推理延迟
 
 !!! info "Lab 信息"

@@ -1,3 +1,6 @@
+---
+description: "Deep comparison of Zeroboot vs E2B for AI agent sandboxes — architecture, startup latency, memory overhead, and security isolation."
+---
 # Zeroboot vs E2B 深度对比：AI Agent Sandbox 技术路线分析
 
 !!! info "文章信息"

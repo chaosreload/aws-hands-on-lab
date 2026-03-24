@@ -1,3 +1,6 @@
+---
+description: "Deploy a real-time voice agent on AWS Bedrock AgentCore Runtime using WebRTC protocol with KVS TURN relay and Nova Sonic."
+---
 # AgentCore WebRTC 双向流：KVS TURN 实时语音 Agent 实战
 
 !!! info "Lab 信息"

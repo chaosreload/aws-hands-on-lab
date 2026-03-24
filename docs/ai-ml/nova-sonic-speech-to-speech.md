@@ -1,3 +1,6 @@
+---
+description: "Hands-on lab for Amazon Nova Sonic speech-to-speech model on Bedrock with bidirectional streaming API for real-time voice conversation."
+---
 # Amazon Nova Sonic 实测：Bedrock 双向流式语音对话 Hands-on Lab
 
 !!! info "Lab 信息"

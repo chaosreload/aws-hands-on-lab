@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chaosreload.github.io/aws-hands-on-lab/sitemap.xml
