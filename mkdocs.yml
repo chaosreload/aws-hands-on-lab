@@ -75,6 +75,7 @@ nav:
     - Amazon Nova Act 实测：用自然语言驱动浏览器自动化的 AI Agent 服务: ai-ml/nova-act-browser-automation.md
     - 实测 AWS MCP Server：用 AI 助手一键部署 ECS 和 Lambda 应用: ai-ml/mcp-serverless-containers.md
     - Amazon Nova Pro Latency-Optimized Inference 实测：一个参数降低 33% 推理延迟: ai-ml/nova-pro-latency-optimized.md
+    - Amazon Nova Sonic 实测：Bedrock 双向流式语音对话 Hands-on Lab: ai-ml/nova-sonic-speech-to-speech.md
   - Compute:
     - compute/index.md
     - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
