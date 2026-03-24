@@ -132,8 +132,11 @@ CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app:app"]
 EOF
 ```
 
-!!! tip "注意基础镜像"
-    MCP Server 建议使用 `public.ecr.aws` 的基础镜像，但实测发现 ECR Public Gallery 可能返回 403 Forbidden。建议使用 Docker Hub 官方镜像（如 `python:3.10-slim`）更稳定。
+!!! tip "ECR Public 基础镜像认证"
+    ECR Public 未认证拉取限制为 1 次/秒（且最多 500GB/月），`docker build` 默认未认证拉取，容易触发 403。在 build 前先认证即可正常使用 `public.ecr.aws` 镜像：
+    ```bash
+    aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+    ```
 
 #### Step 3: 获取容器化指导
 
@@ -338,8 +341,16 @@ Express Mode 自动创建的安全组遵循最小权限原则：
 
 ## 踩坑记录
 
-!!! warning "ECR Public Gallery 403"
-    MCP Server 建议的 `public.ecr.aws/docker/library/python:3.10-slim` 基础镜像可能返回 403 Forbidden。改用 Docker Hub `python:3.10-slim`。**实测发现，可能是 ECR Public Gallery 的速率限制。**
+!!! warning "ECR Public 拉取 403 Forbidden"
+    `docker build` 拉取 `public.ecr.aws` 镜像时返回 403，根因是 **ECR Public 未认证拉取限制为 1 次/秒**（且最多 500GB/月流量）。Docker build 默认是未认证拉取，频繁构建时极易触发限流。
+
+    **解决方案**：在 `docker build` 之前先认证 ECR Public：
+
+    ```bash
+    aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+    ```
+
+    认证后拉取限制提升到 **10 次/秒**，使用 `public.ecr.aws/docker/library/python:3.10-slim` 完全没问题，不需要改用 Docker Hub。在 ECS/Fargate/EC2 等 AWS 内部资源上运行时，认证后同样是 10 次/秒，不受未认证限制影响。
 
 !!! warning "IAM 角色传播延迟"
     创建 IAM 角色后立即调用 Express Mode 可能报错 "Unable to assume the service linked role"。建议等待 15-30 秒让 IAM 传播完成。**已查文档确认：IAM 最终一致性是已知行为。**
