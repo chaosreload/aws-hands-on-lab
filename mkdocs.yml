@@ -90,9 +90,7 @@ nav:
   - Database:
     - database/index.md
     - OpenSearch 原地扩容实测: database/opensearch-in-place-volume.md
-  - Database Migration:
-    - database-migration/index.md
-    - AWS DMS Serverless 自动存储扩展实测：告别 100GB 限制: database-migration/dms-serverless-storage-scaling.md
+    - AWS DMS Serverless 自动存储扩展实测：告别 100GB 限制: database/dms-serverless-storage-scaling.md
   - Security:
     - security/index.md
 
