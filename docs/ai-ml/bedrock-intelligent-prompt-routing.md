@@ -93,7 +93,108 @@ aws bedrock create-prompt-router \
 
 ### Step 4: 对比测试不同 Quality Difference
 
-用同一批 prompt 分别测试 qd=0、qd=20、qd=50 的路由行为差异。
+创建 5 个不同 `responseQualityDifference` 的 Custom Router，用同一批 prompt 观察路由行为变化。
+
+**创建 Custom Router（以 qd=0 和 qd=20 为例）**：
+
+```bash
+# qd=0：对质量差异零容忍，期望更多路由到大模型
+aws bedrock create-prompt-router \
+    --prompt-router-name test-nova-qd-0 \
+    --models '[
+        {"modelArn":"arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-lite-v1:0"},
+        {"modelArn":"arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-pro-v1:0"}
+    ]' \
+    --fallback-model '{"modelArn":"arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-pro-v1:0"}' \
+    --routing-criteria '{"responseQualityDifference": 0}' \
+    --region us-east-1
+
+# qd=20：容忍 20% 的质量差异，期望更多路由到小模型
+aws bedrock create-prompt-router \
+    --prompt-router-name test-nova-qd-20 \
+    --models '[
+        {"modelArn":"arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-lite-v1:0"},
+        {"modelArn":"arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-pro-v1:0"}
+    ]' \
+    --fallback-model '{"modelArn":"arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-pro-v1:0"}' \
+    --routing-criteria '{"responseQualityDifference": 20}' \
+    --region us-east-1
+```
+
+同理创建 qd=5、qd=10、qd=50 的 router。
+
+**准备 7 个不同复杂度的测试 prompt**：
+
+| 编号 | 复杂度 | Prompt |
+|------|--------|--------|
+| S1 | 简单 | What is 2+2? |
+| S2 | 简单 | What is the capital of France? |
+| S3 | 简单 | Translate 'hello' to Spanish |
+| M1 | 中等 | Explain the CAP theorem with examples |
+| M2 | 中等 | Compare REST vs GraphQL for a mobile app backend |
+| C1 | 复杂 | Design a comprehensive disaster recovery plan for a multi-region cloud application handling healthcare data |
+| C2 | 复杂 | Write a detailed RFC for migrating a monolithic e-commerce platform to microservices |
+
+**向每个 router 发送全部 7 个 prompt**：
+
+```bash
+# 获取 custom router ARN
+ROUTER_ARN=$(aws bedrock list-prompt-routers --region us-east-1 \
+    --query 'promptRouterSummaries[?promptRouterName==`test-nova-qd-20`].promptRouterArn' \
+    --output text)
+
+# 发送测试 prompt（以 S1 为例）
+aws bedrock-runtime converse \
+    --model-id "$ROUTER_ARN" \
+    --messages '[{"role":"user","content":[{"text":"What is 2+2?"}]}]' \
+    --region us-east-1 \
+    --query '{model: trace.promptRouter.invokedModelId, tokens: usage}'
+```
+
+**实际输出（qd=20，S1 简单 prompt）**：
+
+```json
+{
+    "model": "amazon.nova-lite-v1:0",
+    "tokens": {
+        "inputTokens": 7,
+        "outputTokens": 101,
+        "totalTokens": 108
+    }
+}
+```
+
+**实际输出（qd=20，C2 复杂 prompt — 与 qd=0 不同）**：
+
+```json
+{
+    "model": "amazon.nova-lite-v1:0",
+    "tokens": {
+        "inputTokens": 20,
+        "outputTokens": 300,
+        "totalTokens": 320
+    }
+}
+```
+
+> 注意：同样的 C2 prompt 在 qd=0 时路由到 `nova-pro-v1:0`，但在 qd=20 时改为路由到 `nova-lite-v1:0`——这就是 quality difference 参数的实际效果。
+
+**全量对比结果**：
+
+| Quality Diff | S1 | S2 | S3 | M1 | M2 | C1 | C2 | Lite 比例 | Pro 比例 |
+|-------------|----|----|----|----|----|----|----|----|---|
+| 0 | Lite | **Pro** | Lite | Lite | Lite | Lite | **Pro** | 71% | 29% |
+| 5 | Lite | **Pro** | Lite | Lite | Lite | Lite | **Pro** | 71% | 29% |
+| 10 | Lite | **Pro** | Lite | Lite | Lite | Lite | **Pro** | 71% | 29% |
+| **20** | Lite | **Pro** | Lite | Lite | Lite | Lite | **Lite** | **86%** | **14%** |
+| **50** | Lite | **Lite** | Lite | Lite | Lite | Lite | **Lite** | **100%** | **0%** |
+
+**关键发现**：
+
+- qd=0~10 路由行为 **完全一致**，这 3 个值没有区别
+- **qd=20 是第一个转折点**：C2（复杂 RFC 编写）从 Pro 降为 Lite
+- **qd=50 完全放弃大模型**：连 S2（"法国首都"居然之前被判为需要 Pro）也降为 Lite
+- 建议生产环境从 **qd=10~20 开始调整**，找到质量和成本的平衡点
 
 ### Step 5: 清理 Custom Router
 
