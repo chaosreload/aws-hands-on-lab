@@ -78,6 +78,7 @@ nav:
     - Amazon Bedrock AgentCore Memory：使用 Streaming Notifications 实时追踪长期记忆变更: ai-ml/agentcore-memory-streaming-ltm.md
     - Bedrock TTFT + Quota 可观测性实测: ai-ml/bedrock-ttft-quota-observability.md
     - Bedrock MiniMax M2.5 vs GLM 5 实测: ai-ml/bedrock-minimax-glm5-benchmark.md
+    - Amazon Bedrock Intelligent Prompt Routing 实测：自动路由省成本的正确打开方式: ai-ml/bedrock-intelligent-prompt-routing.md
     - 在 EC2 嵌套虚拟化上部署 Zeroboot：亚毫秒级 VM Sandbox Benchmark 实测: ai-ml/zeroboot-ec2-benchmark.md
     - Zeroboot vs E2B 深度对比：AI Agent Sandbox 技术路线分析: ai-ml/zeroboot-vs-e2b.md
     - Neuron DRA Driver：EKS 上 Trainium 拓扑感知调度实战: ai-ml/neuron-eks-dra-driver.md
