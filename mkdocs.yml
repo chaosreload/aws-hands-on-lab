@@ -83,6 +83,7 @@ nav:
     - Amazon Nova Sonic 实测：Bedrock 双向流式语音对话 Hands-on Lab: ai-ml/nova-sonic-speech-to-speech.md
     - Amazon Nova 2 Sonic 实测：跨模态对话 + Polyglot 语音 + v1 对比: ai-ml/nova2-sonic-crossmodal-polyglot.md
     - Strands Agents TypeScript SDK 实测：与 Python SDK 的全面对比: ai-ml/strands-agents-typescript.md
+    - Amazon Q Developer Chat 全新 Agentic 能力：Console 中的 AI 运维助手实战: ai-ml/q-developer-chat-agentic.md
   - Compute:
     - compute/index.md
     - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
