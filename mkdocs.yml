@@ -64,6 +64,7 @@ nav:
   - 首页: index.md
   - AI/ML:
     - ai-ml/index.md
+    - Amazon Bedrock Data Automation 实战：从文档解析到多模态智能处理: ai-ml/bedrock-data-automation-ga.md
     - Apache Spark Upgrade Agent：用 AI + MCP 自动化 Spark 版本升级: ai-ml/spark-upgrade-agent-emr.md
     - Amazon Bedrock Knowledge Bases GraphRAG 实战：用图增强 RAG 实现跨文档关联推理: ai-ml/bedrock-knowledge-bases-graphrag.md
     - Amazon Nova Multimodal Embeddings 实测：首个统一多模态 Embedding 模型: ai-ml/nova-multimodal-embeddings.md
