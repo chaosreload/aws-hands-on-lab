@@ -49,8 +49,9 @@
 ### 关键限制
 
 - 仅支持 **S3** 作为数据源
-- 图构建使用 **Claude 3 Haiku**（不可更换），自动启用上下文增强
-- Neptune Analytics graph **不支持自动扩缩**
+- 图构建使用 **Claude 3 Haiku**（不可更换）— 官方文档明确指出 "Configuration options to customize the graph build are not supported"，因此无法换用 Claude 3.5/4.x Haiku 或 Nova 等更新模型
+- **Embedding 模型**仅支持 4 家：Amazon Titan Embed Text v1/v2、Cohere Embed English/Multilingual、Titan Multimodal Embeddings G1、Cohere Embed v3 Multimodal。**不支持 Nova Multimodal Embeddings**
+- Neptune Analytics graph **不支持自动扩缩**，需要手动通过 `update-graph --provisioned-memory` 调整容量（范围 16~24576 m-NCU）
 - 每个数据源最多 **1000 文件**（可申请增加到 10000）
 - 删除 KB **不会自动删除** Neptune graph（需手动删除，否则持续计费！）
 - 层级分块策略下只检索子块，不替换为父块
