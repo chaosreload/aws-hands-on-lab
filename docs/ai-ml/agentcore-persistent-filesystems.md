@@ -267,6 +267,30 @@ result = invoke("SHELL:cat /mnt/workspace/test.txt && md5sum /mnt/workspace/bina
 print(result)  # 文件内容和 MD5 应与写入时完全一致
 ```
 
+### Step 6: 验证 Session 间隔离
+
+使用一个不同的 Session ID 调用同一个 Agent Runtime，验证 Session 之间的存储完全隔离：
+
+```python
+# 用一个全新的 Session ID
+SESSION_B = 'persistent-fs-test-session-bravo-001'
+
+# 检查新 session 的 /mnt/workspace 内容
+result = invoke("SHELL:ls -la /mnt/workspace/", session_id=SESSION_B)
+print(result)
+# 预期输出：空目录 — Session A 写入的文件在 Session B 中完全不可见
+```
+
+**实测结果**：
+
+```
+total 4
+drwxr-xr-x 2 root root    0 Mar 25 02:53 .
+drwxr-xr-x 1 root root 4096 Mar 25 02:53 ..
+```
+
+Session B 看到的是全新的空目录，证实了 Session Storage 的严格隔离 — 每个 session 只能访问自己的存储空间。
+
 ## 测试结果
 
 ### 核心功能验证
