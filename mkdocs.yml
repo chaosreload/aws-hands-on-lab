@@ -67,6 +67,7 @@ nav:
     - Apache Spark Upgrade Agent：用 AI + MCP 自动化 Spark 版本升级: ai-ml/spark-upgrade-agent-emr.md
     - Amazon Bedrock Knowledge Bases GraphRAG 实战：用图增强 RAG 实现跨文档关联推理: ai-ml/bedrock-knowledge-bases-graphrag.md
     - Amazon Nova Multimodal Embeddings 实测：首个统一多模态 Embedding 模型: ai-ml/nova-multimodal-embeddings.md
+    - Amazon Bedrock AgentCore GA 全景实战：从零到生产的完整体验: ai-ml/bedrock-agentcore-ga-overview.md
     - Amazon Bedrock AgentCore Policy 实战：用 Cedar 策略语言精准控制 Agent 工具调用: ai-ml/bedrock-agentcore-policy-ga.md
     - AgentCore Runtime Shell Command 实测: ai-ml/agentcore-runtime-shell-command.md
     - Amazon Bedrock AgentCore Runtime Session Storage 实测：跨 Stop/Resume 的持久化文件系统: ai-ml/agentcore-persistent-filesystems.md
