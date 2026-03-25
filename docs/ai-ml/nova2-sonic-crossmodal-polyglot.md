@@ -290,6 +290,58 @@ await test_crossmodal(MODEL_V2,
 | 音频输入(ES) | v2 | 2.887s | 3.027s | 18.4s | ✅ 西班牙语回复 |
 | 音频输入(ES) | v1 | 3.053s | 3.252s | 16.6s | ✅ 西班牙语回复 |
 
+### 🎧 实测音频样本
+
+以下是测试过程中 Nova 2 Sonic 生成的真实语音输出，可直接播放对比效果：
+
+#### 跨模态文本输入 → 语音输出
+
+**matthew（男声）回答 "What is Amazon Bedrock?"**
+
+<audio controls preload="metadata">
+  <source src="audio/01-crossmodal-en-matthew.mp3" type="audio/mpeg">
+  浏览器不支持音频播放
+</audio>
+
+**tiffany（女声）回答 "Tell me about Mars"**
+
+<audio controls preload="metadata">
+  <source src="audio/02-crossmodal-en-tiffany.mp3" type="audio/mpeg">
+  浏览器不支持音频播放
+</audio>
+
+#### Polyglot 语音：同一个 tiffany 说不同语言
+
+**tiffany 说西班牙语**（回答 "¿Qué es la inteligencia artificial?"）
+
+<audio controls preload="metadata">
+  <source src="audio/03-polyglot-es-tiffany.mp3" type="audio/mpeg">
+  浏览器不支持音频播放
+</audio>
+
+**tiffany 说葡萄牙语**（回答 "O que é computação em nuvem?"）
+
+<audio controls preload="metadata">
+  <source src="audio/04-polyglot-pt-tiffany.mp3" type="audio/mpeg">
+  浏览器不支持音频播放
+</audio>
+
+**tiffany 说印地语**（回答 "क्लाउड कंप्यूटिंग क्या है?"）
+
+<audio controls preload="metadata">
+  <source src="audio/07-hindi-tiffany.mp3" type="audio/mpeg">
+  浏览器不支持音频播放
+</audio>
+
+#### 语音输入 → 语音输出（Speech-to-Speech）
+
+**V2 matthew 回答 Polly 英语提问**
+
+<audio controls preload="metadata">
+  <source src="audio/05a-speech2speech-v2.mp3" type="audio/mpeg">
+  浏览器不支持音频播放
+</audio>
+
 ### 关键发现
 
 #### 1. 跨模态文本输入比音频快约 50%
