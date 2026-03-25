@@ -80,6 +80,7 @@ nav:
     - 实测 AWS MCP Server：用 AI 助手一键部署 ECS 和 Lambda 应用: ai-ml/mcp-serverless-containers.md
     - Amazon Nova Pro Latency-Optimized Inference 实测：一个参数降低 33% 推理延迟: ai-ml/nova-pro-latency-optimized.md
     - Amazon Nova Sonic 实测：Bedrock 双向流式语音对话 Hands-on Lab: ai-ml/nova-sonic-speech-to-speech.md
+    - Amazon Nova 2 Sonic 实测：跨模态对话 + Polyglot 语音 + v1 对比: ai-ml/nova2-sonic-crossmodal-polyglot.md
   - Compute:
     - compute/index.md
     - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
