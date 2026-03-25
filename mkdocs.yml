@@ -74,6 +74,7 @@ nav:
     - Amazon Bedrock AgentCore Runtime Session Storage 实测：跨 Stop/Resume 的持久化文件系统: ai-ml/agentcore-persistent-filesystems.md
     - Amazon Bedrock AgentCore Runtime Stateful MCP Server 实战：Elicitation、Sampling 与 Progress Notifications 深度测试: ai-ml/agentcore-stateful-mcp.md
     - AgentCore WebRTC 双向流：KVS TURN 实时语音 Agent 实战: ai-ml/agentcore-webrtc-streaming.md
+    - AgentCore Memory 长期记忆 Streaming 通知实战：告别轮询，拥抱事件驱动: ai-ml/agentcore-memory-streaming-ltm.md
     - Bedrock TTFT + Quota 可观测性实测: ai-ml/bedrock-ttft-quota-observability.md
     - Bedrock MiniMax M2.5 vs GLM 5 实测: ai-ml/bedrock-minimax-glm5-benchmark.md
     - 在 EC2 嵌套虚拟化上部署 Zeroboot：亚毫秒级 VM Sandbox Benchmark 实测: ai-ml/zeroboot-ec2-benchmark.md
