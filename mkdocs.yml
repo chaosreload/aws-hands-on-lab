@@ -64,6 +64,7 @@ nav:
   - 首页: index.md
   - AI/ML:
     - ai-ml/index.md
+    - Amazon Nova Multimodal Embeddings 实测：首个统一多模态 Embedding 模型: ai-ml/nova-multimodal-embeddings.md
     - Amazon Bedrock AgentCore Policy 实战：用 Cedar 策略语言精准控制 Agent 工具调用: ai-ml/bedrock-agentcore-policy-ga.md
     - AgentCore Runtime Shell Command 实测: ai-ml/agentcore-runtime-shell-command.md
     - AgentCore WebRTC 双向流：KVS TURN 实时语音 Agent 实战: ai-ml/agentcore-webrtc-streaming.md
