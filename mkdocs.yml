@@ -99,6 +99,9 @@ nav:
     - database/index.md
     - OpenSearch 原地扩容实测: database/opensearch-in-place-volume.md
     - AWS DMS Serverless 自动存储扩展实测：告别 100GB 限制: database/dms-serverless-storage-scaling.md
+  - Cloud Operations:
+    - cloud-ops/index.md
+    - AWS DevOps Agent 深度解析：Frontier Agent 如何革新运维事件响应: cloud-ops/devops-agent-preview.md
   - Security:
     - security/index.md
     - Amazon Inspector Agentless 扫描与 Windows KB Findings 实战: security/inspector-agentless-windows-kb.md
