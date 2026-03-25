@@ -1,53 +1,65 @@
-# AgentCore Memory 长期记忆 Streaming 通知实战：告别轮询，拥抱事件驱动
+# Amazon Bedrock AgentCore Memory：使用 Streaming Notifications 实时追踪长期记忆变更
 
 !!! info "Lab 信息"
     - **难度**: ⭐⭐ 中级
     - **预估时间**: 45 分钟
-    - **预估费用**: $2-5（含清理）
+    - **预估费用**: < $1.00（含清理）
     - **Region**: us-east-1
     - **最后验证**: 2026-03-25
 
 ## 背景
 
-Amazon Bedrock AgentCore Memory 是 Agent 生态中实现"个性化记忆"的核心能力——它能从对话中自动提取长期记忆（Long-Term Memory），让 Agent 在后续交互中记住用户偏好。
+AI Agent 要做到"记住用户"，需要 Long-Term Memory（LTM）——从对话中自动提取关键信息，跨 session 持久化。Amazon Bedrock AgentCore Memory 提供了这个能力，但之前你只能**轮询** API 才能知道 LTM 是否有变更。
 
-但之前有一个痛点：**你怎么知道记忆被创建或修改了？** 只能轮询 `ListMemoryRecords` API。这在事件驱动架构中很不自然，也带来不必要的 API 调用成本。
+2026 年 3 月，AgentCore Memory 新增了 **Streaming Notifications**：LTM 记录的创建、更新、删除事件会自动推送到你账户的 Kinesis Data Stream，实现真正的事件驱动架构。
 
-2026 年 3 月，AgentCore Memory 新增了 **Streaming Notifications** 功能——通过 Kinesis Data Stream 将记忆记录的增删改事件实时推送到你的账户。本文完整实测这个功能，重点对比：
+**典型场景**：
 
-- **FULL_CONTENT vs METADATA_ONLY** 两种内容级别的实际差异
-- **直接创建 vs 异步提取** 两条路径的延迟差异
-- 三种事件类型（Created / Updated / Deleted）的 Schema 差异
+- Agent 提取用户偏好后，实时同步到 CRM 系统
+- LTM 变更触发数据湖更新，构建用户画像
+- 审计记忆记录的完整生命周期
 
 ## 前置条件
 
-- AWS 账号，已开通 Amazon Bedrock AgentCore 访问权限
-- AWS CLI v2 已配置（需要 `bedrock-agentcore`、`kinesis`、`iam`、`lambda` 权限）
-- 了解 Kinesis Data Stream 基本概念
+- AWS 账号（需要 Bedrock AgentCore、Kinesis、IAM、Lambda、CloudWatch Logs 权限）
+- AWS CLI v2 已配置
+- 对 AgentCore Memory 基本概念有了解（短期记忆 vs 长期记忆）
 
 ## 核心概念
 
-### 之前 vs 现在
+### Streaming 架构
 
-| | 之前（轮询模式） | 现在（Streaming 模式） |
-|---|---|---|
-| **感知变化** | 周期性调用 ListMemoryRecords | Kinesis 实时推送事件 |
-| **延迟** | 取决于轮询间隔（秒~分钟级） | 直接创建 ~1s，异步提取 ~30s |
-| **成本** | 持续 API 调用费 | 仅 Kinesis + 实际事件量 |
-| **架构风格** | 请求-响应 | 事件驱动 |
+```
+CreateEvent（对话）→ Memory Strategy（异步提取）→ LTM Record 变更
+                                                      ↓
+                                              Kinesis Data Stream
+                                                      ↓
+                                              Lambda / 下游消费者
+```
 
-### 事件类型
+### 三种事件类型
 
-| 事件类型 | 触发场景 |
-|---------|---------|
-| `MemoryRecordCreated` | 异步提取（CreateEvent + Memory Strategy）或 BatchCreateMemoryRecords |
-| `MemoryRecordUpdated` | BatchUpdateMemoryRecords |
-| `MemoryRecordDeleted` | DeleteMemoryRecord / BatchDeleteMemoryRecords / 去重合并 |
+| 事件类型 | 触发时机 | 说明 |
+|---------|---------|------|
+| `MemoryRecordCreated` | LTM 提取完成 / BatchCreate | 新记忆生成 |
+| `MemoryRecordUpdated` | BatchUpdate | 记忆内容更新 |
+| `MemoryRecordDeleted` | Delete / 去重合并 | 记忆被删除 |
 
-### 内容级别
+### 两种 Content Level
 
-- **FULL_CONTENT**：事件包含 `memoryRecordText`（记忆内容全文），适合下游直接消费
-- **METADATA_ONLY**：仅元数据（ID、namespace、策略类型等），需二次调用 API 获取内容
+| Content Level | 事件内容 | 适用场景 |
+|--------------|---------|---------|
+| `FULL_CONTENT` | 元数据 + `memoryRecordText` 全文 | 直接消费内容的下游处理 |
+| `METADATA_ONLY` | 仅元数据（ID、namespace、策略等） | 轻量通知 + 按需 API 查询 |
+
+### Semantic vs Summary 策略
+
+| 维度 | Semantic Memory | Summary Memory |
+|------|----------------|----------------|
+| 输出数量 | 多条独立记录（每条 = 一个事实） | 1 条合并记录 |
+| 输出格式 | 短句 plain text | XML `<topic>` 结构化摘要 |
+| Streaming 事件数 | 与事实数量一致（我们的测试中 = 12） | 通常 1 个 |
+| 适用场景 | 精确查询单个用户属性 | 快速获取会话概览 |
 
 ## 动手实践
 
@@ -56,28 +68,26 @@ Amazon Bedrock AgentCore Memory 是 Agent 生态中实现"个性化记忆"的核
 ```bash
 aws kinesis create-stream \
   --stream-name agentcore-memory-stream \
-  --shard-count 1 \
+  --stream-mode-details StreamMode=ON_DEMAND \
   --region us-east-1
 ```
 
-等待状态变为 ACTIVE：
+验证状态：
 
 ```bash
 aws kinesis describe-stream \
   --stream-name agentcore-memory-stream \
   --region us-east-1 \
-  --query "StreamDescription.StreamStatus"
-# 输出: "ACTIVE"
+  --query "StreamDescription.{Status: StreamStatus, ARN: StreamARN}"
 ```
 
 ### Step 2: 创建 IAM Role
 
-AgentCore 需要一个 IAM Role 来向你的 Kinesis stream 写入事件。
+AgentCore 需要一个 IAM Role 才能向你的 Kinesis 写入事件。
 
-**Trust Policy**（允许 AgentCore 服务 assume）：
+创建信任策略文件 `trust-policy.json`：
 
-```bash
-cat > /tmp/trust-policy.json << 'EOF'
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -90,90 +100,76 @@ cat > /tmp/trust-policy.json << 'EOF'
     }
   ]
 }
-EOF
-
-aws iam create-role \
-  --role-name AgentCoreMemoryStreamRole \
-  --assume-role-policy-document file:///tmp/trust-policy.json
 ```
 
-**Permissions Policy**（授权写入 Kinesis）：
+创建 Role 并附加权限：
 
 ```bash
-cat > /tmp/kinesis-policy.json << 'EOF'
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "kinesis:PutRecords",
-        "kinesis:DescribeStream"
-      ],
-      "Resource": "arn:aws:kinesis:us-east-1:<ACCOUNT_ID>:stream/agentcore-memory-stream"
-    }
-  ]
-}
-EOF
+# 创建 Role
+aws iam create-role \
+  --role-name AgentCoreMemoryStreamRole \
+  --assume-role-policy-document file://trust-policy.json
 
+# 附加 Kinesis 权限（替换 ACCOUNT_ID）
 aws iam put-role-policy \
   --role-name AgentCoreMemoryStreamRole \
   --policy-name AgentCoreKinesisAccess \
-  --policy-document file:///tmp/kinesis-policy.json
+  --policy-document '{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": ["kinesis:PutRecords", "kinesis:DescribeStream"],
+        "Resource": "arn:aws:kinesis:us-east-1:ACCOUNT_ID:stream/agentcore-memory-stream"
+      }
+    ]
+  }'
 ```
-
-> ⚠️ 将 `<ACCOUNT_ID>` 替换为你的 AWS 账户 ID。
 
 ### Step 3: 创建 Lambda Consumer
 
-创建一个简单的 Lambda 来消费 Kinesis 事件并记录到 CloudWatch：
+创建一个简单的 Lambda 来接收和记录 Kinesis 事件。
+
+`index.py`:
 
 ```python
-# index.py
 import json
 import base64
-from datetime import datetime
+import logging
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 def handler(event, context):
-    for r in event.get("Records", []):
-        payload = base64.b64decode(r["kinesis"]["data"]).decode("utf-8")
+    for record in event["Records"]:
+        payload = base64.b64decode(record["kinesis"]["data"]).decode("utf-8")
         parsed = json.loads(payload)
-        event_type = parsed.get("memoryStreamEvent", {}).get("eventType", "unknown")
-        memory_id = parsed.get("memoryStreamEvent", {}).get("memoryId", "")
-        has_text = "memoryRecordText" in parsed.get("memoryStreamEvent", {})
-        print(json.dumps({
-            "eventType": event_type,
-            "memoryId": memory_id,
-            "hasRecordText": has_text,
-            "receivedAt": datetime.utcnow().isoformat() + "Z",
-            "fullPayload": parsed
-        }))
+        evt = parsed.get("memoryStreamEvent", {})
+        logger.info("EVENT_TYPE=%s | MEMORY_ID=%s | RECORD_ID=%s",
+                     evt.get("eventType"), evt.get("memoryId"),
+                     evt.get("memoryRecordId", "N/A"))
+        if "memoryRecordText" in evt:
+            logger.info("RECORD_TEXT=%s", evt["memoryRecordText"][:500])
     return {"statusCode": 200}
 ```
 
-打包部署并添加 Kinesis 触发器：
+打包部署：
 
 ```bash
-# 打包
-zip -j /tmp/lambda-consumer.zip index.py
-
-# 创建 Lambda execution role（省略详细步骤）
-# 需要 AWSLambdaBasicExecutionRole + AmazonKinesisReadOnlyAccess
-
-# 创建 Lambda
+# 创建 Lambda 执行 Role（需要 AWSLambdaBasicExecutionRole + AWSLambdaKinesisExecutionRole）
 aws lambda create-function \
-  --function-name agentcore-memory-consumer \
+  --function-name agentcore-stream-consumer \
   --runtime python3.12 \
   --handler index.handler \
-  --role arn:aws:iam::<ACCOUNT_ID>:role/agentcore-memory-consumer-role \
-  --zip-file fileb:///tmp/lambda-consumer.zip \
-  --timeout 60 \
+  --role arn:aws:iam::ACCOUNT_ID:role/AgentCoreLambdaConsumerRole \
+  --zip-file fileb://function.zip \
+  --timeout 30 \
   --region us-east-1
 
 # 添加 Kinesis 触发器
 aws lambda create-event-source-mapping \
-  --function-name agentcore-memory-consumer \
-  --event-source-arn arn:aws:kinesis:us-east-1:<ACCOUNT_ID>:stream/agentcore-memory-stream \
+  --function-name agentcore-stream-consumer \
+  --event-source-arn arn:aws:kinesis:us-east-1:ACCOUNT_ID:stream/agentcore-memory-stream \
   --starting-position TRIM_HORIZON \
   --batch-size 10 \
   --region us-east-1
@@ -181,131 +177,89 @@ aws lambda create-event-source-mapping \
 
 ### Step 4: 创建启用 Streaming 的 Memory
 
-创建两个 Memory，分别使用不同的内容级别进行对比：
+创建配置文件 `create-memory.json`：
 
-**Memory A：FULL_CONTENT 模式**
-
-```bash
-cat > /tmp/stream-delivery-full.json << 'EOF'
+```json
 {
-  "resources": [
+  "name": "StreamingSemanticMemory",
+  "description": "Memory with semantic strategy and FULL_CONTENT streaming",
+  "eventExpiryDuration": 30,
+  "memoryExecutionRoleArn": "arn:aws:iam::ACCOUNT_ID:role/AgentCoreMemoryStreamRole",
+  "memoryStrategies": [
     {
-      "kinesis": {
-        "dataStreamArn": "arn:aws:kinesis:us-east-1:<ACCOUNT_ID>:stream/agentcore-memory-stream",
-        "contentConfigurations": [
-          {
-            "type": "MEMORY_RECORDS",
-            "level": "FULL_CONTENT"
-          }
-        ]
+      "semanticMemoryStrategy": {
+        "name": "semantic_facts",
+        "description": "Extract semantic facts from conversations"
       }
     }
-  ]
+  ],
+  "streamDeliveryResources": {
+    "resources": [
+      {
+        "kinesis": {
+          "dataStreamArn": "arn:aws:kinesis:us-east-1:ACCOUNT_ID:stream/agentcore-memory-stream",
+          "contentConfigurations": [
+            {
+              "type": "MEMORY_RECORDS",
+              "level": "FULL_CONTENT"
+            }
+          ]
+        }
+      }
+    ]
+  }
 }
-EOF
+```
 
+```bash
 aws bedrock-agentcore-control create-memory \
-  --name "streaming_test_full" \
-  --description "Memory with FULL_CONTENT streaming" \
-  --event-expiry-duration 30 \
-  --memory-execution-role-arn "arn:aws:iam::<ACCOUNT_ID>:role/AgentCoreMemoryStreamRole" \
-  --stream-delivery-resources file:///tmp/stream-delivery-full.json \
+  --cli-input-json file://create-memory.json \
   --region us-east-1
 ```
 
-**Memory B：METADATA_ONLY 模式**
-
-```bash
-cat > /tmp/stream-delivery-meta.json << 'EOF'
-{
-  "resources": [
-    {
-      "kinesis": {
-        "dataStreamArn": "arn:aws:kinesis:us-east-1:<ACCOUNT_ID>:stream/agentcore-memory-stream",
-        "contentConfigurations": [
-          {
-            "type": "MEMORY_RECORDS",
-            "level": "METADATA_ONLY"
-          }
-        ]
-      }
-    }
-  ]
-}
-EOF
-
-aws bedrock-agentcore-control create-memory \
-  --name "streaming_test_metadata" \
-  --description "Memory with METADATA_ONLY streaming" \
-  --event-expiry-duration 30 \
-  --memory-execution-role-arn "arn:aws:iam::<ACCOUNT_ID>:role/AgentCoreMemoryStreamRole" \
-  --stream-delivery-resources file:///tmp/stream-delivery-meta.json \
-  --region us-east-1
-```
-
-创建成功后，检查 Lambda CloudWatch Logs 应能看到 `StreamingEnabled` 验证事件：
+创建完成后（~2 分钟），你的 Lambda 应该收到第一个事件——`StreamingEnabled`：
 
 ```json
 {
   "memoryStreamEvent": {
     "eventType": "StreamingEnabled",
-    "memoryId": "streaming_test_full-xxxxx",
-    "message": "Streaming enabled for memory resource: streaming_test_full-xxxxx"
+    "eventTime": "2026-03-25T08:43:31.337Z",
+    "memoryId": "StreamingSemanticMemory-e8u5Cd3egX",
+    "message": "Streaming enabled for memory resource: StreamingSemanticMemory-e8u5Cd3egX"
   }
 }
 ```
 
-### Step 5: 添加 Memory Strategy
-
-!!! warning "重要发现"
-    如果不配置 Memory Strategy，`CreateEvent` 只会写入短期记忆事件，不会触发异步提取为长期记忆，也就不会产生 streaming 事件。
-
-```bash
-cat > /tmp/add-strategy.json << 'EOF'
-{
-  "addMemoryStrategies": [
-    {
-      "semanticMemoryStrategy": {
-        "name": "SemanticExtraction",
-        "description": "Extract semantic memories from conversations",
-        "namespaceTemplates": ["{actorId}"]
-      }
-    }
-  ]
-}
-EOF
-
-aws bedrock-agentcore-control update-memory \
-  --memory-id "<MEMORY_FULL_ID>" \
-  --memory-strategies file:///tmp/add-strategy.json \
-  --region us-east-1
-
-aws bedrock-agentcore-control update-memory \
-  --memory-id "<MEMORY_META_ID>" \
-  --memory-strategies file:///tmp/add-strategy.json \
-  --region us-east-1
-```
-
-### Step 6: 注入对话，触发 Streaming 事件
-
-**路径 A：通过 CreateEvent 触发异步提取**
+### Step 5: 注入对话，触发 LTM 提取
 
 ```bash
 aws bedrock-agentcore create-event \
-  --memory-id "<MEMORY_FULL_ID>" \
+  --memory-id "YOUR_MEMORY_ID" \
   --actor-id "test-user" \
   --session-id "test-session-1" \
-  --event-timestamp "$(date -u +'%Y-%m-%dT%H:%M:%S.000Z')" \
+  --event-timestamp "$(date -u +"%Y-%m-%dT%H:%M:%S.%3NZ")" \
   --payload '[
     {
       "conversational": {
-        "content": {"text": "My favorite programming language is Python and I use VS Code"},
+        "content": {"text": "I am a software engineer at a fintech startup in Singapore. I use Python and Go."},
         "role": "USER"
       }
     },
     {
       "conversational": {
-        "content": {"text": "Got it! I will remember your preferences."},
+        "content": {"text": "Great! What kind of projects are you working on?"},
+        "role": "ASSISTANT"
+      }
+    },
+    {
+      "conversational": {
+        "content": {"text": "We are building a real-time fraud detection system using Apache Kafka and Amazon Bedrock. I prefer Claude models for text analysis."},
+        "role": "USER"
+      }
+    },
+    {
+      "conversational": {
+        "content": {"text": "That sounds like a powerful combination for fraud detection!"},
         "role": "ASSISTANT"
       }
     }
@@ -313,163 +267,216 @@ aws bedrock-agentcore create-event \
   --region us-east-1
 ```
 
-**路径 B：通过 BatchCreateMemoryRecords 直接创建**
+约 **48 秒**后，Lambda 收到一批 `MemoryRecordCreated` 事件。Semantic 策略从对话中提取出独立事实：
+
+```
+RECORD_TEXT=The user is a software engineer working at a fintech startup in Singapore.
+RECORD_TEXT=The user prefers using Claude models for text analysis tasks.
+RECORD_TEXT=The user is building a real-time fraud detection system.
+RECORD_TEXT=The user's system uses Apache Kafka for streaming.
+...
+```
+
+### Step 6: 验证三种事件类型
+
+**Update 事件**：
 
 ```bash
-aws bedrock-agentcore batch-create-memory-records \
-  --memory-id "<MEMORY_FULL_ID>" \
-  --records '[
-    {
-      "requestIdentifier": "test-1",
-      "content": {"text": "User prefers hiking in autumn season"},
-      "namespaces": ["hobbies/test-user"],
-      "timestamp": "'$(date +%s)'"
-    }
-  ]' \
+aws bedrock-agentcore batch-update-memory-records \
+  --memory-id "YOUR_MEMORY_ID" \
+  --records '[{
+    "memoryRecordId": "RECORD_ID",
+    "content": {"text": "Updated: user now also uses TypeScript for frontend development."},
+    "namespaces": ["YOUR_NAMESPACE"],
+    "timestamp": "EPOCH_SECONDS"
+  }]' \
   --region us-east-1
 ```
 
-### Step 7: 验证 Update 和 Delete 事件
+FULL_CONTENT 模式下，`MemoryRecordUpdated` 事件包含更新后的完整文本：
+
+```json
+{
+  "memoryStreamEvent": {
+    "eventType": "MemoryRecordUpdated",
+    "memoryRecordText": "Updated: user now also uses TypeScript for frontend development.",
+    "memoryStrategyType": "SEMANTIC"
+  }
+}
+```
+
+**Delete 事件**：
 
 ```bash
-# Update
-aws bedrock-agentcore batch-update-memory-records \
-  --memory-id "<MEMORY_FULL_ID>" \
-  --records '[
-    {
-      "memoryRecordId": "<RECORD_ID>",
-      "content": {"text": "User prefers hiking in autumn and spring seasons"},
-      "namespaces": ["hobbies/test-user"],
-      "timestamp": "'$(date +%s)'"
-    }
-  ]' \
-  --region us-east-1
-
-# Delete
 aws bedrock-agentcore delete-memory-record \
-  --memory-id "<MEMORY_FULL_ID>" \
-  --memory-record-id "<RECORD_ID>" \
+  --memory-id "YOUR_MEMORY_ID" \
+  --memory-record-id "RECORD_ID" \
   --region us-east-1
+```
+
+Delete 事件始终只包含 ID，不受 content level 影响：
+
+```json
+{
+  "memoryStreamEvent": {
+    "eventType": "MemoryRecordDeleted",
+    "memoryId": "YOUR_MEMORY_ID",
+    "memoryRecordId": "RECORD_ID"
+  }
+}
 ```
 
 ## 测试结果
 
 ### FULL_CONTENT vs METADATA_ONLY 对比
 
-同一对话（"My favorite programming language is Python and I use VS Code"）分别注入两个 Memory，语义提取后生成的 streaming 事件对比：
+我们创建两个 Memory 用相同对话测试，唯一差异是 content level：
 
 | 字段 | FULL_CONTENT | METADATA_ONLY |
-|------|-------------|--------------|
-| eventType | MemoryRecordCreated | MemoryRecordCreated |
+|------|:-----------:|:------------:|
+| eventType | ✅ | ✅ |
+| eventTime | ✅ | ✅ |
 | memoryId | ✅ | ✅ |
 | memoryRecordId | ✅ | ✅ |
 | namespaces | ✅ | ✅ |
-| memoryStrategyType | SEMANTIC | SEMANTIC |
-| **memoryRecordText** | **"The user's favorite programming language is Python."** | **❌ 不包含** |
+| memoryStrategyId | ✅ | ✅ |
+| memoryStrategyType | ✅ | ✅ |
+| createdAt | ✅ | ✅ |
+| **memoryRecordText** | **✅ 包含完整文本** | **❌ 不包含** |
 
-**结论**：两种模式的元数据完全相同，唯一区别是 FULL_CONTENT 包含 `memoryRecordText` 字段。
+**关键结论**：`METADATA_ONLY` 适合用作触发器（"知道变了就行"），配合 `GetMemoryRecord` API 按需查询内容；`FULL_CONTENT` 适合直接消费内容的下游处理，省去额外 API 调用。
 
-### 三种事件类型 Schema 差异
+### Semantic vs Summary 策略 Streaming 事件对比
 
-| 事件类型 | 包含字段 | hasRecordText (FULL_CONTENT) |
-|---------|---------|-----|
-| MemoryRecordCreated | memoryId, memoryRecordId, namespaces, createdAt, memoryStrategyId, memoryStrategyType, memoryRecordText* | ✅ |
-| MemoryRecordUpdated | 同 Created（含更新后文本） | ✅ |
-| MemoryRecordDeleted | **仅** memoryId + memoryRecordId | ❌（不受 content level 影响） |
+同一段对话（6 轮，涉及个人信息、技术栈、团队、预算），分别用两种策略处理：
 
-### 端到端延迟对比
+| 维度 | Semantic Memory | Summary Memory |
+|------|:--------------:|:-------------:|
+| 产出记录数 | **12** | **1** |
+| Streaming 事件数 | **12 × MemoryRecordCreated** | **1 × MemoryRecordCreated** |
+| 输出格式 | 短句事实 | XML `<topic>` 结构化摘要 |
+| 示例内容 | "The user's infrastructure budget is around $15K per month." | `<topic name="Team and Infrastructure">Team consists of 8 engineers...` |
+| Namespace 模式 | `/strategies/{id}/actors/{actorId}/` | `/strategies/{id}/actors/{actorId}/sessions/{sessionId}/` |
 
-| 路径 | 描述 | 样本 | p50 | p90 | 说明 |
-|------|------|------|-----|-----|------|
-| BatchCreateMemoryRecords → Kinesis | 直接创建记录 | 10 | **1.05s** | **2.02s** | 几乎实时 |
-| CreateEvent → 语义提取 → Kinesis | 对话注入 → LLM 提取 → 推送 | 4 | **~30s** | **~32s** | 主要延迟来自 LLM 推理 |
+Semantic 策略的 **12 条事实**包括：
 
-**关键发现**：BatchCreate 路径延迟亚秒级到 2 秒，几乎实时。CreateEvent 路径因需要 LLM 语义提取，延迟约 30 秒，但 streaming 推送本身的延迟仍 < 2 秒。
+1. 用户是新加坡 fintech startup 的软件工程师
+2. 使用 Python 和 Go 已有 5 年
+3. 正在构建实时欺诈检测系统
+4. 使用 Apache Kafka 做流处理
+5. 使用 PostgreSQL 做交易数据库
+6. 最近开始用 Amazon Bedrock
+7. 偏好 Claude 模型做文本分析
+8. 团队 8 人
+9. 部署目标 AWS ap-southeast-1
+10. 使用 Terraform 部署
+11. CI/CD 用 GitHub Actions
+12. 月预算约 $15K
+
+Summary 策略则生成 **1 条 XML 摘要**，按 "User Background"、"Fraud Detection System Architecture"、"Team and Infrastructure" 三个主题组织。
+
+### 延迟数据
+
+| 路径 | 延迟 | 说明 |
+|------|------|------|
+| BatchCreateMemoryRecords → Kinesis 事件 | p50: 1.05s, p90: 2.02s | 直接创建，无 LLM 推理 |
+| CreateEvent → 异步提取 → Kinesis 事件 | ~48s | 包含 LLM 语义提取（~46s）+ streaming 发布（~2s） |
+| BatchUpdateMemoryRecords → Kinesis 事件 | ~30s | 更新操作 |
+| DeleteMemoryRecord → Kinesis 事件 | ~31s | 删除操作 |
 
 ## 踩坑记录
 
-!!! warning "Memory 名称不能用连字符"
-    `create-memory --name "streaming-test"` 会报 `ValidationException`。名称必须匹配 `[a-zA-Z][a-zA-Z0-9_]{0,47}`，只能用字母、数字和下划线。**已查 API Reference 确认。**
+!!! warning "Memory name 不支持连字符"
+    Memory name 只接受 `[a-zA-Z][a-zA-Z0-9_]{0,47}`，使用 `my-memory` 会报 ValidationException。用下划线替代：`my_memory`。（已查 API Reference 确认）
 
-!!! warning "没有 Memory Strategy = 没有异步提取"
-    如果 Memory 未配置 Strategy（semantic / summary / episodic 等），`CreateEvent` 只会写入短期记忆事件，不会触发 LLM 提取生成长期记忆记录，自然也不会产生 streaming 事件。这不是 Bug，是 by design——文档说 "via CreateEvent **and memory strategies**"。**已查文档确认。**
+!!! warning "没有 Memory Strategy = 没有异步 LTM 提取"
+    如果创建 Memory 时不配置 `memoryStrategies`，`CreateEvent` 只写入短期记忆，**不会**触发长期记忆提取，也就不会产生 streaming 事件。必须至少配置一个策略（Semantic / Summary / Episodic / User Preference）。（已查文档确认："If no strategies are specified, long-term memory records will not be extracted for that memory."）
 
-!!! warning "BatchUpdateMemoryRecords 的 timestamp 是必填字段"
-    即使是更新操作，`timestamp` 仍然是必填参数，否则会报 `ParamValidation` 错误。**实测发现。**
+!!! warning "BatchUpdateMemoryRecords 需要 timestamp 字段"
+    即使是更新操作，`timestamp` 仍为必填参数，遗漏会返回 ParamValidation 错误。（已查 API Reference 确认）
 
-!!! warning "namespaceTemplates 模板变量格式"
-    使用 `{actorId}` 而非 `{{actor_id}}`。支持的变量：`{actorId}`、`{sessionId}`、`{memoryStrategyId}`。**已查 API Reference 确认。**
+!!! warning "Lambda consumer 注意 f-string 转义"
+    通过 SSH heredoc 创建 Lambda 代码时，f-string 中的反斜杠转义容易出问题。建议本地写好 zip 再 SCP 上传。
 
 ## 费用明细
 
 | 资源 | 单价 | 用量 | 费用 |
 |------|------|------|------|
-| Kinesis Data Stream (1 shard) | $0.015/hr | ~2 hr | $0.03 |
-| Kinesis PUT Units | $0.014/million | < 100 | < $0.01 |
-| Lambda 调用 | $0.20/million | < 50 | < $0.01 |
-| AgentCore Memory API | 按调用计费 | ~30 calls | < $1.00 |
-| **合计** | | | **< $2.00** |
+| Kinesis Data Stream (ON_DEMAND) | $0.08/shard-hr | ~0.5 hr | $0.04 |
+| Kinesis PUT | $0.014/百万 PUT | ~50 PUT | < $0.01 |
+| Lambda 调用 | $0.20/百万 | ~30 次 | < $0.01 |
+| AgentCore Memory API | 按调用计费 | ~20 次 | < $0.50 |
+| **合计** | | | **< $1.00** |
 
 ## 清理资源
 
+按以下顺序清理（先解除依赖，再删资源）：
+
 ```bash
-# 1. 删除 AgentCore Memories
+REGION=us-east-1
+
+# 1. 删除 AgentCore Memory
 aws bedrock-agentcore-control delete-memory \
-  --memory-id "<MEMORY_FULL_ID>" --region us-east-1
+  --memory-id YOUR_SEMANTIC_MEMORY_ID --region $REGION
 aws bedrock-agentcore-control delete-memory \
-  --memory-id "<MEMORY_META_ID>" --region us-east-1
+  --memory-id YOUR_SUMMARY_MEMORY_ID --region $REGION
 
 # 2. 删除 Lambda event source mapping
 aws lambda delete-event-source-mapping \
-  --uuid "<EVENT_SOURCE_MAPPING_UUID>" --region us-east-1
+  --uuid YOUR_ESM_UUID --region $REGION
 
-# 3. 删除 Lambda function
+# 3. 删除 Lambda
 aws lambda delete-function \
-  --function-name agentcore-memory-consumer --region us-east-1
+  --function-name agentcore-stream-consumer --region $REGION
 
 # 4. 删除 Kinesis Data Stream
 aws kinesis delete-stream \
-  --stream-name agentcore-memory-stream --region us-east-1
+  --stream-name agentcore-memory-stream --region $REGION
 
-# 5. 删除 IAM Roles
+# 5. 删除 IAM Role + Policy
 aws iam delete-role-policy \
   --role-name AgentCoreMemoryStreamRole \
   --policy-name AgentCoreKinesisAccess
 aws iam delete-role --role-name AgentCoreMemoryStreamRole
 
 aws iam detach-role-policy \
-  --role-name agentcore-memory-consumer-role \
+  --role-name AgentCoreLambdaConsumerRole \
   --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
 aws iam detach-role-policy \
-  --role-name agentcore-memory-consumer-role \
-  --policy-arn arn:aws:iam::aws:policy/AmazonKinesisReadOnlyAccess
-aws iam delete-role --role-name agentcore-memory-consumer-role
+  --role-name AgentCoreLambdaConsumerRole \
+  --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaKinesisExecutionRole
+aws iam delete-role --role-name AgentCoreLambdaConsumerRole
+
+# 6. 删除 CloudWatch Log Group
+aws logs delete-log-group \
+  --log-group-name /aws/lambda/agentcore-stream-consumer --region $REGION
 ```
 
 !!! danger "务必清理"
-    Kinesis Data Stream 按 shard-hour 持续计费（$0.015/hr/shard），Lab 完成后请立即清理。
+    Kinesis Data Stream 按 shard-hour 持续计费，即使没有数据写入。Lab 完成后请立即清理。
 
 ## 结论与建议
 
-### 适用场景
+### 这个功能解决了什么
 
-| 场景 | 推荐模式 | 理由 |
-|------|---------|------|
-| 用户画像实时更新 | FULL_CONTENT | 下游直接消费记忆内容，无需二次 API 调用 |
-| 审计日志 / 合规追踪 | METADATA_ONLY | 只需知道"发生了什么变化"，按需查详情 |
-| 数据湖汇聚 | FULL_CONTENT | 直接将记忆流式写入 S3/数据仓库 |
-| 跨 Agent 记忆同步 | METADATA_ONLY + API | 轻量通知 + 按需拉取，减少带宽 |
+AgentCore Memory Streaming Notifications 把"轮询检查记忆变化"变成了"记忆变化主动通知你"。对于需要实时响应 LTM 变更的场景（用户画像同步、审计、数据湖更新），这是架构上的显著简化。
 
 ### 生产环境建议
 
-1. **始终配置 Memory Strategy** — 否则 CreateEvent 不会触发 LTM 提取
-2. **选择合适的内容级别** — FULL_CONTENT 适合数据管道，METADATA_ONLY 适合轻量触发器
-3. **监控 Kinesis 延迟** — 关注 `IteratorAgeMilliseconds` 指标
-4. **如果使用 KMS 加密 Kinesis** — 记得在 IAM Policy 中添加 `kms:GenerateDataKey` 权限
+1. **Content Level 选择**：大多数场景用 `METADATA_ONLY` + 按需查询就够了，减少 Kinesis 数据传输量。只有需要直接消费 LTM 全文的下游（如搜索索引更新）才用 `FULL_CONTENT`
+2. **策略选择影响事件量**：Semantic 策略产出细粒度事实（每条对话可能 10+ 条），Summary 策略产出 1 条聚合摘要。事件量差异显著，影响 Kinesis 吞吐和 Lambda 调用成本
+3. **延迟预期**：异步 LTM 提取含 LLM 推理，端到端 ~48s；直接 API 创建 ~1s。设计下游系统时需考虑这个延迟
+4. **错误处理**：建议 Lambda consumer 配置 DLQ（死信队列），处理解析失败的事件
+5. **观测性**：AgentCore 提供 CloudWatch Metrics 和 Logs，建议配置告警监控 streaming 投递失败
+
+### 与 AgentCore 系列的关系
+
+这是我们 AgentCore 系列的第四篇。Streaming Notifications 补全了 Memory 服务的"可观测"拼图——你不只能给 Agent 加记忆，还能实时知道 Agent 记住了什么。
 
 ## 参考链接
 
-- [Memory record streaming 官方文档](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory-record-streaming.html)
+- [AgentCore Memory Streaming 官方文档](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory-record-streaming.html)
 - [AWS What's New 公告](https://aws.amazon.com/about-aws/whats-new/2026/03/agentcore-memory-streaming-ltm/)
-- [AgentCore Memory 概述](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory.html)
-- [Region 可用性](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agentcore-regions.html)
+- [AgentCore Memory 概览](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory.html)
+- [Memory 策略文档](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory-strategies.html)
+- [AgentCore Region 可用性](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agentcore-regions.html)
