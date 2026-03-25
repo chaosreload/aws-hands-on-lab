@@ -85,6 +85,7 @@ nav:
     - Amazon Nova Pro Latency-Optimized Inference 实测：一个参数降低 33% 推理延迟: ai-ml/nova-pro-latency-optimized.md
     - Amazon Nova Sonic 实测：Bedrock 双向流式语音对话 Hands-on Lab: ai-ml/nova-sonic-speech-to-speech.md
     - Amazon Nova 2 Sonic 实测：跨模态对话 + Polyglot 语音 + v1 对比: ai-ml/nova2-sonic-crossmodal-polyglot.md
+    - Amazon Nova 2 Lite Benchmark — Extended Thinking 推理能力实测对比: ai-ml/nova2-benchmark.md
     - Strands Agents TypeScript SDK 实测：与 Python SDK 的全面对比: ai-ml/strands-agents-typescript.md
     - Amazon Q Developer Chat 全新 Agentic 能力：Console 中的 AI 运维助手实战: ai-ml/q-developer-chat-agentic.md
     - Amazon Bedrock 多 Agent 协作实战：Supervisor + Collaborator 编排模式深度测试: ai-ml/bedrock-multi-agent-collaboration.md
