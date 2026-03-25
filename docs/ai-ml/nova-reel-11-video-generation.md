@@ -92,6 +92,13 @@ invocation = bedrock_runtime.start_async_invoke(
 print(f"Job started: {invocation['invocationArn']}")
 ```
 
+**生成效果**：
+
+<video controls width="100%">
+  <source src="../assets/nova-reel-videos/t2v-basic-sunset.mp4" type="video/mp4">
+</video>
+*6 秒日落海滩场景，seed=42*
+
 !!! warning "S3 URI 必须以 `/` 结尾"
     如果 S3 URI 不带尾部斜杠，API 会返回 `ValidationException: The provided S3 URI does not point to a bucket or a directory`。这是实测发现的细节，官方文档未明确说明。
 
@@ -194,6 +201,13 @@ invocation = bedrock_runtime.start_async_invoke(
 )
 ```
 
+**生成效果**：
+
+<video controls width="100%">
+  <source src="../assets/nova-reel-videos/multishot-auto-ocean.mp4" type="video/mp4">
+</video>
+*18 秒海洋纪录片，3 个自动分镜，seed=1234*
+
 完成后 S3 中会有：
 
 ```
@@ -246,6 +260,13 @@ invocation = bedrock_runtime.start_async_invoke(
     }
 )
 ```
+
+**生成效果**：
+
+<video controls width="100%">
+  <source src="../assets/nova-reel-videos/multishot-manual-city.mp4" type="video/mp4">
+</video>
+*18 秒未来城市，3 个手动分镜，seed=1234*
 
 !!! tip "手动模式 vs 自动模式"
     - **自动模式**：一个长 prompt（最多 4000 字符），模型决定分镜，适合快速生成
