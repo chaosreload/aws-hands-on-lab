@@ -44,9 +44,9 @@
 |------|--------|--------|
 | Amazon Nova | Nova Lite ($0.06/$0.24 per 1M) | Nova Pro ($0.80/$3.20 per 1M) |
 | Meta Llama | Llama 3.1 8B ($0.22/$0.22) | Llama 3.1 70B ($0.72/$0.72) |
-| Anthropic Claude | Claude 3 Haiku | Claude 3.5 Sonnet |
+| Anthropic Claude | Claude 3 Haiku ~ 3.5 Haiku | Claude 3.5 Sonnet v2 ~ 3.7 Sonnet |
 
-> ⚠️ Anthropic Default Router 目前使用 Claude 3 Haiku + Sonnet 3.5 v1，这些模型已被标记为 **Legacy**，新账号可能无法使用。需创建 Custom Router 选择更新的模型。
+> ⚠️ **Anthropic 模型支持范围有限**：Default Router 使用 Claude 3 Haiku + Sonnet 3.5 v1（已标记 **Legacy**），需创建 Custom Router 选更新模型。但实测发现 **Claude 4 系列（Haiku 4.5、Sonnet 4、Sonnet 4.5、Sonnet 4.6、Opus 4.x）全部不支持** Prompt Router，最新可用模型是 Claude 3.7 Sonnet。详见[踩坑 5](#坑-5)。
 
 ## 动手实践
 
@@ -265,12 +265,27 @@ Router 额外增加了 ~329ms（官方声称 85ms P90），但因为路由到更
 !!! warning "坑 2：Anthropic Default Router 不可用"
     默认的 Anthropic router 使用 Claude 3 Haiku + Sonnet 3.5 v1，这两个模型在 2026 年已被标记为 **Legacy**。调用会返回 `ResourceNotFoundException: Access denied. This Model is marked by provider as Legacy`。
     
-    **解决方案**：创建 Custom Router 选择 Haiku 3.5 + Sonnet 3.5 v2。
+    **解决方案**：创建 Custom Router 选择 Haiku 3.5 + Sonnet 3.7（注意：Claude 4 系列不支持，详见坑 5）。
 
 !!! warning "坑 3：fallback-model 必须在 models 列表中"
     创建 Custom Router 时，`fallback-model` 指定的模型 ARN **必须**同时出现在 `models` 列表中。文档 CLI 示例中它们看起来是独立参数，容易误解。实测发现，官方未记录。
 
-!!! warning "坑 4：中文 prompt 路由判断不准"
+!!! warning "坑 5：Claude 4 系列全部不支持 Prompt Router" {#坑-5}
+    想用 Claude Haiku 4.5 + Sonnet 4.6 组路由？不行。实测 Claude 4 系列 **全军覆没**：
+    
+    | 模型组合 | 结果 |
+    |---------|------|
+    | Claude 3.5 Haiku + 3.5 Sonnet v2 | ✅ 成功创建 |
+    | Claude 3.5 Haiku + 3.7 Sonnet | ✅ 成功创建 |
+    | Claude 3.5 Haiku + **Sonnet 4** | ❌ `Prompt routing is not supported` |
+    | **Haiku 4.5** + 3.7 Sonnet | ❌ `Prompt routing is not supported` |
+    | **Haiku 4.5** + **Sonnet 4.6** | ❌ `Prompt routing is not supported` |
+    
+    **Claude 3.7 Sonnet 是当前 Prompt Router 支持的最新 Anthropic 模型。** Claude 4 全系列（Haiku 4.5、Sonnet 4/4.5/4.6、Opus 4/4.1/4.5/4.6）均返回 `ValidationException`。对于已经以 Claude 4 为主力的团队，这是一个重要限制。
+    
+    **当前最佳 Anthropic 组合**：Claude 3.5 Haiku + Claude 3.7 Sonnet。
+
+!!! warning "坑 6：中文 prompt 路由判断不准"
     简单中文 prompt 路由到 Pro，复杂中文 prompt 反而路由到 Lite——完全反了。这与官方声明"仅优化英文 prompt"一致。**非英文场景不建议使用**。
 
 ## 费用明细
@@ -310,6 +325,7 @@ aws bedrock delete-prompt-router \
 - **全是复杂 prompt**：路由意义不大，直接用大模型
 - **非英文为主**：路由准确度下降
 - **对延迟极度敏感**：router 额外增加 ~329ms 开销
+- **需要 Claude 4 系列**：Prompt Router 目前不支持 Claude 4.x，最新仅到 3.7 Sonnet
 
 ### 生产建议
 1. **从 Default Router 开始**，观察 `trace.promptRouter.invokedModelId` 了解路由分布
