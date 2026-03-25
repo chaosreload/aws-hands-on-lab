@@ -89,6 +89,7 @@ nav:
     - Strands Agents TypeScript SDK 实测：与 Python SDK 的全面对比: ai-ml/strands-agents-typescript.md
     - Amazon Q Developer Chat 全新 Agentic 能力：Console 中的 AI 运维助手实战: ai-ml/q-developer-chat-agentic.md
     - Amazon Bedrock 多 Agent 协作实战：Supervisor + Collaborator 编排模式深度测试: ai-ml/bedrock-multi-agent-collaboration.md
+    - 用 Powertools for Lambda 简化 Bedrock Agent 开发：代码量减少 44% 的实战验证: ai-ml/powertools-bedrock-agents-function-utility.md
   - Compute:
     - compute/index.md
     - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
