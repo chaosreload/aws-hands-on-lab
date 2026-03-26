@@ -129,6 +129,7 @@ nav:
   - Security:
     - security/index.md
     - Amazon Inspector Agentless 扫描与 Windows KB Findings 实战: security/inspector-agentless-windows-kb.md
+    - AWS CloudTrail MCP Server 实战：用自然语言查询 AWS 安全事件: security/cloudtrail-mcp-server.md
 
 extra:
   social:
