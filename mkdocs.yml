@@ -103,6 +103,7 @@ nav:
     - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
     - Lambda AZ Metadata 同 AZ 路由实测: compute/lambda-az-metadata.md
     - EC2 嵌套虚拟化实测：在虚拟实例上运行 KVM 和 Firecracker: compute/ec2-nested-virtualization.md
+    - Amazon ECS Express Mode 实战：一条命令部署生产级容器应用: compute/ecs-express-mode.md
   - Networking:
     - networking/index.md
   - Storage:
