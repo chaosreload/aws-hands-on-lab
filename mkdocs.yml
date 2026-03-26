@@ -101,6 +101,7 @@ nav:
     - 用 Powertools for Lambda 简化 Bedrock Agent 开发：代码量减少 44% 的实战验证: ai-ml/powertools-bedrock-agents-function-utility.md
     - Amazon Bedrock AgentCore Runtime AG-UI 协议实战：标准化 Agent-Frontend 事件流交互: ai-ml/agentcore-runtime-ag-ui.md
     - Amazon Bedrock AgentCore Runtime：使用 Direct Code Deployment 快速部署 AI Agent: ai-ml/bedrock-agentcore-code-deploy.md
+    - Amazon Nova 自定义模型 On-Demand Deployment 解析：按需推理的新选择: ai-ml/nova-custom-on-demand-deployment.md
   - Compute:
     - compute/index.md
     - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
