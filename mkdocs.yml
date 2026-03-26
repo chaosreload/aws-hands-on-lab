@@ -108,6 +108,7 @@ nav:
     - EC2 嵌套虚拟化实测：在虚拟实例上运行 KVM 和 Firecracker: compute/ec2-nested-virtualization.md
     - Amazon EC2 I7i 存储优化实例实测：NVMe 性能提升 50% 的真实数据: compute/ec2-i7i-storage-optimized.md
     - Amazon ECS Express Mode 实战：一条命令部署生产级容器应用: compute/ecs-express-mode.md
+    - Amazon ECS Managed Instances 实战：全托管 EC2 容器计算的新选择: compute/ecs-managed-instances.md
   - Networking:
     - networking/index.md
   - Storage:
