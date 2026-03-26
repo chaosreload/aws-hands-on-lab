@@ -96,6 +96,7 @@ nav:
     - Amazon Bedrock RAG Evaluation 实测：用 LLM-as-a-Judge 自动评估你的 RAG 应用: ai-ml/bedrock-rag-evaluation-ga.md
     - Amazon Bedrock Model Evaluation：用 LLM-as-a-Judge 评估模型质量: ai-ml/bedrock-llm-judge-evaluation.md
     - Amazon Q Developer Chat 全新 Agentic 能力：Console 中的 AI 运维助手实战: ai-ml/q-developer-chat-agentic.md
+    - Amazon Q Developer CLI Agent 实战：终端中的 AI 编程助手（现已演进为 Kiro CLI）: ai-ml/q-developer-cli-agent.md
     - Amazon Bedrock 多 Agent 协作实战：Supervisor + Collaborator 编排模式深度测试: ai-ml/bedrock-multi-agent-collaboration.md
     - 用 Powertools for Lambda 简化 Bedrock Agent 开发：代码量减少 44% 的实战验证: ai-ml/powertools-bedrock-agents-function-utility.md
     - Amazon Bedrock AgentCore Runtime AG-UI 协议实战：标准化 Agent-Frontend 事件流交互: ai-ml/agentcore-runtime-ag-ui.md
