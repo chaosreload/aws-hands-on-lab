@@ -118,6 +118,7 @@ nav:
     - OpenSearch 原地扩容实测: database/opensearch-in-place-volume.md
     - AWS DMS Serverless 自动存储扩展实测：告别 100GB 限制: database/dms-serverless-storage-scaling.md
     - Amazon ElastiCache 向量搜索实战：Valkey 8.2 向量索引、混合搜索与性能调优: database/elasticache-vector-search.md
+    - Aurora PostgreSQL pgvector 0.8.0 实测：迭代索引扫描如何解决向量搜索 Overfiltering 问题: database/pgvector-0.8.0-aurora-postgresql-iterative-scan.md
   - Cloud Operations:
     - cloud-ops/index.md
     - AWS DevOps Agent 深度解析：Frontier Agent 如何革新运维事件响应: cloud-ops/devops-agent-preview.md
