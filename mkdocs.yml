@@ -120,6 +120,7 @@ nav:
     - AWS DataSync 集成 Secrets Manager：三种凭证管理模式实测对比: storage/datasync-secrets-manager.md
     - Amazon S3 Vectors (Preview) 实战：云原生向量存储初体验: storage/s3-vectors-preview.md
     - Amazon S3 Vectors GA 实测：40 倍 Scale 提升 + Per-Index 加密 + 性能基准: storage/s3-vectors-ga.md
+    - S3 Vectors vs OpenSearch Serverless：向量检索选型实测对比: storage/s3vectors-vs-opensearch.md
   - Database:
     - database/index.md
     - OpenSearch 原地扩容实测: database/opensearch-in-place-volume.md
