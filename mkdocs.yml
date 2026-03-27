@@ -78,6 +78,7 @@ nav:
     - Amazon Bedrock AgentCore Runtime Stateful MCP Server 实战：Elicitation、Sampling 与 Progress Notifications 深度测试: ai-ml/agentcore-stateful-mcp.md
     - AgentCore WebRTC 双向流：KVS TURN 实时语音 Agent 实战: ai-ml/agentcore-webrtc-streaming.md
     - Amazon Bedrock AgentCore Memory：使用 Streaming Notifications 实时追踪长期记忆变更: ai-ml/agentcore-memory-streaming-ltm.md
+    - Amazon Bedrock AgentCore Browser Profiles：跨 Session 复用认证状态实战: ai-ml/agentcore-browser-profiles.md
     - Bedrock TTFT + Quota 可观测性实测: ai-ml/bedrock-ttft-quota-observability.md
     - Bedrock MiniMax M2.5 vs GLM 5 实测: ai-ml/bedrock-minimax-glm5-benchmark.md
     - Amazon Bedrock Prompt Optimization 实测：一键优化 Prompt 的效果到底如何？: ai-ml/bedrock-prompt-optimization.md
