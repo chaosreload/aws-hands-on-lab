@@ -17,13 +17,31 @@
 - **SCA**（Software Composition Analysis）：检测第三方依赖中的已知 CVE
 - **IaC**（Infrastructure as Code）：验证 CloudFormation、Terraform 等基础设施模板的安全配置
 
-本文通过实际操作，演示 Inspector Code Security 的完整设置流程、CLI 操作、以及使用 `inspector-scan` API 进行依赖漏洞扫描。
+本文通过实际操作，演示 Inspector Code Security 的完整设置流程：创建包含已知漏洞的测试仓库、集成 GitHub、触发 SAST/SCA/IaC 三合一扫描、以及使用 `inspector-scan` API 进行独立依赖漏洞扫描。
 
 ## 前置条件
 
 - AWS 账号（需要 `inspector2:*` 和 `inspector-scan:*` 权限）
 - AWS CLI v2 已配置
 - GitHub 或 GitLab 账号（用于代码仓库集成）
+
+## 测试仓库
+
+本文使用一个包含已知漏洞的测试仓库进行验证：[chaosreload/inspector-test-repo](https://github.com/chaosreload/inspector-test-repo)
+
+```
+inspector-test-repo/
+├── app/
+│   ├── vulnerable_app.py      # SQL 注入、硬编码凭证、命令注入
+│   └── requirements.txt       # 有已知 CVE 的依赖（django@2.0、flask@1.0 等）
+├── infra/
+│   ├── insecure-sg.yaml       # 0.0.0.0/0 入站规则的 Security Group
+│   └── insecure-s3.yaml       # 无加密、公开访问的 S3 Bucket
+└── README.md
+```
+
+!!! warning "仅供测试"
+    该仓库包含故意植入的安全漏洞，请勿在生产环境使用任何代码。
 
 ## 核心概念
 
@@ -65,7 +83,7 @@ Inspector 控制台      SCM 平台反馈
 - **Region 支持**：仅 10 个 Region（见下表）
 - **SCM 平台**：仅支持 GitHub（github.com）和 GitLab Self-Managed
 - **每账户一个默认扫描配置**：使用 `projectSelectionScope=ALL` 时，只能创建一个配置
-- **GitHub 集成需要浏览器 OAuth**：无法纯 CLI 完成
+- **GitHub 集成需要浏览器 OAuth**：CLI 可创建集成并获取授权 URL，但 OAuth 授权步骤必须在浏览器完成。推荐通过 Console 完成全流程
 
 **支持的 Region**：
 
@@ -187,7 +205,71 @@ aws inspector2 list-code-security-scan-configurations \
 ]
 ```
 
-### Step 4: 使用 Inspector Scan API 扫描依赖漏洞
+### Step 4: 触发仓库扫描并查看 Findings
+
+GitHub 集成完成且扫描配置关联后，可以手动触发扫描：
+
+```bash
+# 查看已关联的仓库项目 ID
+aws inspector2 list-code-security-scan-configuration-associations \
+  --scan-configuration-arn "YOUR_SCAN_CONFIG_ARN" \
+  --region us-east-1
+```
+
+输出：
+```json
+{
+    "associations": [
+        {
+            "resource": {
+                "projectId": "project-66594973-ce57-42e7-90d4-a0c317f05c5c"
+            }
+        }
+    ]
+}
+```
+
+```bash
+# 手动触发扫描
+aws inspector2 start-code-security-scan \
+  --resource "projectId=project-66594973-ce57-42e7-90d4-a0c317f05c5c" \
+  --region us-east-1
+```
+
+输出：
+```json
+{
+    "scanId": "4691197b-4608-40aa-95e2-e66e818e87c0",
+    "status": "IN_PROGRESS"
+}
+```
+
+```bash
+# 查看扫描状态（约 40 秒完成）
+aws inspector2 get-code-security-scan \
+  --resource "projectId=project-66594973-ce57-42e7-90d4-a0c317f05c5c" \
+  --scan-id "4691197b-4608-40aa-95e2-e66e818e87c0" \
+  --region us-east-1
+```
+
+输出：
+```json
+{
+    "scanId": "4691197b-4608-40aa-95e2-e66e818e87c0",
+    "status": "SUCCESSFUL",
+    "lastCommitId": "2bade059fe9bc13a60bece9fb060f08e130b7e00"
+}
+```
+
+```bash
+# 查看扫描发现的 Findings
+aws inspector2 list-findings \
+  --region us-east-1 \
+  --query 'findings[].{Type:type,Severity:severity,Title:title}' \
+  --output table
+```
+
+### Step 5: 使用 Inspector Scan API 扫描依赖漏洞
 
 即使不设置 GitHub 集成，你也可以使用 `inspector-scan` API 对项目依赖进行即时扫描。这对 CI/CD 管道特别有用。
 
@@ -253,7 +335,7 @@ aws inspector-scan scan-sbom \
   --output table
 ```
 
-### Step 5: 动态调整扫描配置
+### Step 6: 动态调整扫描配置
 
 ```bash
 # 仅启用 SAST（关闭 SCA 和 IaC）
@@ -279,9 +361,68 @@ aws inspector2 update-code-security-scan-configuration \
 
 ## 测试结果
 
-### SBOM 依赖扫描结果
+### GitHub 仓库扫描结果
 
-对 6 个常用开源库的旧版本进行扫描，共发现 **39 个漏洞**：
+对 [chaosreload/inspector-test-repo](https://github.com/chaosreload/inspector-test-repo) 触发全量扫描（SAST + SCA + IaC），约 42 秒完成，共发现 **62 个 Findings**：
+
+**按严重性分布**：
+
+| 严重性 | 数量 | 占比 |
+|--------|------|------|
+| Critical | 9 | 14.5% |
+| High | 28 | 45.2% |
+| Medium | 25 | 40.3% |
+| **总计** | **62** | 100% |
+
+**按扫描类型分布**：
+
+| 扫描类型 | Finding 类型 | 数量 | 示例 |
+|---------|-------------|------|------|
+| **SAST** (源码漏洞) | CODE_VULNERABILITY | 8 | SQL 注入、硬编码凭证、命令注入、资源泄漏 |
+| **IaC** (基础设施) | CODE_VULNERABILITY | 10 | SG 0.0.0.0/0 开放、S3 无加密/无版本控制/公开访问 |
+| **SCA** (依赖漏洞) | PACKAGE_VULNERABILITY | 44 | django 16 个 CVE、urllib3 12 个 CVE |
+
+#### SAST 检测详情（源代码漏洞）
+
+| 严重性 | 漏洞类型 | 文件 | 检测器 |
+|--------|---------|------|--------|
+| CRITICAL | CWE-798 硬编码凭证 (×2) | vulnerable_app.py | python/hardcoded-credentials@v1.0 |
+| CRITICAL | CWE-94 代码注入 | vulnerable_app.py | python/code-injection@v1.0 |
+| HIGH | CWE-89 SQL 注入 (×2) | vulnerable_app.py | python/sql-injection@v1.0 |
+| HIGH | CWE-77/78/88 OS 命令注入 (×2) | vulnerable_app.py | python/os-command-injection@v1.0 |
+| MEDIUM | CWE-400/664 资源泄漏 (×2) | vulnerable_app.py | python/resource-leak@v1.0 |
+
+#### IaC 检测详情（基础设施配置）
+
+| 严重性 | 问题 | 文件 | 检测器 |
+|--------|------|------|--------|
+| HIGH | Security Group 允许 0.0.0.0/0 SSH 访问 | insecure-sg.yaml | checkov-custom-restricted-ssh@v1.0 |
+| HIGH | Security Group 允许不受限 TCP 入站 | insecure-sg.yaml | checkov-custom-restricted-ports@v1.0 |
+| HIGH | S3 未启用 KMS 加密 | insecure-s3.yaml | checkov-custom-s3-default-encryption-kms@v1.0 |
+| HIGH | S3 未启用 Object Lock | insecure-s3.yaml | cfn-custom-s3-default-lock-enabled@v1.0 |
+| HIGH | S3 策略允许 HTTP 请求 | insecure-s3.yaml | checkov-custom-s3-bucket-ssl-request-only@v1.0 |
+| HIGH | S3 未启用复制 | insecure-s3.yaml | checkov-custom-s3-bucket-replication-enabled@v1.0 |
+| HIGH | S3 未启用版本控制 | insecure-s3.yaml | disabled-s3-versioning-cloudformation@v1.0 |
+| MEDIUM | S3 未限制公共 Bucket | insecure-s3.yaml | s3-restr-public-false-cloudformation@v1.0 |
+| MEDIUM | S3 未忽略公共 ACL | insecure-s3.yaml | s3-ignr-pubacls-false-cloudformation@v1.0 |
+
+#### SCA 检测详情（依赖漏洞）
+
+| 组件 | 漏洞数 | 关键 CVE | 严重性分布 |
+|------|--------|---------|-----------|
+| django@2.0 | 16 | CVE-2019-19844 (Critical, 密码重置) | 2C / 6H / 8M |
+| urllib3@1.24.1 | 12 | CVE-2021-33503 (High, DoS) | 5H / 7M |
+| jinja2@2.10 | 6 | CVE-2024-56326 (High, 沙箱逃逸) | 3H / 3M |
+| requests@2.19.0 | 5 | CVE-2018-18074 (High, 凭证泄露) | 2H / 3M |
+| pyyaml@5.1 | 3 | CVE-2020-14343 (Critical, 任意代码执行) | 3C |
+| flask@1.0 | 2 | CVE-2023-30861 (High, Session 泄露) | 1H / 1M |
+
+!!! tip "Log4Shell 与 SBOM 扫描"
+    GitHub 仓库中的 `requirements.txt` 不包含 Java 依赖。如需检测 Log4Shell (CVE-2021-44228) 等跨语言漏洞，可使用 `inspector-scan scan-sbom` API 提交 CycloneDX 格式的 SBOM（见 Step 5）。
+
+### SBOM 独立扫描结果
+
+使用 `inspector-scan scan-sbom` API 对 6 个常用开源库的旧版本进行独立扫描（不依赖 GitHub 集成），共发现 **39 个漏洞**：
 
 **按严重性分布**：
 
