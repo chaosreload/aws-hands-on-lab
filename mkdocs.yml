@@ -94,6 +94,7 @@ nav:
     - Amazon Nova 2 Sonic 实测：跨模态对话 + Polyglot 语音 + v1 对比: ai-ml/nova2-sonic-crossmodal-polyglot.md
     - Amazon Nova Reel 1.1 实战：从文字到 2 分钟 AI 视频: ai-ml/nova-reel-11-video-generation.md
     - Amazon Nova 2 Lite Benchmark — Extended Thinking 推理能力实测对比: ai-ml/nova2-benchmark.md
+    - Amazon Nova 2 Omni Preview — 受限预览，无法实测: ai-ml/nova2-omni-preview.md
     - Strands Agents TypeScript SDK 实测：与 Python SDK 的全面对比: ai-ml/strands-agents-typescript.md
     - Amazon Bedrock RAG Evaluation 实测：用 LLM-as-a-Judge 自动评估你的 RAG 应用: ai-ml/bedrock-rag-evaluation-ga.md
     - Amazon Bedrock Model Evaluation：用 LLM-as-a-Judge 评估模型质量: ai-ml/bedrock-llm-judge-evaluation.md
