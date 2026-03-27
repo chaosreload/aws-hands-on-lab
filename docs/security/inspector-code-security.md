@@ -27,21 +27,107 @@
 
 ## 测试仓库
 
-本文使用一个包含已知漏洞的测试仓库进行验证：[chaosreload/inspector-test-repo](https://github.com/chaosreload/inspector-test-repo)
+为验证 Inspector Code Security 的三种扫描能力，需要准备一个包含已知漏洞的 GitHub 仓库。请创建一个新的 GitHub 仓库，按以下结构添加文件：
 
 ```
-inspector-test-repo/
+your-test-repo/
 ├── app/
-│   ├── vulnerable_app.py      # SQL 注入、硬编码凭证、命令注入
-│   └── requirements.txt       # 有已知 CVE 的依赖（django@2.0、flask@1.0 等）
-├── infra/
-│   ├── insecure-sg.yaml       # 0.0.0.0/0 入站规则的 Security Group
-│   └── insecure-s3.yaml       # 无加密、公开访问的 S3 Bucket
-└── README.md
+│   ├── vulnerable_app.py      # SAST 测试：SQL 注入、硬编码凭证、命令注入
+│   └── requirements.txt       # SCA 测试：有已知 CVE 的 Python 依赖
+└── infra/
+    ├── insecure-sg.yaml       # IaC 测试：0.0.0.0/0 入站规则的 Security Group
+    └── insecure-s3.yaml       # IaC 测试：无加密、公开访问的 S3 Bucket
+```
+
+**`app/vulnerable_app.py`**（SAST 测试用例）：
+
+```python
+import sqlite3
+import os
+
+# VULNERABILITY: Hardcoded AWS credentials (SECRET_LEAK)
+AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE"
+AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+
+def get_user(username):
+    """VULNERABILITY: SQL Injection - user input directly in query"""
+    conn = sqlite3.connect("users.db")
+    cursor = conn.cursor()
+    query = f"SELECT * FROM users WHERE username = '{username}'"
+    cursor.execute(query)
+    return cursor.fetchone()
+
+def authenticate(user, password):
+    """VULNERABILITY: Hardcoded password comparison"""
+    if password == "admin123":
+        return True
+    return False
+
+def run_command(cmd):
+    """VULNERABILITY: Command injection"""
+    os.system(cmd)
+```
+
+**`app/requirements.txt`**（SCA 测试用例 — 包含已知 CVE 的旧版本）：
+
+```
+flask==1.0
+django==2.0
+requests==2.19.0
+jinja2==2.10
+pyyaml==5.1
+urllib3==1.24.1
+```
+
+**`infra/insecure-sg.yaml`**（IaC 测试用例 — 不安全的 Security Group）：
+
+```yaml
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  InsecureSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Insecure SG for testing
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: -1
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 0.0.0.0/0
+```
+
+**`infra/insecure-s3.yaml`**（IaC 测试用例 — 不安全的 S3 Bucket）：
+
+```yaml
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  InsecureBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: my-insecure-test-bucket
+      # No encryption, no versioning, no access logging
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref InsecureBucket
+      PolicyDocument:
+        Statement:
+          - Sid: PublicRead
+            Effect: Allow
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Sub "arn:aws:s3:::${InsecureBucket}/*"
 ```
 
 !!! warning "仅供测试"
-    该仓库包含故意植入的安全漏洞，请勿在生产环境使用任何代码。
+    以上代码包含故意植入的安全漏洞，请勿在生产环境使用。测试完成后建议删除仓库。
 
 ## 核心概念
 
@@ -363,7 +449,7 @@ aws inspector2 update-code-security-scan-configuration \
 
 ### GitHub 仓库扫描结果
 
-对 [chaosreload/inspector-test-repo](https://github.com/chaosreload/inspector-test-repo) 触发全量扫描（SAST + SCA + IaC），约 42 秒完成，共发现 **62 个 Findings**：
+对测试仓库触发全量扫描（SAST + SCA + IaC），约 42 秒完成，共发现 **62 个 Findings**：
 
 **按严重性分布**：
 
