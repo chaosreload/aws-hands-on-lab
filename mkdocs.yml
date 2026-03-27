@@ -138,6 +138,7 @@ nav:
     - AWS CloudTrail MCP Server 实战：用自然语言查询 AWS 安全事件: security/cloudtrail-mcp-server.md
     - Amazon CloudFront 后量子 TLS 实测：零配置启用量子安全加密: security/cloudfront-tls-post-quantum.md
     - AWS WAF ASN Match 实战：基于自治系统编号的精准流量控制: security/waf-asn-match.md
+    - Amazon Inspector Code Security 实战：在开发阶段拦截代码与依赖漏洞: security/inspector-code-security.md
 
 extra:
   social:
