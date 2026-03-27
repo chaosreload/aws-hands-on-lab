@@ -108,6 +108,7 @@ nav:
     - Amazon Nova 自定义模型 On-Demand Deployment 解析：按需推理的新选择: ai-ml/nova-custom-on-demand-deployment.md
     - Amazon Bedrock API Keys：告别繁琐 IAM 配置，一键调用大模型: ai-ml/bedrock-api-keys.md
     - Amazon Bedrock Responses API 实战：OpenAI 兼容端点动手指南: bedrock/bedrock-responses-api.md
+    - Amazon Bedrock Citations API 实战：让 AI 回答可追溯到源文档: bedrock/bedrock-citations-api-pdf-claude.md
   - Compute:
     - compute/index.md
     - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
