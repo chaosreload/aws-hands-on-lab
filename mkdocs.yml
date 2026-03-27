@@ -111,6 +111,7 @@ nav:
     - Amazon Bedrock AgentCore MCP Server 实战：从安装到部署的完整开发体验: ai-ml/bedrock-agentcore-mcp-server.md
     - Amazon Nova 自定义模型 On-Demand Deployment 解析：按需推理的新选择: ai-ml/nova-custom-on-demand-deployment.md
     - Amazon Bedrock API Keys：告别繁琐 IAM 配置，一键调用大模型: ai-ml/bedrock-api-keys.md
+    - MCP Server for Amazon MSK：用自然语言管理 Kafka 集群: ai-ml/msk-mcp-server.md
     - Amazon Bedrock Responses API 实战：OpenAI 兼容端点动手指南: bedrock/bedrock-responses-api.md
     - Amazon Bedrock Server-Side Custom Tools 实测：用 Lambda 实现 MCP 协议的服务端工具调用: bedrock/bedrock-server-side-custom-tools.md
     - Amazon Bedrock Citations API 实战：让 AI 回答可追溯到源文档: bedrock/bedrock-citations-api-pdf-claude.md
