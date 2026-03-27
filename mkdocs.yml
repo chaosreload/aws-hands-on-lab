@@ -110,6 +110,7 @@ nav:
     - Amazon Bedrock Responses API 实战：OpenAI 兼容端点动手指南: bedrock/bedrock-responses-api.md
     - Amazon Bedrock Server-Side Custom Tools 实测：用 Lambda 实现 MCP 协议的服务端工具调用: bedrock/bedrock-server-side-custom-tools.md
     - Amazon Bedrock Citations API 实战：让 AI 回答可追溯到源文档: bedrock/bedrock-citations-api-pdf-claude.md
+    - Amazon Bedrock Count Tokens API 实测：推理前精确预估 Token 用量与成本: bedrock/bedrock-count-tokens-api.md
   - Compute:
     - compute/index.md
     - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
