@@ -64,6 +64,7 @@ nav:
   - 首页: index.md
   - AI/ML:
     - ai-ml/index.md
+    - Bedrock Prompt Caching 1 小时 TTL 实测：Claude Code 场景下费用对比: ai-ml/bedrock-prompt-caching-1h-ttl.md
     - Amazon Bedrock Model Distillation 实测：从数据准备到踩坑全记录: ai-ml/bedrock-model-distillation.md
     - Amazon Bedrock Data Automation 实战：从文档解析到多模态智能处理: ai-ml/bedrock-data-automation-ga.md
     - Amazon Bedrock Data Automation Blueprint 指令优化：用样本数据自动提升文档提取准确率: ai-ml/bda-blueprint-instruction-optimization.md
