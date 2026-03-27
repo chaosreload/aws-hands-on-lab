@@ -145,6 +145,10 @@ nav:
     - AWS WAF ASN Match 实战：基于自治系统编号的精准流量控制: security/waf-asn-match.md
     - Amazon Inspector Code Security 实战：在开发阶段拦截代码与依赖漏洞: security/inspector-code-security.md
 
+  - Serverless:
+    - serverless/index.md
+    - API Gateway REST API 响应流式传输实战：TTFB 降低 86%: serverless/api-gateway-response-streaming.md
+
 extra:
   social:
     - icon: fontawesome/brands/github
