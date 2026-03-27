@@ -149,6 +149,7 @@ nav:
     - Amazon Neptune BYOKG-RAG Toolkit 实战：用已有知识图谱构建 GraphRAG 问答系统: database/neptune-byokg-rag-toolkit.md
   - Cloud Operations:
     - cloud-ops/index.md
+    - CloudWatch Agent 采集 EBS 详细性能统计实战：精准定位存储性能瓶颈: cloud-ops/cw-agent-ebs-performance-stats.md
     - AWS DevOps Agent 深度解析：Frontier Agent 如何革新运维事件响应: cloud-ops/devops-agent-preview.md
   - Security:
     - security/index.md
