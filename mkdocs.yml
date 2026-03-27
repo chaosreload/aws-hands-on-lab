@@ -125,6 +125,7 @@ nav:
     - Amazon EC2 I7i 存储优化实例实测：NVMe 性能提升 50% 的真实数据: compute/ec2-i7i-storage-optimized.md
     - Amazon ECS Express Mode 实战：一条命令部署生产级容器应用: compute/ecs-express-mode.md
     - Amazon ECS Managed Instances 实战：全托管 EC2 容器计算的新选择: compute/ecs-managed-instances.md
+    - Amazon EKS Capabilities 实战：全托管 Kubernetes 平台能力（ACK + KRO + Argo CD）: compute/eks-capabilities.md
     - EC2 Capacity Reservation Topology API：启动实例前掌握 GPU 容量的网络拓扑: compute/ec2-capacity-reservation-topology-api.md
   - Networking:
     - networking/index.md
