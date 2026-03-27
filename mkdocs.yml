@@ -128,6 +128,7 @@ nav:
   - Networking:
     - networking/index.md
     - ALB 原生 URL 和 Host Header 重写：告别额外代理层: networking/alb-url-host-header-rewrite.md
+    - Amazon VPC Route Server 动态路由实战：BGP 自动 Failover + BFD 快速切换: networking/vpc-route-server-bgp-failover.md
   - Storage:
     - storage/index.md
     - S3 Tables IAM-only 权限实测: storage/s3-tables-iam-permissions.md
