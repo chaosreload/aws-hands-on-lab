@@ -389,7 +389,7 @@ aws network-firewall update-firewall-policy \
 | httpbin.org | HTTPS | 200 | 114ms | ✅ 通过 |
 | example.com | HTTP | 200 | ~100ms | ✅ 通过 |
 
-**结论**：ATD 在 Drop 模式下不影响正常流量。
+**结论**：ATD 在 Drop 模式下不影响正常流量。恶意流量拦截效果详见下方[恶意流量实测](#恶意流量实测)章节。
 
 ### CloudWatch 指标数据
 
@@ -507,6 +507,138 @@ aws ec2 delete-vpc --vpc-id $VPC
 !!! danger "务必清理"
     Network Firewall 按小时计费（$0.395/hr/endpoint），如不清理每天约 $9.48。Lab 完成后请立即执行清理。
 
+## 恶意流量实测
+
+前面的测试验证了 ATD 对正常流量"无影响"。但 ATD 的核心价值是**阻断恶意流量**。本节通过向已知恶意目标发起连接，验证 ATD 的 Drop 和 Alert 功能。
+
+### 测试方法
+
+**测试目标来源**（公开威胁情报）：
+
+| 来源 | 目标类型 | 数量 |
+|------|---------|------|
+| [abuse.ch Feodo Tracker](https://feodotracker.abuse.ch/) | C2 botnet IP | 5 个 |
+| 公开矿池域名 | Crypto mining pool | 7 个 |
+| CERT.PL sinkhole | Sinkhole domain | 2 个 |
+
+**安全保障**：
+
+- 所有测试流量从隔离 VPC 内的 EC2 发起（通过 SSM，无 SSH 入站）
+- ATD Drop 模式下，恶意流量在 firewall 层被丢弃，**不会实际到达目标**
+- Security Group 无任何入站规则
+- 测试完成后立即清理所有资源
+
+### Drop 模式测试结果
+
+ATD 默认 Drop 模式，测试从 EC2 尝试连接各类恶意目标：
+
+| 目标 | 类型 | Drop 模式结果 | ATD 触发 |
+|------|------|-------------|---------|
+| `stratum.slushpool.com` (172.65.65.63) | Mining pool | ❌ 超时 (5.0s) | ✅ blocked |
+| `xmrpool.eu` (57.129.130.178) | Mining pool | ❌ 超时 (5.0s) | ✅ blocked |
+| `pool.supportxmr.com` (104.243.33.118) | Mining pool | ❌ 超时 (5.0s) | ✅ blocked |
+| `pool.supportxmr.com` (104.243.43.115) | Mining pool | ❌ 超时 (5.0s) | ✅ blocked |
+| `pool.minergate.com` (49.12.80.39) | Mining pool | SSL 错误 (0.4s) | ❌ |
+| `monerohash.com` (66.23.198.161) | Mining pool | HTTP 200 (0.05s) | ❌ |
+| 50.16.16.211 | C2 (Feodo) | HTTP 200 (0.005s) | ❌ |
+| 162.243.103.246 | C2 (Feodo) | HTTP 200 (0.02s) | ❌ |
+| `sinkhole.cert.pl` | Sinkhole | 超时 (5.0s) | ❌ |
+| `aws.amazon.com` (正常) | Baseline | ✅ HTTP 200 (0.06s) | — |
+
+**关键发现**：ATD 成功拦截了 **4 个矿池 IP**，均在 TCP SYN 级别被丢弃（表现为连接超时）。C2 IP（来自 Feodo Tracker）未被拦截——这说明 ATD 基于 MadPot **自己的** 威胁情报，不是第三方 feed 的简单聚合。
+
+### CloudWatch Alert 日志（Drop 模式）
+
+ATD 拦截时生成的 alert 日志示例：
+
+```json
+{
+  "firewall_name": "atd-maltest-firewall",
+  "event": {
+    "event_type": "alert",
+    "alert": {
+      "severity": 3,
+      "signature_id": 1700154080,
+      "signature": "traffic_to_mining [172[.]65[.]65[.]63]",
+      "action": "blocked",
+      "metadata": {
+        "category": ["mining"],
+        "class": ["suspicious_endpoint"],
+        "expiry": ["2026-03-29T07:00:06Z"],
+        "threat_names": ["[suspicious:mining/stratum]"]
+      }
+    },
+    "verdict": { "action": "drop" },
+    "src_ip": "10.0.2.170",
+    "dest_ip": "172.65.65.63",
+    "dest_port": 443,
+    "proto": "TCP",
+    "direction": "to_server"
+  }
+}
+```
+
+日志中的关键字段：
+
+- `alert.action: "blocked"` — 流量被阻断
+- `verdict.action: "drop"` — 防火墙执行 drop
+- `metadata.category: ["mining"]` — 威胁分类：加密货币挖矿
+- `metadata.threat_names` — 具体威胁类型（如 `mining/stratum`）
+- `metadata.expiry` — 该规则的过期时间（规则持续更新）
+
+### Alert 模式测试结果
+
+切换 ATD 为 Alert 模式（`Override: DROP_TO_ALERT`），重新测试同样的矿池目标：
+
+| 目标 | Alert 模式结果 | 日志 action |
+|------|-------------|-----------|
+| `stratum.slushpool.com` (172.65.65.63) | 连接被远端拒绝 (0.06s) | ✅ `allowed` |
+| `xmrpool.eu` (57.129.130.178) | 连接被远端拒绝 (0.16s) | ✅ `allowed` |
+| `pool.supportxmr.com` (104.243.33.118) | 连接被远端拒绝 (0.03s) | ✅ `allowed` |
+
+Alert 模式下的日志对比：
+
+```json
+{
+  "alert": {
+    "signature": "traffic_to_mining [172[.]65[.]65[.]63]",
+    "action": "allowed",      // ← Drop 模式为 "blocked"
+    "metadata": {
+      "category": ["mining"],
+      "threat_names": ["[suspicious:mining/stratum]"]
+    }
+  },
+  "verdict": { "action": "pass" }  // ← Drop 模式为 "drop"
+}
+```
+
+**行为差异**：Alert 模式下流量**通过防火墙**到达目标（被远端拒绝是因为矿池不接受 HTTPS 请求），但日志中仍然记录了威胁检测事件。
+
+### 对比实验：有 ATD vs 无 ATD
+
+| 目标 | 有 ATD (Drop) | 无 ATD | 有 ATD (Alert) |
+|------|-------------|--------|--------------|
+| `stratum.slushpool.com` | ❌ 超时 8.0s | 拒绝 0.06s | 拒绝 0.06s |
+| `xmrpool.eu` | ❌ 超时 5.0s | 拒绝 0.17s | 拒绝 0.16s |
+| `pool.supportxmr.com` | ❌ 超时 5.0s | 拒绝 0.06s | 拒绝 0.03s |
+| `aws.amazon.com` (正常) | ✅ 200 0.06s | ✅ 200 0.06s | ✅ 200 0.06s |
+
+**结论**：
+- **Drop 模式**：恶意流量在 firewall 层被丢弃，表现为连接超时（SYN 被 drop）
+- **无 ATD**：流量正常通过 firewall，到达远端（被远端拒绝或响应）
+- **Alert 模式**：流量行为与无 ATD 相同，但生成 alert 日志
+- **正常流量**：三种模式下均不受影响
+
+### CloudWatch Metrics
+
+| 指标 | 08:05-08:10 (Drop模式测试) | 08:10-08:15 (Alert模式) | 08:15-08:20 (无ATD) |
+|------|--------------------------|----------------------|-------------------|
+| DroppedPackets | **12** | 0 | 0 |
+| PassedPackets | 47,220 | 613 | 528 |
+| ReceivedPackets | 47,232 | 613 | 526 |
+
+Drop 模式期间 `DroppedPackets = 12`，与 4 次 TCP SYN 重试（3 retries × 4 targets = 12 packets）一致。
+
 ## 结论与建议
 
 ### ATD 适合的场景
@@ -525,7 +657,7 @@ aws ec2 delete-vpc --vpc-id $VPC
 
 ### 局限性
 
-- **无法查看具体规则**：Managed rule group 的规则内容不可见，无法精确知道拦截了哪些 IP/域名
+- **无法查看具体规则**：Managed rule group 的规则内容不可见，无法精确知道拦截了哪些 IP/域名（实测中第三方威胁 feed 如 Feodo Tracker 的 C2 IP 未被拦截，说明 ATD 使用 MadPot 独立的威胁情报）
 - **被动防御**：只能阻断 MadPot 已知的威胁，新型 0-day 攻击仍需其他安全层防护
 - **额外成本**：高流量场景下 ATD 数据处理费可能显著
 
