@@ -123,6 +123,7 @@ nav:
     - Amazon ECS Managed Instances 实战：全托管 EC2 容器计算的新选择: compute/ecs-managed-instances.md
   - Networking:
     - networking/index.md
+    - ALB 原生 URL 和 Host Header 重写：告别额外代理层: networking/alb-url-host-header-rewrite.md
   - Storage:
     - storage/index.md
     - S3 Tables IAM-only 权限实测: storage/s3-tables-iam-permissions.md
