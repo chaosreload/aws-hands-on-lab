@@ -134,7 +134,7 @@ nav:
     - Amazon Inspector Agentless 扫描与 Windows KB Findings 实战: security/inspector-agentless-windows-kb.md
     - AWS CloudTrail MCP Server 实战：用自然语言查询 AWS 安全事件: security/cloudtrail-mcp-server.md
     - Amazon CloudFront 后量子 TLS 实测：零配置启用量子安全加密: security/cloudfront-tls-post-quantum.md
-    - AWS WAF ASN Match：基于自治系统编号的精准流量控制实战: security/waf-asn-match.md
+    - AWS WAF ASN Match 实战：基于自治系统编号的精准流量控制: security/waf-asn-match.md
 
 extra:
   social:
