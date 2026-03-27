@@ -139,7 +139,7 @@ nav:
     - AWS DMS Serverless 自动存储扩展实测：告别 100GB 限制: database/dms-serverless-storage-scaling.md
     - Amazon ElastiCache 向量搜索实战：Valkey 8.2 向量索引、混合搜索与性能调优: database/elasticache-vector-search.md
     - Aurora PostgreSQL pgvector 0.8.0 实测：迭代索引扫描如何解决向量搜索 Overfiltering 问题: database/pgvector-0.8.0-aurora-postgresql-iterative-scan.md
-    - OpenSearch Serverless Disk-Optimized Vectors 实测：用磁盘向量换取 97% 内存节省: database/opensearch-serverless-disk-optimized-vectors.md
+    - OpenSearch Serverless 磁盘优化向量实战：低成本向量搜索方案: opensearch/opensearch-serverless-disk-optimized-vectors.md
     - Amazon Neptune BYOKG-RAG Toolkit 实战：用已有知识图谱构建 GraphRAG 问答系统: database/neptune-byokg-rag-toolkit.md
   - Cloud Operations:
     - cloud-ops/index.md
