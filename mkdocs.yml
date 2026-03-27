@@ -105,6 +105,7 @@ nav:
     - Amazon Bedrock AgentCore Runtime：使用 Direct Code Deployment 快速部署 AI Agent: ai-ml/bedrock-agentcore-code-deploy.md
     - Amazon Bedrock AgentCore Browser Proxy 实测：用自有代理实现稳定出口 IP 与精准流量路由: ai-ml/agentcore-browser-proxy.md
     - Amazon Nova 自定义模型 On-Demand Deployment 解析：按需推理的新选择: ai-ml/nova-custom-on-demand-deployment.md
+    - Amazon Bedrock API Keys：告别繁琐 IAM 配置，一键调用大模型: ai-ml/bedrock-api-keys.md
   - Compute:
     - compute/index.md
     - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
