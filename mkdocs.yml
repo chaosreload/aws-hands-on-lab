@@ -152,6 +152,7 @@ nav:
     - Amazon OpenSearch Service 多层存储实战：可写 Warm 层取代 UltraWarm 的全新架构: database/opensearch-multi-tier-writable-warm.md
     - Amazon Neptune BYOKG-RAG Toolkit 实战：用已有知识图谱构建 GraphRAG 问答系统: database/neptune-byokg-rag-toolkit.md
     - Amazon DocumentDB Serverless 实战：自动扩缩的文档数据库 + 向量搜索: database/documentdb-serverless-ga.md
+    - Amazon DocumentDB 8.0 全面实测：压缩、查询优化与新特性动手验证: database/documentdb-8.md
     - Amazon ElastiCache Bloom Filter 实测：比 Set 省 98% 内存的概率型数据结构: database/elasticache-bloom-filter.md
     - Aurora DSQL Connectors 实战：用 Python 和 Node.js 三行代码连接分布式 SQL 数据库: database/aurora-dsql-connectors-iam.md
   - Analytics:
