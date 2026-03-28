@@ -127,6 +127,7 @@ nav:
     - Amazon ECS Managed Instances 实战：全托管 EC2 容器计算的新选择: compute/ecs-managed-instances.md
     - Amazon EKS Capabilities 实战：全托管 Kubernetes 平台能力（ACK + KRO + Argo CD）: compute/eks-capabilities.md
     - EC2 Capacity Reservation Topology API：启动实例前掌握 GPU 容量的网络拓扑: compute/ec2-capacity-reservation-topology-api.md
+    - EC2 Image Builder 集成 Lambda 和 Step Functions：工作流自动化实践: compute/ec2-image-builder-lambda-step-functions.md
   - Networking:
     - networking/index.md
     - ALB 原生 URL 和 Host Header 重写：告别额外代理层: networking/alb-url-host-header-rewrite.md
