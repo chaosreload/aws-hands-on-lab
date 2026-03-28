@@ -149,6 +149,7 @@ nav:
     - Aurora PostgreSQL pgvector 0.8.0 实测：迭代索引扫描如何解决向量搜索 Overfiltering 问题: database/pgvector-0.8.0-aurora-postgresql-iterative-scan.md
     - Amazon ElastiCache Memcached 水平自动扩缩实战: database/elasticache-memcached-horizontal-autoscaling.md
     - OpenSearch Serverless 磁盘优化向量实战：低成本向量搜索方案: database/opensearch-serverless-disk-optimized-vectors.md
+    - Amazon OpenSearch Service 多层存储实战：可写 Warm 层取代 UltraWarm 的全新架构: database/opensearch-multi-tier-writable-warm.md
     - Amazon Neptune BYOKG-RAG Toolkit 实战：用已有知识图谱构建 GraphRAG 问答系统: database/neptune-byokg-rag-toolkit.md
     - Amazon DocumentDB Serverless 实战：自动扩缩的文档数据库 + 向量搜索: database/documentdb-serverless-ga.md
     - Amazon ElastiCache Bloom Filter 实测：比 Set 省 98% 内存的概率型数据结构: database/elasticache-bloom-filter.md
