@@ -155,6 +155,7 @@ nav:
     - Amazon DocumentDB 8.0 全面实测：压缩、查询优化与新特性动手验证: database/documentdb-8.md
     - Amazon ElastiCache Bloom Filter 实测：比 Set 省 98% 内存的概率型数据结构: database/elasticache-bloom-filter.md
     - Aurora DSQL Connectors 实战：用 Python 和 Node.js 三行代码连接分布式 SQL 数据库: database/aurora-dsql-connectors-iam.md
+    - Amazon RDS for PostgreSQL Zero-ETL 集成 Amazon Redshift 实战：近实时数据复制全流程验证: database/rds-postgres-zero-etl-redshift.md
   - Analytics:
     - Amazon OpenSearch Service Derived Source 实测：存储优化 51%，你需要知道的取舍: analytics/opensearch-derived-source.md
     - Amazon OpenSearch Ingestion 批量 AI 推理实战：用 SageMaker 批量生成向量嵌入: analytics/opensearch-ingestion-batch-ai-inference.md
