@@ -153,6 +153,7 @@ nav:
     - Amazon Neptune BYOKG-RAG Toolkit 实战：用已有知识图谱构建 GraphRAG 问答系统: database/neptune-byokg-rag-toolkit.md
     - Amazon DocumentDB Serverless 实战：自动扩缩的文档数据库 + 向量搜索: database/documentdb-serverless-ga.md
     - Amazon ElastiCache Bloom Filter 实测：比 Set 省 98% 内存的概率型数据结构: database/elasticache-bloom-filter.md
+    - Aurora DSQL Connectors 实战：用 Python 和 Node.js 三行代码连接分布式 SQL 数据库: database/aurora-dsql-connectors-iam.md
   - Analytics:
     - Amazon OpenSearch Service Derived Source 实测：存储优化 51%，你需要知道的取舍: analytics/opensearch-derived-source.md
     - Amazon OpenSearch Ingestion 批量 AI 推理实战：用 SageMaker 批量生成向量嵌入: analytics/opensearch-ingestion-batch-ai-inference.md
