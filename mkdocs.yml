@@ -154,6 +154,7 @@ nav:
     - Amazon ElastiCache Bloom Filter 实测：比 Set 省 98% 内存的概率型数据结构: database/elasticache-bloom-filter.md
   - Analytics:
     - Amazon OpenSearch Service Derived Source 实测：存储优化 51%，你需要知道的取舍: analytics/opensearch-derived-source.md
+    - Amazon OpenSearch Ingestion 批量 AI 推理实战：用 SageMaker 批量生成向量嵌入: analytics/opensearch-ingestion-batch-ai-inference.md
   - Cloud Operations:
     - cloud-ops/index.md
     - CloudWatch Agent 采集 EBS 详细性能统计实战：精准定位存储性能瓶颈: cloud-ops/cw-agent-ebs-performance-stats.md
