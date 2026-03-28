@@ -131,6 +131,7 @@ nav:
   - Networking:
     - networking/index.md
     - ALB 原生 URL 和 Host Header 重写：告别额外代理层: networking/alb-url-host-header-rewrite.md
+    - ALB Target Optimizer 实战：精确控制后端并发请求数: networking/alb-target-optimizer.md
     - Amazon VPC Route Server 动态路由实战：BGP 自动 Failover + BFD 快速切换: networking/vpc-route-server-bgp-failover.md
   - Storage:
     - storage/index.md
