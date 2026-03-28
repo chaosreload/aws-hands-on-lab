@@ -162,6 +162,9 @@ nav:
     - AWS Network Firewall Active Threat Defense 实战：基于 MadPot 威胁情报自动阻断恶意流量: security/network-firewall-atd.md
     - AWS IAM 新增 VPC Endpoint Condition Keys 实战：可扩展的网络边界控制: security/iam-vpc-endpoint-condition-keys.md
 
+  - Containers:
+    - containers/index.md
+    - Amazon ECR Archive 存储类：降低容器镜像存储成本的实战指南: containers/ecr-archive-storage-class.md
   - Serverless:
     - serverless/index.md
     - API Gateway REST API 响应流式传输实战：TTFB 降低 86%: serverless/api-gateway-response-streaming.md
