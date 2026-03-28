@@ -151,6 +151,7 @@ nav:
     - OpenSearch Serverless 磁盘优化向量实战：低成本向量搜索方案: database/opensearch-serverless-disk-optimized-vectors.md
     - Amazon Neptune BYOKG-RAG Toolkit 实战：用已有知识图谱构建 GraphRAG 问答系统: database/neptune-byokg-rag-toolkit.md
     - Amazon DocumentDB Serverless 实战：自动扩缩的文档数据库 + 向量搜索: database/documentdb-serverless-ga.md
+    - Amazon ElastiCache Bloom Filter 实测：比 Set 省 98% 内存的概率型数据结构: database/elasticache-bloom-filter.md
   - Cloud Operations:
     - cloud-ops/index.md
     - CloudWatch Agent 采集 EBS 详细性能统计实战：精准定位存储性能瓶颈: cloud-ops/cw-agent-ebs-performance-stats.md
