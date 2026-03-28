@@ -172,6 +172,7 @@ nav:
     - serverless/index.md
     - API Gateway REST API 响应流式传输实战：TTFB 降低 86%: serverless/api-gateway-response-streaming.md
     - AWS Lambda Response Streaming 200 MB 实测：从入门到边界探索: serverless/lambda-response-streaming-200mb.md
+    - Amazon EventBridge 1MB 事件负载实测：边界探索与 Target 传递踩坑: serverless/eventbridge-1mb-payload.md
 
 extra:
   social:
