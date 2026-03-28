@@ -155,6 +155,7 @@ nav:
     - CloudWatch Agent 采集 EBS 详细性能统计实战：精准定位存储性能瓶颈: cloud-ops/cw-agent-ebs-performance-stats.md
     - AWS DevOps Agent 深度解析：Frontier Agent 如何革新运维事件响应: cloud-ops/devops-agent-preview.md
     - AWS FIS 新场景实测：用 AZ Slowdown 和 Cross-AZ Packet Loss 模拟灰色故障: cloud-ops/fis-partial-failure-scenarios.md
+    - AWS Systems Manager Just-in-Time Node Access：零常驻权限的节点访问管理: cloud-ops/ssm-jit-node-access.md
   - Security:
     - security/index.md
     - Amazon Inspector Agentless 扫描与 Windows KB Findings 实战: security/inspector-agentless-windows-kb.md
