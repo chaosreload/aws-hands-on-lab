@@ -165,6 +165,7 @@ nav:
   - Containers:
     - containers/index.md
     - Amazon ECR Archive 存储类：降低容器镜像存储成本的实战指南: containers/ecr-archive-storage-class.md
+    - Amazon ECR Blob Mounting 实战：跨 Repository 共享 Image Layer 优化存储与推送性能: containers/ecr-blob-mounting.md
   - Serverless:
     - serverless/index.md
     - API Gateway REST API 响应流式传输实战：TTFB 降低 86%: serverless/api-gateway-response-streaming.md
