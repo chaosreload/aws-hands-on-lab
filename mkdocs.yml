@@ -125,7 +125,6 @@ nav:
     - Amazon EC2 I7i 存储优化实例实测：NVMe 性能提升 50% 的真实数据: compute/ec2-i7i-storage-optimized.md
     - Amazon ECS Express Mode 实战：一条命令部署生产级容器应用: compute/ecs-express-mode.md
     - Amazon ECS Managed Instances 实战：全托管 EC2 容器计算的新选择: compute/ecs-managed-instances.md
-    - Amazon EKS Capabilities 实战：全托管 Kubernetes 平台能力（ACK + KRO + Argo CD）: compute/eks-capabilities.md
     - EC2 Capacity Reservation Topology API：启动实例前掌握 GPU 容量的网络拓扑: compute/ec2-capacity-reservation-topology-api.md
     - EC2 Image Builder 集成 Lambda 和 Step Functions：工作流自动化实践: compute/ec2-image-builder-lambda-step-functions.md
   - Networking:
@@ -182,6 +181,7 @@ nav:
     - containers/index.md
     - Amazon ECR Archive 存储类：降低容器镜像存储成本的实战指南: containers/ecr-archive-storage-class.md
     - Amazon ECR Blob Mounting 实战：跨 Repository 共享 Image Layer 优化存储与推送性能: containers/ecr-blob-mounting.md
+    - Amazon EKS Capabilities 实战：全托管 Kubernetes 平台能力（ACK + KRO + Argo CD）: containers/eks-capabilities.md
   - Serverless:
     - serverless/index.md
     - API Gateway REST API 响应流式传输实战：TTFB 降低 86%: serverless/api-gateway-response-streaming.md
