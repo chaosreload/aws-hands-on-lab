@@ -680,6 +680,82 @@ aws ec2 terminate-instances --instance-ids i-xxx --region $REGION --profile $PRO
 !!! danger "务必清理"
     Redshift Serverless 最低 8 RPU（~$3/小时），Aurora Serverless v2 按 ACU 计费。Lab 完成后请立即清理。
 
+
+## 成本分析
+
+### 定价模型对比
+
+#### 方案 A：Export Cluster Data to S3
+
+| 费用项 | 计算方式 | 参考单价（ap-southeast-1） |
+|--------|---------|--------------------------|
+| **导出费** | 按 DB cluster 数据量（GB） | **$0.011/GB** |
+| S3 存储 | Parquet 压缩后数据量 × 月存储价 | $0.025/GB/月 |
+| KMS Key | 每月固定费 | $1/月 |
+| Athena 查询 | 按扫描数据量 | $5/TB scanned |
+| S3 PUT 请求 | 导出文件数 | $0.005/1000 请求 |
+
+!!! warning "计费陷阱"
+    **导出费按整个 DB cluster 大小计算**，即使你只选了部分数据库/表导出（`--export-only`），费用仍然按全量算。这是官方定价页明确说明的。
+
+#### 方案 B：Zero-ETL → Redshift
+
+| 费用项 | 计算方式 | 参考单价（ap-southeast-1） |
+|--------|---------|--------------------------|
+| **Zero-ETL 集成** | — | **$0**（免费） |
+| Enhanced Binlog I/O | 开启 binlog 增加的写 I/O | 按 Aurora Standard I/O 计费 |
+| 初始 Seed | 首次全量同步（Snapshot Export 机制） | $0.011/GB（一次性） |
+| **Redshift Serverless 计算** | RPU-小时 | **$0.375/RPU-小时**（最低 8 RPU = $3/h） |
+| Redshift 存储 | Managed Storage | $0.024/GB/月 |
+| 跨 AZ 数据传输 | 源和目标不在同一 AZ 时 | $0.01/GB |
+
+!!! info "Zero-ETL 本身免费"
+    AWS 官方明确说明：*"AWS does not charge an additional fee for zero-ETL integrations. Ongoing processing of data changes by zero-ETL integration is offered at no additional charge."* 但需要注意 Enhanced Binlog 带来的额外 I/O 成本和 Redshift 的计算/存储费用。
+
+### 场景化成本估算
+
+以下以 **100GB Aurora MySQL 实例** 为例，对比两种方案的月度成本：
+
+#### 场景一：每日导出 + 偶尔查询
+
+| 费用项 | 方案 A：Export to S3 | 方案 B：Zero-ETL |
+|--------|:-------------------:|:----------------:|
+| 导出/Seed | 100GB × $0.011 × 30 = **$33** | 100GB × $0.011 = **$1.1**（一次性） |
+| S3 存储 | ~40GB × $0.025 = **$1** | — |
+| Redshift Serverless 计算 | — | 8 RPU × $0.375 × 2h × 30 = **$180** |
+| Redshift 存储 | — | 100GB × $0.024 = **$2.4** |
+| Athena 查询 | 5GB × 10次 × 30天 × $5/TB = **$7.5** | — |
+| Enhanced Binlog I/O | — | 估 **$5-20** |
+| KMS | **$1** | — |
+| **月合计** | **~$42.5** | **~$190+** |
+
+#### 场景二：每周导出 + 低频查询
+
+| 费用项 | 方案 A：Export to S3 | 方案 B：Zero-ETL |
+|--------|:-------------------:|:----------------:|
+| 导出/Seed | 100GB × $0.011 × 4 = **$4.4** | $1.1（一次性） |
+| 存储 | ~40GB × $0.025 = **$1** | 100GB × $0.024 = **$2.4** |
+| 查询 | 5GB × 3次 × 4周 × $5/TB = **$0.3** | Redshift 8 RPU × $0.375 × 0.5h × 4 = **$6** |
+| 其他 | KMS **$1** | Binlog I/O **$5-20** |
+| **月合计** | **~$6.7** | **~$30+** |
+
+#### 场景三：500GB 大库 + 近实时需求
+
+| 费用项 | 方案 A（每日导出） | 方案 B（Zero-ETL） |
+|--------|:------------------:|:-----------------:|
+| 导出/Seed | 500GB × $0.011 × 30 = **$165** | 500GB × $0.011 = **$5.5**（一次性） |
+| 存储 | ~200GB × $0.025 = **$5** | 500GB × $0.024 = **$12** |
+| 查询/计算 | Athena **$15** | Redshift Serverless（4h/天）**$360** |
+| 其他 | KMS **$1** | Binlog I/O **$20-50** |
+| **月合计** | **~$186** | **~$400+** |
+
+!!! tip "成本优化建议"
+    - **低频归档场景**：Export to S3 + Athena 按量付费，成本最低
+    - **近实时但查询少**：Zero-ETL + Redshift Serverless 配置好自动暂停（idle timeout）
+    - **大数据量 + 频繁查询**：考虑 Redshift Provisioned Reserved Instance，单价更低
+    - **降低 Export 成本**：减少导出频率（如每周而非每天），或考虑 Snapshot Export（成本相同但可基于时间点）
+    - **降低 Zero-ETL 成本**：使用 Aurora I/O-Optimized 配置（I/O 不额外收费，但实例单价高 30%）
+
 ## 结论与建议
 
 ### 选型决策表
