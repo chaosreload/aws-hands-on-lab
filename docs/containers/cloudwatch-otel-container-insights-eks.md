@@ -64,7 +64,21 @@ OTel Container Insights 从 8 个数据源采集指标：
 
 ### Step 1: 准备 EKS 集群和节点
 
-如果已有 EKS 集群，跳到 Step 2。否则，先创建集群和节点组：
+如果已有 EKS 集群，跳到「更新 kubeconfig」步骤。否则，先创建集群和节点组：
+
+```bash
+# 创建 EKS 集群（约 15 分钟）
+eksctl create cluster \
+  --name my-cluster \
+  --region ap-southeast-1 \
+  --version 1.31 \
+  --nodegroup-name default \
+  --node-type m5.large \
+  --nodes 2 \
+  --managed
+```
+
+集群就绪后，更新 kubeconfig 并确认节点状态：
 
 ```bash
 # 更新 kubeconfig
