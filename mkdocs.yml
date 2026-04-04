@@ -168,6 +168,7 @@ nav:
     - AWS DevOps Agent 深度解析：Frontier Agent 如何革新运维事件响应: cloud-ops/devops-agent-preview.md
     - AWS FIS 新场景实测：用 AZ Slowdown 和 Cross-AZ Packet Loss 模拟灰色故障: cloud-ops/fis-partial-failure-scenarios.md
     - AWS Systems Manager Just-in-Time Node Access：零常驻权限的节点访问管理: cloud-ops/ssm-jit-node-access.md
+    - CloudWatch Query Studio 实测：首次原生 PromQL 查询体验全解析: cloud-ops/cloudwatch-query-studio-promql.md
   - Security:
     - security/index.md
     - Amazon Inspector Agentless 扫描与 Windows KB Findings 实战: security/inspector-agentless-windows-kb.md
