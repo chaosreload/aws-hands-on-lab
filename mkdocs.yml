@@ -170,6 +170,7 @@ nav:
     - AWS Systems Manager Just-in-Time Node Access：零常驻权限的节点访问管理: cloud-ops/ssm-jit-node-access.md
     - CloudWatch Query Studio 实测：首次原生 PromQL 查询体验全解析: cloud-ops/cloudwatch-query-studio-promql.md
     - CloudWatch OpenTelemetry Metrics 实战：原生 OTel 指标摄入与 PromQL 查询全解析: cloud-ops/cloudwatch-otel-metrics.md
+    - CloudWatch 自动启用规则实战：一条命令为所有 CloudFront Distribution 开启 Access Logs: cloud-ops/cloudwatch-cloudfront-enablement.md
   - Security:
     - security/index.md
     - Amazon Inspector Agentless 扫描与 Windows KB Findings 实战: security/inspector-agentless-windows-kb.md
