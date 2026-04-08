@@ -141,7 +141,7 @@ nav:
     - Amazon S3 Vectors GA 实测：40 倍 Scale 提升 + Per-Index 加密 + 性能基准: storage/s3-vectors-ga.md
     - S3 Vectors vs OpenSearch Serverless：向量检索选型实测对比: storage/s3vectors-vs-opensearch.md
     - Amazon S3 Files 实测：首个云对象存储的原生文件系统访问全面解析: storage/s3-files.md
-    - S3 Files vs S3 File Gateway 实测：原生文件系统访问与经典网关方案的全面对比: storage/s3-files-vs-file-gateway.md
+    - S3 Files vs File Gateway vs Mountpoint CSI 实测：三种 S3 挂载方案全面对比: storage/s3-files-vs-file-gateway.md
   - Database:
     - database/index.md
     - OpenSearch 原地扩容实测: database/opensearch-in-place-volume.md
