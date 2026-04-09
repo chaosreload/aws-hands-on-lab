@@ -144,6 +144,7 @@ nav:
     - S3 Vectors vs OpenSearch Serverless：向量检索选型实测对比: storage/s3vectors-vs-opensearch.md
     - Amazon S3 Files 实测：首个云对象存储的原生文件系统访问全面解析: storage/s3-files.md
     - S3 Files vs File Gateway vs Mountpoint CSI 实测：三种 S3 挂载方案全面对比: storage/s3-files-vs-file-gateway.md
+    - S3 Files vs 开源方案实测：s3fs-fuse 和 fsspec 性能对比与选型: storage/s3-files-vs-opensource.md
   - Database:
     - database/index.md
     - OpenSearch 原地扩容实测: database/opensearch-in-place-volume.md

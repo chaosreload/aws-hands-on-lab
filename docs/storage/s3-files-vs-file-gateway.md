@@ -577,3 +577,4 @@ aws s3api delete-bucket --bucket fgw-test-20260408-36429 --region us-east-1
 - [Mountpoint for Amazon S3 文件系统行为](https://github.com/awslabs/mountpoint-s3/blob/main/doc/SEMANTICS.md)
 - [Mounting Amazon S3 to EC2 using S3 File Gateway (AWS Blog)](https://aws.amazon.com/blogs/storage/mounting-amazon-s3-to-an-amazon-ec2-instance-using-a-private-connection-to-s3-file-gateway/)
 - [S3 Files 实测：首个云对象存储的原生文件系统访问全面解析](../storage/s3-files.md)
+- [S3 Files vs 开源方案实测：s3fs-fuse 和 fsspec 性能对比与选型](../storage/s3-files-vs-opensource.md)
