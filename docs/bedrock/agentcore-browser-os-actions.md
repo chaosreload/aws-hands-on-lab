@@ -218,7 +218,9 @@ aws bedrock-agentcore invoke-browser \
 {"result": {"mouseClick": {"status": "SUCCESS"}}}
 ```
 
-随后截图确认菜单已弹出。
+随后截图确认菜单已弹出：
+
+![右键菜单截图 — 可以看到浏览器原生上下文菜单被成功触发](images/agentcore-os-actions-right-click.png)
 
 **打印对话框**（CDP 触发 `window.print()` 后会被阻塞）：
 
@@ -245,6 +247,10 @@ aws bedrock-agentcore invoke-browser \
   --region us-east-1
 ```
 
+截图可以看到 Chromium 打印对话框被成功触发：
+
+![打印对话框截图 — Ctrl+P 触发的系统打印对话框](images/agentcore-os-actions-print-dialog.png)
+
 三步全部 SUCCESS。这个工作流——**触发系统对话框 → 截图确认 → 操作关闭**——正是 OS-level actions 的典型用法。
 
 ### Step 5: 全屏截图
@@ -258,6 +264,8 @@ aws bedrock-agentcore invoke-browser \
 ```
 
 返回 `result.screenshot.data` 字段包含 base64 编码的 PNG 图片。目前仅支持 PNG 格式。
+
+![全屏截图示例 — OS-level screenshot 捕获的完整浏览器画面](images/agentcore-os-actions-initial.png)
 
 !!! tip "截图用途"
     截图是 vision-based AI agent 的核心能力——agent 可以截图后用多模态模型（如 Claude、Nova）分析页面内容，决定下一步操作坐标。这比 CDP 获取 DOM 树更接近人类操作方式。
