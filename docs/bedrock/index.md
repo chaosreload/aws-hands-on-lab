@@ -8,7 +8,9 @@ Amazon Bedrock 产品功能指南与动手实测。
 >
 > 和 What's New 的区别：What's New 是增量（每次发布写一篇），Feature Guide 是全貌（一个功能一篇，持续更新）。
 
-*即将推出：Guardrails、Inference Profiles、Knowledge Bases...*
+- 📖 [Guardrails 功能决策指南：6 种安全策略的选型与实测](bedrock-guardrails.md)
+
+*更多 Feature Guide 即将推出：Inference Profiles、Knowledge Bases...*
 
 ---
 

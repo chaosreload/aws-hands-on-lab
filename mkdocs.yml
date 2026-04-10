@@ -61,6 +61,9 @@ nav:
 - Bedrock:
   - bedrock/index.md
   
+  - Feature Guides:
+    - Guardrails 功能决策指南：6 种安全策略的选型与实测: bedrock/bedrock-guardrails.md
+  
   - What's New 实测:
     - 核心功能:
       - Responses API 实战：OpenAI 兼容端点动手指南: bedrock/bedrock-responses-api.md
