@@ -169,6 +169,7 @@ nav:
     - Amazon OpenSearch Ingestion 批量 AI 推理实战：用 SageMaker 批量生成向量嵌入: analytics/opensearch-ingestion-batch-ai-inference.md
     - Amazon OpenSearch Service GPU 加速与自动优化向量索引实战: analytics/opensearch-gpu-vector-indexes.md
     - Amazon Managed Service for Apache Flink 2.2 实战：首个大版本升级全面解析: analytics/managed-flink-2-2.md
+    - OpenSearch Service 统一可观测性实测：Prometheus Direct Query + AI Agent Tracing 全解析: analytics/opensearch-prometheus-agent-tracing.md
   - Cloud Operations:
     - cloud-ops/index.md
     - CloudWatch Agent 采集 EBS 详细性能统计实战：精准定位存储性能瓶颈: cloud-ops/cw-agent-ebs-performance-stats.md
