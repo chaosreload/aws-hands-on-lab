@@ -4,208 +4,214 @@ site_description: AWS 动手实验室 — 从概念到实操的技术指南
 site_author: chaosreload
 repo_url: https://github.com/chaosreload/aws-hands-on-lab
 repo_name: chaosreload/aws-hands-on-lab
-
 theme:
   name: material
   language: zh
   palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: deep orange
-      accent: orange
-      toggle:
-        icon: material/brightness-7
-        name: 切换到暗色模式
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: deep orange
-      accent: orange
-      toggle:
-        icon: material/brightness-4
-        name: 切换到亮色模式
+  - media: '(prefers-color-scheme: light)'
+    scheme: default
+    primary: deep orange
+    accent: orange
+    toggle:
+      icon: material/brightness-7
+      name: 切换到暗色模式
+  - media: '(prefers-color-scheme: dark)'
+    scheme: slate
+    primary: deep orange
+    accent: orange
+    toggle:
+      icon: material/brightness-4
+      name: 切换到亮色模式
   features:
-    - navigation.tabs
-    - navigation.sections
-    - navigation.expand
-    - navigation.top
-    - search.suggest
-    - search.highlight
-    - content.code.copy
-    - content.tabs.link
+  - navigation.tabs
+  - navigation.sections
+  - navigation.expand
+  - navigation.top
+  - search.suggest
+  - search.highlight
+  - content.code.copy
+  - content.tabs.link
   icon:
     repo: fontawesome/brands/github
-
 plugins:
-  - social
-  - search:
-      lang:
-        - zh
-        - en
-
+- social
+- search:
+    lang:
+    - zh
+    - en
 markdown_extensions:
-  - admonition
-  - pymdownx.details
-  - pymdownx.superfences
-  - pymdownx.highlight:
-      anchor_linenums: true
-      line_spans: __span
-      pygments_lang_class: true
-  - pymdownx.inlinehilite
-  - pymdownx.tabbed:
-      alternate_style: true
-  - pymdownx.tasklist:
-      custom_checkbox: true
-  - attr_list
-  - md_in_html
-  - toc:
-      permalink: true
-
+- admonition
+- pymdownx.details
+- pymdownx.superfences
+- pymdownx.highlight:
+    anchor_linenums: true
+    line_spans: __span
+    pygments_lang_class: true
+- pymdownx.inlinehilite
+- pymdownx.tabbed:
+    alternate_style: true
+- pymdownx.tasklist:
+    custom_checkbox: true
+- attr_list
+- md_in_html
+- toc:
+    permalink: true
 nav:
-  - 首页: index.md
-  - AI/ML:
-    - ai-ml/index.md
-    - Bedrock Prompt Caching 1 小时 TTL 实测：Claude Code 场景下费用对比: ai-ml/bedrock-prompt-caching-1h-ttl.md
-    - Amazon Bedrock Model Distillation 实测：从数据准备到踩坑全记录: ai-ml/bedrock-model-distillation.md
-    - Amazon Bedrock Data Automation 实战：从文档解析到多模态智能处理: ai-ml/bedrock-data-automation-ga.md
-    - Amazon Bedrock Data Automation Blueprint 指令优化：用样本数据自动提升文档提取准确率: ai-ml/bda-blueprint-instruction-optimization.md
-    - Apache Spark Upgrade Agent：用 AI + MCP 自动化 Spark 版本升级: ai-ml/spark-upgrade-agent-emr.md
-    - Amazon Bedrock Knowledge Bases GraphRAG 实战：用图增强 RAG 实现跨文档关联推理: ai-ml/bedrock-knowledge-bases-graphrag.md
-    - Amazon Nova Multimodal Embeddings 实测：首个统一多模态 Embedding 模型: ai-ml/nova-multimodal-embeddings.md
-    - Amazon Bedrock Knowledge Bases 多模态检索实战：图片、音频、视频的统一 RAG 工作流: ai-ml/multimodal-retrieval-kb.md
-    - Amazon Bedrock AgentCore GA 全景实战：从零到生产的完整体验: ai-ml/bedrock-agentcore-ga-overview.md
-    - Amazon Bedrock AgentCore Policy 实战：用 Cedar 策略语言精准控制 Agent 工具调用: ai-ml/bedrock-agentcore-policy-ga.md
-    - AgentCore Runtime Shell Command 实测: ai-ml/agentcore-runtime-shell-command.md
-    - Amazon Bedrock AgentCore Runtime Session Storage 实测：跨 Stop/Resume 的持久化文件系统: ai-ml/agentcore-persistent-filesystems.md
-    - AgentCore Runtime + S3 Files 实测：AI Agent 文件存储无限扩展的三种方案对比: ai-ml/agentcore-s3files-agent-storage.md
-    - Amazon Bedrock AgentCore Runtime Stateful MCP Server 实战：Elicitation、Sampling 与 Progress Notifications 深度测试: ai-ml/agentcore-stateful-mcp.md
-    - AgentCore WebRTC 双向流：KVS TURN 实时语音 Agent 实战: ai-ml/agentcore-webrtc-streaming.md
-    - Amazon Bedrock AgentCore Memory：使用 Streaming Notifications 实时追踪长期记忆变更: ai-ml/agentcore-memory-streaming-ltm.md
-    - Amazon Bedrock AgentCore Browser Profiles：跨 Session 复用认证状态实战: ai-ml/agentcore-browser-profiles.md
-    - Bedrock TTFT + Quota 可观测性实测: ai-ml/bedrock-ttft-quota-observability.md
-    - Bedrock MiniMax M2.5 vs GLM 5 实测: ai-ml/bedrock-minimax-glm5-benchmark.md
-    - Amazon Bedrock Prompt Optimization 实测：一键优化 Prompt 的效果到底如何？: ai-ml/bedrock-prompt-optimization.md
-    - Amazon Bedrock Intelligent Prompt Routing 实测：自动路由省成本的正确打开方式: ai-ml/bedrock-intelligent-prompt-routing.md
-    - 在 EC2 嵌套虚拟化上部署 Zeroboot：亚毫秒级 VM Sandbox Benchmark 实测: ai-ml/zeroboot-ec2-benchmark.md
-    - Zeroboot vs E2B 深度对比：AI Agent Sandbox 技术路线分析: ai-ml/zeroboot-vs-e2b.md
-    - Neuron DRA Driver：EKS 上 Trainium 拓扑感知调度实战: ai-ml/neuron-eks-dra-driver.md
-    - 实测 Amazon Bedrock Agents CloudWatch 指标：多模型对比 + 13 个运行时指标全解析: ai-ml/bedrock-agents-cloudwatch-metrics.md
-    - Amazon Nova Act 实测：用自然语言驱动浏览器自动化的 AI Agent 服务: ai-ml/nova-act-browser-automation.md
-    - 实测 AWS MCP Server：用 AI 助手一键部署 ECS 和 Lambda 应用: ai-ml/mcp-serverless-containers.md
-    - 动手实践：将 API Gateway REST API 变成 AI Agent 可调用的 MCP 工具: ai-ml/api-gateway-mcp-proxy.md
-    - Amazon Nova Pro Latency-Optimized Inference 实测：一个参数降低 33% 推理延迟: ai-ml/nova-pro-latency-optimized.md
-    - Amazon Nova Sonic 实测：Bedrock 双向流式语音对话 Hands-on Lab: ai-ml/nova-sonic-speech-to-speech.md
-    - Amazon Nova 2 Sonic 实测：跨模态对话 + Polyglot 语音 + v1 对比: ai-ml/nova2-sonic-crossmodal-polyglot.md
-    - Amazon Nova Reel 1.1 实战：从文字到 2 分钟 AI 视频: ai-ml/nova-reel-11-video-generation.md
-    - Amazon Nova 2 Lite Benchmark — Extended Thinking 推理能力实测对比: ai-ml/nova2-benchmark.md
-    - Amazon Nova 2 Omni Preview — 受限预览，无法实测: ai-ml/nova2-omni-preview.md
-    - Strands Agents TypeScript SDK 实测：与 Python SDK 的全面对比: ai-ml/strands-agents-typescript.md
-    - Amazon Bedrock RAG Evaluation 实测：用 LLM-as-a-Judge 自动评估你的 RAG 应用: ai-ml/bedrock-rag-evaluation-ga.md
-    - Amazon Bedrock Model Evaluation：用 LLM-as-a-Judge 评估模型质量: ai-ml/bedrock-llm-judge-evaluation.md
-    - Amazon Q Developer Chat 全新 Agentic 能力：Console 中的 AI 运维助手实战: ai-ml/q-developer-chat-agentic.md
-    - Amazon Q Developer CLI Agent 实战：终端中的 AI 编程助手（现已演进为 Kiro CLI）: ai-ml/q-developer-cli-agent.md
-    - Amazon Bedrock 多 Agent 协作实战：Supervisor + Collaborator 编排模式深度测试: ai-ml/bedrock-multi-agent-collaboration.md
-    - 用 Powertools for Lambda 简化 Bedrock Agent 开发：代码量减少 44% 的实战验证: ai-ml/powertools-bedrock-agents-function-utility.md
-    - Amazon Bedrock AgentCore Runtime AG-UI 协议实战：标准化 Agent-Frontend 事件流交互: ai-ml/agentcore-runtime-ag-ui.md
-    - Amazon Bedrock AgentCore Runtime：使用 Direct Code Deployment 快速部署 AI Agent: ai-ml/bedrock-agentcore-code-deploy.md
-    - Amazon Bedrock AgentCore Browser Proxy 实测：用自有代理实现稳定出口 IP 与精准流量路由: ai-ml/agentcore-browser-proxy.md
-    - Amazon Bedrock AgentCore Browser Web Bot Auth 实测：用加密签名让 AI Agent "证明自己是好 Bot": ai-ml/agentcore-browser-web-bot-auth.md
-    - Amazon Bedrock AgentCore MCP Server 实战：从安装到部署的完整开发体验: ai-ml/bedrock-agentcore-mcp-server.md
-    - Amazon Nova 自定义模型 On-Demand Deployment 解析：按需推理的新选择: ai-ml/nova-custom-on-demand-deployment.md
-    - Amazon Bedrock API Keys：告别繁琐 IAM 配置，一键调用大模型: ai-ml/bedrock-api-keys.md
-    - MCP Server for Amazon MSK：用自然语言管理 Kafka 集群: ai-ml/msk-mcp-server.md
-    - Amazon Bedrock Responses API 实战：OpenAI 兼容端点动手指南: bedrock/bedrock-responses-api.md
-    - Amazon Bedrock Server-Side Custom Tools 实测：用 Lambda 实现 MCP 协议的服务端工具调用: bedrock/bedrock-server-side-custom-tools.md
-    - Amazon Bedrock Citations API 实战：让 AI 回答可追溯到源文档: bedrock/bedrock-citations-api-pdf-claude.md
-    - Amazon Bedrock Count Tokens API 实测：推理前精确预估 Token 用量与成本: bedrock/bedrock-count-tokens-api.md
-    - Amazon Bedrock AgentCore 企业级部署：VPC 连接、PrivateLink、CloudFormation 与资源标签实战: bedrock/agentcore-vpc-privatelink-cfn-tagging.md
-    - AgentCore Browser OS-Level Actions 实测：突破 CDP 限制的 8 种操作全解析: bedrock/agentcore-browser-os-actions.md
-    - Amazon Bedrock IAM 成本分摊实测：按用户和角色追踪 GenAI 推理费用: bedrock/bedrock-iam-cost-allocation.md
-  - Compute:
-    - compute/index.md
-    - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
-    - Lambda AZ Metadata 同 AZ 路由实测: compute/lambda-az-metadata.md
-    - EC2 嵌套虚拟化实测：在虚拟实例上运行 KVM 和 Firecracker: compute/ec2-nested-virtualization.md
-    - Amazon EC2 I7i 存储优化实例实测：NVMe 性能提升 50% 的真实数据: compute/ec2-i7i-storage-optimized.md
-    - Amazon Lightsail Compute-Optimized 实测：与 EC2 c7i 的性能、成本、功能全面对比: lightsail/lightsail-compute-optimized-vs-ec2.md
-    - Amazon ECS Express Mode 实战：一条命令部署生产级容器应用: compute/ecs-express-mode.md
-    - Amazon ECS Managed Instances 实战：全托管 EC2 容器计算的新选择: compute/ecs-managed-instances.md
-    - EC2 Capacity Reservation Topology API：启动实例前掌握 GPU 容量的网络拓扑: compute/ec2-capacity-reservation-topology-api.md
-    - EC2 Image Builder 集成 Lambda 和 Step Functions：工作流自动化实践: compute/ec2-image-builder-lambda-step-functions.md
-  - Networking:
-    - networking/index.md
-    - ALB 原生 URL 和 Host Header 重写：告别额外代理层: networking/alb-url-host-header-rewrite.md
-    - ALB Target Optimizer 实战：精确控制后端并发请求数: networking/alb-target-optimizer.md
-    - Amazon VPC Route Server 动态路由实战：BGP 自动 Failover + BFD 快速切换: networking/vpc-route-server-bgp-failover.md
-  - Storage:
-    - storage/index.md
-    - S3 Tables IAM-only 权限实测: storage/s3-tables-iam-permissions.md
-    - AWS DataSync 集成 Secrets Manager：三种凭证管理模式实测对比: storage/datasync-secrets-manager.md
-    - Amazon S3 Vectors (Preview) 实战：云原生向量存储初体验: storage/s3-vectors-preview.md
-    - Amazon S3 Vectors GA 实测：40 倍 Scale 提升 + Per-Index 加密 + 性能基准: storage/s3-vectors-ga.md
-    - S3 Vectors vs OpenSearch Serverless：向量检索选型实测对比: storage/s3vectors-vs-opensearch.md
-    - Amazon S3 Files 实测：首个云对象存储的原生文件系统访问全面解析: storage/s3-files.md
-    - S3 Files vs File Gateway vs Mountpoint CSI 实测：三种 S3 挂载方案全面对比: storage/s3-files-vs-file-gateway.md
-    - S3 Files vs 开源方案实测：s3fs-fuse 和 fsspec 性能对比与选型: storage/s3-files-vs-opensource.md
-  - Database:
-    - database/index.md
-    - OpenSearch 原地扩容实测: database/opensearch-in-place-volume.md
-    - Amazon OpenSearch Service Agentic Search 实战：自然语言驱动搜索: database/agentic-search.md
-    - AWS DMS Serverless 自动存储扩展实测：告别 100GB 限制: database/dms-serverless-storage-scaling.md
-    - Amazon ElastiCache 向量搜索实战：Valkey 8.2 向量索引、混合搜索与性能调优: database/elasticache-vector-search.md
-    - Aurora PostgreSQL pgvector 0.8.0 实测：迭代索引扫描如何解决向量搜索 Overfiltering 问题: database/pgvector-0.8.0-aurora-postgresql-iterative-scan.md
-    - Amazon ElastiCache Memcached 水平自动扩缩实战: database/elasticache-memcached-horizontal-autoscaling.md
-    - OpenSearch Serverless 磁盘优化向量实战：低成本向量搜索方案: database/opensearch-serverless-disk-optimized-vectors.md
-    - Amazon OpenSearch Service 多层存储实战：可写 Warm 层取代 UltraWarm 的全新架构: database/opensearch-multi-tier-writable-warm.md
-    - Amazon Neptune BYOKG-RAG Toolkit 实战：用已有知识图谱构建 GraphRAG 问答系统: database/neptune-byokg-rag-toolkit.md
-    - Amazon DocumentDB Serverless 实战：自动扩缩的文档数据库 + 向量搜索: database/documentdb-serverless-ga.md
-    - Amazon DocumentDB 8.0 全面实测：压缩、查询优化与新特性动手验证: database/documentdb-8.md
-    - Amazon ElastiCache Bloom Filter 实测：比 Set 省 98% 内存的概率型数据结构: database/elasticache-bloom-filter.md
-    - Aurora DSQL Connectors 实战：用 Python 和 Node.js 三行代码连接分布式 SQL 数据库: database/aurora-dsql-connectors-iam.md
-    - Amazon RDS for PostgreSQL Zero-ETL 集成 Amazon Redshift 实战：近实时数据复制全流程验证: database/rds-postgres-zero-etl-redshift.md
-    - RDS Blue/Green Deployments + RDS Proxy 实测：Switchover 恢复时间从 13 秒降到 500 毫秒: database/rds-proxy-blue-green.md
-    - Aurora MySQL 数据导出到 S3 实测对比：Export Cluster Data vs Zero-ETL: database/aurora-data-export-to-s3.md
-  - Analytics:
-    - Amazon OpenSearch Service Derived Source 实测：存储优化 51%，你需要知道的取舍: analytics/opensearch-derived-source.md
-    - Amazon OpenSearch Ingestion 批量 AI 推理实战：用 SageMaker 批量生成向量嵌入: analytics/opensearch-ingestion-batch-ai-inference.md
-    - Amazon OpenSearch Service GPU 加速与自动优化向量索引实战: analytics/opensearch-gpu-vector-indexes.md
-    - Amazon Managed Service for Apache Flink 2.2 实战：首个大版本升级全面解析: analytics/managed-flink-2-2.md
-    - OpenSearch Service 统一可观测性实测：Prometheus Direct Query + AI Agent Tracing 全解析: analytics/opensearch-prometheus-agent-tracing.md
-  - Cloud Operations:
-    - cloud-ops/index.md
-    - CloudWatch Agent 采集 EBS 详细性能统计实战：精准定位存储性能瓶颈: cloud-ops/cw-agent-ebs-performance-stats.md
-    - AWS DevOps Agent 深度解析：Frontier Agent 如何革新运维事件响应: cloud-ops/devops-agent-preview.md
-    - AWS FIS 新场景实测：用 AZ Slowdown 和 Cross-AZ Packet Loss 模拟灰色故障: cloud-ops/fis-partial-failure-scenarios.md
-    - AWS Systems Manager Just-in-Time Node Access：零常驻权限的节点访问管理: cloud-ops/ssm-jit-node-access.md
-    - CloudWatch Query Studio 实测：首次原生 PromQL 查询体验全解析: cloud-ops/cloudwatch-query-studio-promql.md
-    - CloudWatch OpenTelemetry Metrics 实战：原生 OTel 指标摄入与 PromQL 查询全解析: cloud-ops/cloudwatch-otel-metrics.md
-    - CloudWatch 自动启用规则实战：一条规则为所有 CloudFront Distribution 开启 Access Logs: cloud-ops/cloudwatch-cloudfront-enablement.md
-  - Security:
-    - security/index.md
-    - Amazon Inspector Agentless 扫描与 Windows KB Findings 实战: security/inspector-agentless-windows-kb.md
-    - AWS CloudTrail MCP Server 实战：用自然语言查询 AWS 安全事件: security/cloudtrail-mcp-server.md
-    - Amazon CloudFront 后量子 TLS 实测：零配置启用量子安全加密: security/cloudfront-tls-post-quantum.md
-    - AWS WAF ASN Match 实战：基于自治系统编号的精准流量控制: security/waf-asn-match.md
-    - Amazon Inspector Code Security 实战：在开发阶段拦截代码与依赖漏洞: security/inspector-code-security.md
-    - AWS Network Firewall Active Threat Defense 实战：基于 MadPot 威胁情报自动阻断恶意流量: security/network-firewall-atd.md
-    - AWS IAM 新增 VPC Endpoint Condition Keys 实战：可扩展的网络边界控制: security/iam-vpc-endpoint-condition-keys.md
-    - AWS KMS 导入密钥 On-Demand 轮换实战：无需更改 Key ID 的密钥材料原地轮换: security/kms-on-demand-rotation-imported-keys.md
-    - CloudTrail Insights for Data Events 实战：自动检测数据访问异常: security/cloudtrail-insights-data-events.md
-
-  - Containers:
-    - containers/index.md
-    - Amazon ECR Archive 存储类：降低容器镜像存储成本的实战指南: containers/ecr-archive-storage-class.md
-    - Amazon ECR Blob Mounting 实战：跨 Repository 共享 Image Layer 优化存储与推送性能: containers/ecr-blob-mounting.md
-    - Amazon EKS Capabilities 实战：全托管 Kubernetes 平台能力（ACK + KRO + Argo CD）: containers/eks-capabilities.md
-    - CloudWatch OTel Container Insights 实战：用 PromQL 解锁 EKS 可观测性新维度: containers/cloudwatch-otel-container-insights-eks.md
-    - EKS Managed Node Groups Warm Pools 实测：冷启动加速 37% 的原生方案: containers/eks-mng-warm-pools.md
-  - Serverless:
-    - serverless/index.md
-    - API Gateway REST API 响应流式传输实战：TTFB 降低 86%: serverless/api-gateway-response-streaming.md
-    - AWS Lambda Response Streaming 200 MB 实测：从入门到边界探索: serverless/lambda-response-streaming-200mb.md
-    - Amazon EventBridge 1MB 事件负载实测：边界探索与 Target 传递踩坑: serverless/eventbridge-1mb-payload.md
-    - Amazon SNS 消息过滤新运算符实战：Wildcard、Anything-but Wildcard 与 Anything-but Prefix: serverless/sns-message-filtering-operators.md
-
+- 首页: index.md
+- Bedrock:
+  - bedrock/index.md
+  
+  - What's New 实测:
+    - 核心功能:
+      - Responses API 实战：OpenAI 兼容端点动手指南: bedrock/bedrock-responses-api.md
+      - Server-Side Custom Tools 实测：用 Lambda 实现服务端工具调用: bedrock/bedrock-server-side-custom-tools.md
+      - Citations API 实战：让 AI 回答可追溯到源文档: bedrock/bedrock-citations-api-pdf-claude.md
+      - Count Tokens API 实测：推理前精确预估 Token 用量与成本: bedrock/bedrock-count-tokens-api.md
+      - IAM 成本分摊实测：按用户和角色追踪 GenAI 推理费用: bedrock/bedrock-iam-cost-allocation.md
+      - Prompt Caching 1h TTL 实测：Claude Code 场景下费用对比: ai-ml/bedrock-prompt-caching-1h-ttl.md
+      - Model Distillation 实测：从数据准备到踩坑全记录: ai-ml/bedrock-model-distillation.md
+      - Prompt Optimization 实测：一键优化 Prompt 的效果到底如何？: ai-ml/bedrock-prompt-optimization.md
+      - Intelligent Prompt Routing 实测：自动路由省成本: ai-ml/bedrock-intelligent-prompt-routing.md
+      - API Keys：告别繁琐 IAM 配置: ai-ml/bedrock-api-keys.md
+      - TTFT + Quota 可观测性实测: ai-ml/bedrock-ttft-quota-observability.md
+      - MiniMax M2.5 vs GLM 5 实测: ai-ml/bedrock-minimax-glm5-benchmark.md
+      - RAG Evaluation 实测：LLM-as-a-Judge: ai-ml/bedrock-rag-evaluation-ga.md
+      - Model Evaluation：LLM-as-a-Judge 评估模型质量: ai-ml/bedrock-llm-judge-evaluation.md
+      - Multi-Agent 协作实战：Supervisor + Collaborator: ai-ml/bedrock-multi-agent-collaboration.md
+      - Agents CloudWatch 指标：13 个运行时指标全解析: ai-ml/bedrock-agents-cloudwatch-metrics.md
+      - Powertools for Lambda 简化 Agent 开发: ai-ml/powertools-bedrock-agents-function-utility.md
+    - Knowledge Bases:
+      - GraphRAG 实战：用图增强 RAG 实现跨文档推理: ai-ml/bedrock-knowledge-bases-graphrag.md
+      - 多模态检索实战：图片、音频、视频的统一 RAG 工作流: ai-ml/multimodal-retrieval-kb.md
+    - Data Automation:
+      - Data Automation 实战：从文档解析到多模态智能处理: ai-ml/bedrock-data-automation-ga.md
+      - Blueprint 指令优化：用样本数据自动提升提取准确率: ai-ml/bda-blueprint-instruction-optimization.md
+    - AgentCore:
+      - AgentCore GA 全景实战：从零到生产: ai-ml/bedrock-agentcore-ga-overview.md
+      - Policy 实战：用 Cedar 精准控制工具调用: ai-ml/bedrock-agentcore-policy-ga.md
+      - Runtime Shell Command 实测: ai-ml/agentcore-runtime-shell-command.md
+      - Session Storage 实测：跨 Stop/Resume 持久化: ai-ml/agentcore-persistent-filesystems.md
+      - S3 Files 集成：三种方案对比: ai-ml/agentcore-s3files-agent-storage.md
+      - Stateful MCP Server 实战：Elicitation、Sampling: ai-ml/agentcore-stateful-mcp.md
+      - WebRTC 双向流：KVS TURN 实时语音 Agent: ai-ml/agentcore-webrtc-streaming.md
+      - Memory Streaming：实时追踪长期记忆变更: ai-ml/agentcore-memory-streaming-ltm.md
+      - Browser Profiles：跨 Session 复用认证: ai-ml/agentcore-browser-profiles.md
+      - AG-UI 协议实战：标准化 Agent-Frontend 交互: ai-ml/agentcore-runtime-ag-ui.md
+      - Direct Code Deploy：快速部署 AI Agent: ai-ml/bedrock-agentcore-code-deploy.md
+      - Browser Proxy 实测：稳定出口 IP: ai-ml/agentcore-browser-proxy.md
+      - Browser Bot Auth 实测：加密签名认证: ai-ml/agentcore-browser-web-bot-auth.md
+      - MCP Server 实战：从安装到部署: ai-ml/bedrock-agentcore-mcp-server.md
+      - VPC + PrivateLink + CFN：企业级部署: bedrock/agentcore-vpc-privatelink-cfn-tagging.md
+      - Browser OS-Level Actions：突破 CDP 限制: bedrock/agentcore-browser-os-actions.md
+- AI/ML:
+  - ai-ml/index.md
+  - Nova:
+    - Nova Multimodal Embeddings 实测：首个统一多模态 Embedding 模型: ai-ml/nova-multimodal-embeddings.md
+    - Nova Pro Latency-Optimized Inference 实测: ai-ml/nova-pro-latency-optimized.md
+    - Nova Sonic 实测：双向流式语音对话: ai-ml/nova-sonic-speech-to-speech.md
+    - Nova 2 Sonic 实测：跨模态对话 + Polyglot 语音: ai-ml/nova2-sonic-crossmodal-polyglot.md
+    - Nova Reel 1.1 实战：文字到 2 分钟 AI 视频: ai-ml/nova-reel-11-video-generation.md
+    - Nova 2 Lite Benchmark — Extended Thinking 推理对比: ai-ml/nova2-benchmark.md
+    - Nova 2 Omni Preview — 受限预览: ai-ml/nova2-omni-preview.md
+    - Nova 自定义模型 On-Demand Deployment: ai-ml/nova-custom-on-demand-deployment.md
+    - Nova Act 实测：自然语言驱动浏览器自动化: ai-ml/nova-act-browser-automation.md
+  - Q Developer:
+    - Q Developer Chat Agentic 能力：Console AI 运维助手: ai-ml/q-developer-chat-agentic.md
+    - Q Developer CLI Agent：终端 AI 编程助手: ai-ml/q-developer-cli-agent.md
+  - Agent Frameworks & Tools:
+    - Strands Agents TypeScript SDK 实测: ai-ml/strands-agents-typescript.md
+    - MCP Server for Amazon MSK：自然语言管理 Kafka: ai-ml/msk-mcp-server.md
+    - Spark Upgrade Agent：AI + MCP 自动化 Spark 升级: ai-ml/spark-upgrade-agent-emr.md
+    - AWS MCP Server 实测：一键部署 ECS 和 Lambda: ai-ml/mcp-serverless-containers.md
+    - API Gateway 变成 MCP 工具: ai-ml/api-gateway-mcp-proxy.md
+    - Neuron DRA Driver：EKS Trainium 拓扑感知调度: ai-ml/neuron-eks-dra-driver.md
+  - Sandbox & Runtime:
+    - Zeroboot EC2 Benchmark：亚毫秒 VM Sandbox: ai-ml/zeroboot-ec2-benchmark.md
+    - Zeroboot vs E2B：AI Agent Sandbox 对比: ai-ml/zeroboot-vs-e2b.md
+- Compute:
+  - compute/index.md
+  - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
+  - Lambda AZ Metadata 同 AZ 路由实测: compute/lambda-az-metadata.md
+  - EC2 嵌套虚拟化实测：在虚拟实例上运行 KVM 和 Firecracker: compute/ec2-nested-virtualization.md
+  - Amazon EC2 I7i 存储优化实例实测：NVMe 性能提升 50% 的真实数据: compute/ec2-i7i-storage-optimized.md
+  - Amazon Lightsail Compute-Optimized 实测：与 EC2 c7i 的性能、成本、功能全面对比: lightsail/lightsail-compute-optimized-vs-ec2.md
+  - Amazon ECS Express Mode 实战：一条命令部署生产级容器应用: compute/ecs-express-mode.md
+  - Amazon ECS Managed Instances 实战：全托管 EC2 容器计算的新选择: compute/ecs-managed-instances.md
+  - EC2 Capacity Reservation Topology API：启动实例前掌握 GPU 容量的网络拓扑: compute/ec2-capacity-reservation-topology-api.md
+  - EC2 Image Builder 集成 Lambda 和 Step Functions：工作流自动化实践: compute/ec2-image-builder-lambda-step-functions.md
+- Networking:
+  - networking/index.md
+  - ALB 原生 URL 和 Host Header 重写：告别额外代理层: networking/alb-url-host-header-rewrite.md
+  - ALB Target Optimizer 实战：精确控制后端并发请求数: networking/alb-target-optimizer.md
+  - Amazon VPC Route Server 动态路由实战：BGP 自动 Failover + BFD 快速切换: networking/vpc-route-server-bgp-failover.md
+- Storage:
+  - storage/index.md
+  - S3 Tables IAM-only 权限实测: storage/s3-tables-iam-permissions.md
+  - AWS DataSync 集成 Secrets Manager：三种凭证管理模式实测对比: storage/datasync-secrets-manager.md
+  - Amazon S3 Vectors (Preview) 实战：云原生向量存储初体验: storage/s3-vectors-preview.md
+  - Amazon S3 Vectors GA 实测：40 倍 Scale 提升 + Per-Index 加密 + 性能基准: storage/s3-vectors-ga.md
+  - S3 Vectors vs OpenSearch Serverless：向量检索选型实测对比: storage/s3vectors-vs-opensearch.md
+  - Amazon S3 Files 实测：首个云对象存储的原生文件系统访问全面解析: storage/s3-files.md
+  - S3 Files vs File Gateway vs Mountpoint CSI 实测：三种 S3 挂载方案全面对比: storage/s3-files-vs-file-gateway.md
+  - S3 Files vs 开源方案实测：s3fs-fuse 和 fsspec 性能对比与选型: storage/s3-files-vs-opensource.md
+- Database:
+  - database/index.md
+  - OpenSearch 原地扩容实测: database/opensearch-in-place-volume.md
+  - Amazon OpenSearch Service Agentic Search 实战：自然语言驱动搜索: database/agentic-search.md
+  - AWS DMS Serverless 自动存储扩展实测：告别 100GB 限制: database/dms-serverless-storage-scaling.md
+  - Amazon ElastiCache 向量搜索实战：Valkey 8.2 向量索引、混合搜索与性能调优: database/elasticache-vector-search.md
+  - Aurora PostgreSQL pgvector 0.8.0 实测：迭代索引扫描如何解决向量搜索 Overfiltering 问题: database/pgvector-0.8.0-aurora-postgresql-iterative-scan.md
+  - Amazon ElastiCache Memcached 水平自动扩缩实战: database/elasticache-memcached-horizontal-autoscaling.md
+  - OpenSearch Serverless 磁盘优化向量实战：低成本向量搜索方案: database/opensearch-serverless-disk-optimized-vectors.md
+  - Amazon OpenSearch Service 多层存储实战：可写 Warm 层取代 UltraWarm 的全新架构: database/opensearch-multi-tier-writable-warm.md
+  - Amazon Neptune BYOKG-RAG Toolkit 实战：用已有知识图谱构建 GraphRAG 问答系统: database/neptune-byokg-rag-toolkit.md
+  - Amazon DocumentDB Serverless 实战：自动扩缩的文档数据库 + 向量搜索: database/documentdb-serverless-ga.md
+  - Amazon DocumentDB 8.0 全面实测：压缩、查询优化与新特性动手验证: database/documentdb-8.md
+  - Amazon ElastiCache Bloom Filter 实测：比 Set 省 98% 内存的概率型数据结构: database/elasticache-bloom-filter.md
+  - Aurora DSQL Connectors 实战：用 Python 和 Node.js 三行代码连接分布式 SQL 数据库: database/aurora-dsql-connectors-iam.md
+  - Amazon RDS for PostgreSQL Zero-ETL 集成 Amazon Redshift 实战：近实时数据复制全流程验证: database/rds-postgres-zero-etl-redshift.md
+  - RDS Blue/Green Deployments + RDS Proxy 实测：Switchover 恢复时间从 13 秒降到 500 毫秒: database/rds-proxy-blue-green.md
+  - Aurora MySQL 数据导出到 S3 实测对比：Export Cluster Data vs Zero-ETL: database/aurora-data-export-to-s3.md
+- Analytics:
+  - Amazon OpenSearch Service Derived Source 实测：存储优化 51%，你需要知道的取舍: analytics/opensearch-derived-source.md
+  - Amazon OpenSearch Ingestion 批量 AI 推理实战：用 SageMaker 批量生成向量嵌入: analytics/opensearch-ingestion-batch-ai-inference.md
+  - Amazon OpenSearch Service GPU 加速与自动优化向量索引实战: analytics/opensearch-gpu-vector-indexes.md
+  - Amazon Managed Service for Apache Flink 2.2 实战：首个大版本升级全面解析: analytics/managed-flink-2-2.md
+  - OpenSearch Service 统一可观测性实测：Prometheus Direct Query + AI Agent Tracing 全解析: analytics/opensearch-prometheus-agent-tracing.md
+- Cloud Operations:
+  - cloud-ops/index.md
+  - CloudWatch Agent 采集 EBS 详细性能统计实战：精准定位存储性能瓶颈: cloud-ops/cw-agent-ebs-performance-stats.md
+  - AWS DevOps Agent 深度解析：Frontier Agent 如何革新运维事件响应: cloud-ops/devops-agent-preview.md
+  - AWS FIS 新场景实测：用 AZ Slowdown 和 Cross-AZ Packet Loss 模拟灰色故障: cloud-ops/fis-partial-failure-scenarios.md
+  - AWS Systems Manager Just-in-Time Node Access：零常驻权限的节点访问管理: cloud-ops/ssm-jit-node-access.md
+  - CloudWatch Query Studio 实测：首次原生 PromQL 查询体验全解析: cloud-ops/cloudwatch-query-studio-promql.md
+  - CloudWatch OpenTelemetry Metrics 实战：原生 OTel 指标摄入与 PromQL 查询全解析: cloud-ops/cloudwatch-otel-metrics.md
+  - CloudWatch 自动启用规则实战：一条规则为所有 CloudFront Distribution 开启 Access Logs: cloud-ops/cloudwatch-cloudfront-enablement.md
+- Security:
+  - security/index.md
+  - Amazon Inspector Agentless 扫描与 Windows KB Findings 实战: security/inspector-agentless-windows-kb.md
+  - AWS CloudTrail MCP Server 实战：用自然语言查询 AWS 安全事件: security/cloudtrail-mcp-server.md
+  - Amazon CloudFront 后量子 TLS 实测：零配置启用量子安全加密: security/cloudfront-tls-post-quantum.md
+  - AWS WAF ASN Match 实战：基于自治系统编号的精准流量控制: security/waf-asn-match.md
+  - Amazon Inspector Code Security 实战：在开发阶段拦截代码与依赖漏洞: security/inspector-code-security.md
+  - AWS Network Firewall Active Threat Defense 实战：基于 MadPot 威胁情报自动阻断恶意流量: security/network-firewall-atd.md
+  - AWS IAM 新增 VPC Endpoint Condition Keys 实战：可扩展的网络边界控制: security/iam-vpc-endpoint-condition-keys.md
+  - AWS KMS 导入密钥 On-Demand 轮换实战：无需更改 Key ID 的密钥材料原地轮换: security/kms-on-demand-rotation-imported-keys.md
+  - CloudTrail Insights for Data Events 实战：自动检测数据访问异常: security/cloudtrail-insights-data-events.md
+- Containers:
+  - containers/index.md
+  - Amazon ECR Archive 存储类：降低容器镜像存储成本的实战指南: containers/ecr-archive-storage-class.md
+  - Amazon ECR Blob Mounting 实战：跨 Repository 共享 Image Layer 优化存储与推送性能: containers/ecr-blob-mounting.md
+  - Amazon EKS Capabilities 实战：全托管 Kubernetes 平台能力（ACK + KRO + Argo CD）: containers/eks-capabilities.md
+  - CloudWatch OTel Container Insights 实战：用 PromQL 解锁 EKS 可观测性新维度: containers/cloudwatch-otel-container-insights-eks.md
+  - EKS Managed Node Groups Warm Pools 实测：冷启动加速 37% 的原生方案: containers/eks-mng-warm-pools.md
+- Serverless:
+  - serverless/index.md
+  - API Gateway REST API 响应流式传输实战：TTFB 降低 86%: serverless/api-gateway-response-streaming.md
+  - AWS Lambda Response Streaming 200 MB 实测：从入门到边界探索: serverless/lambda-response-streaming-200mb.md
+  - Amazon EventBridge 1MB 事件负载实测：边界探索与 Target 传递踩坑: serverless/eventbridge-1mb-payload.md
+  - Amazon SNS 消息过滤新运算符实战：Wildcard、Anything-but Wildcard 与 Anything-but Prefix: serverless/sns-message-filtering-operators.md
 extra:
   social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/chaosreload
+  - icon: fontawesome/brands/github
+    link: https://github.com/chaosreload
