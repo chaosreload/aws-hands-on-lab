@@ -119,6 +119,7 @@ nav:
     - Amazon Bedrock Count Tokens API 实测：推理前精确预估 Token 用量与成本: bedrock/bedrock-count-tokens-api.md
     - Amazon Bedrock AgentCore 企业级部署：VPC 连接、PrivateLink、CloudFormation 与资源标签实战: bedrock/agentcore-vpc-privatelink-cfn-tagging.md
     - AgentCore Browser OS-Level Actions 实测：突破 CDP 限制的 8 种操作全解析: bedrock/agentcore-browser-os-actions.md
+    - Amazon Bedrock IAM 成本分摊实测：按用户和角色追踪 GenAI 推理费用: bedrock/bedrock-iam-cost-allocation.md
   - Compute:
     - compute/index.md
     - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
