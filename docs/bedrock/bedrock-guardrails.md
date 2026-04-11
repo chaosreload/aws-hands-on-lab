@@ -2,7 +2,6 @@
 
 !!! abstract "Feature Guide"
     这是一篇**功能决策指南**，帮你判断 Guardrails 的每种策略该不该用、怎么用、有什么坑。
-    和 What's New 文章的区别：What's New 聚焦单次发布的增量，Feature Guide 覆盖功能全貌。
 
 !!! info "Lab 信息"
     - **难度**: ⭐⭐ 中级
