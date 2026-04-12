@@ -176,7 +176,7 @@ aws ssm send-command --region us-east-1 \
 | us-west-2 | 881 / 2554 | us: 904 / 2603 | -23ms | -49ms |
 | eu-central-1 | 947 / 2788 | eu: 766 / 2473 | +181ms | +315ms |
 | ap-northeast-1 | 988 / 2710 | jp: 663 / 2215 | +325ms | +496ms |
-| ap-southeast-1 | 1020 / 2806 | —（仅 global） | — | — |
+| ap-southeast-1 | 1020 / 2806 | —（未测试 Geographic） | — | — |
 | ap-southeast-2 | 1114 / 2792 | au: 788 / 2405 | +326ms | +387ms |
 
 **Nova 2 Lite（TTFB / 总延迟，P50，单位 ms）**
@@ -187,8 +187,8 @@ aws ssm send-command --region us-east-1 \
 | us-west-2 | 344 / 1167 | us: 333 / 1154 | +12ms | +13ms |
 | eu-central-1 | 764 / 1551 | eu: 379 / 1214 | +384ms | +336ms |
 | ap-northeast-1 | 673 / 1494 | jp: 336 / 1042 | +336ms | +451ms |
-| ap-southeast-1 | 592 / 1351 | —（仅 global） | — | — |
-| ap-southeast-2 | 708 / 1557 | —（仅 global） | — | — |
+| ap-southeast-1 | 592 / 1351 | —（未测试 Geographic） | — | — |
+| ap-southeast-2 | 708 / 1557 | —（未测试 Geographic） | — | — |
 
 ### 关键发现
 
@@ -316,7 +316,7 @@ aws s3 rb s3://bedrock-benchmark-results-595842667825 --force
 | 调用源在美国 | **Global** ✅ | 延迟与 US Profile 几乎相同，还有 ~10% 折扣 |
 | 调用源在欧洲/亚太，延迟敏感 | **Geographic**（eu/jp/au） | 比 Global 快 12-43%，TTFB 可节省 180-384ms |
 | 调用源在欧洲/亚太，成本优先 | **Global** | 接受 200-500ms 额外延迟，换取 ~10% 折扣 |
-| 调用源仅有 Global 可用 | **Global**（唯一选择） | 如 ap-southeast-1 的 Nova 2 Lite |
+| 调用源无对应 Geographic Profile | **Global** | 如 ap-southeast-1（无 asean. profile），本次测试仅测了 Global |
 | 流式输出、对首 token 敏感 | **Geographic** | TTFB 差异比总延迟差异更大 |
 | 高并发、需要最大吞吐 | **Global** | 全球 Region 池更大，容量更充裕 |
 
