@@ -62,22 +62,47 @@ Amazon Bedrock 的 Cross-Region Inference Profile 允许你通过一个 inferenc
 
 我们选择了两个代表性模型：
 
-- **Claude Sonnet 4.6**（第三方模型）：支持 global/us/eu/jp/au 五种 profile
-- **Nova 2 Lite**（AWS 自研模型）：支持 global/us/eu/jp 四种 profile
+- **Claude Sonnet 4.6**（`anthropic.claude-sonnet-4-6`）：第三方模型
+- **Nova 2 Lite**（`amazon.nova-2-lite-v1:0`）：AWS 自研模型
 
-本次测试中各 EC2 Region 使用的 profile 组合：
+#### 完整 Inference Profile 列表
 
-| EC2 Region | Claude Sonnet 4.6 | Nova 2 Lite |
-|------------|-------------------|-------------|
-| us-east-1 | global, us | global, us |
-| us-west-2 | global, us | global, us |
-| eu-central-1 | global, eu | global, eu |
-| ap-northeast-1 | global, jp | global, jp |
-| ap-southeast-1 | global | global |
-| ap-southeast-2 | global, au | global |
+以下是这两个模型所有可用的 Cross-Region Inference Profile，包括可调用的 Source Region 和请求路由的 Destination Region：
 
-!!! note "关于 Profile 的可用性"
-    所有 inference profile（global、us、eu、jp、au 等）都可以从 **任何 Region** 通过 SDK 指定 model ID 调用，不受 EC2 所在 Region 限制。上表列出的是本次测试选择的 profile 组合——我们在每个 Region 测试了 Global Profile 和该地理区域对应的 Geographic Profile（如有），以对比「就近路由」和「全球路由」的延迟差异。ap-southeast-1 仅测试了 Global，因为新加坡没有对应的 Geographic Profile。
+**Claude Sonnet 4.6**
+
+| Inference Profile ID | Source Region（可发起调用） | Destination Region（请求路由目标） |
+|---------------------|--------------------------|-------------------------------|
+| `global.anthropic.claude-sonnet-4-6` | 所有商用 Region | 全球所有商用 Region |
+| `us.anthropic.claude-sonnet-4-6` | us-east-1, us-east-2, us-west-2 | us-east-1, us-east-2, us-west-2 |
+| `eu.anthropic.claude-sonnet-4-6` | eu-north-1, eu-west-1, eu-west-3, eu-south-1, eu-south-2, eu-central-1 | eu-north-1, eu-west-1, eu-west-3, eu-south-1, eu-south-2, eu-central-1 |
+| `jp.anthropic.claude-sonnet-4-6` | ap-northeast-1, ap-northeast-3 | ap-northeast-1, ap-northeast-3 |
+| `au.anthropic.claude-sonnet-4-6` | ap-southeast-2, ap-southeast-4 | ap-southeast-2, ap-southeast-4 |
+
+**Nova 2 Lite**
+
+| Inference Profile ID | Source Region（可发起调用） | Destination Region（请求路由目标） |
+|---------------------|--------------------------|-------------------------------|
+| `global.amazon.nova-2-lite-v1:0` | 所有商用 Region | 全球所有商用 Region |
+| `us.amazon.nova-2-lite-v1:0` | us-east-1, us-east-2, us-west-2 | us-east-1, us-east-2, us-west-2 |
+| `eu.amazon.nova-2-lite-v1:0` | eu-north-1, eu-west-1, eu-west-3, eu-south-1, eu-south-2, eu-central-1 | eu-north-1, eu-west-1, eu-west-3, eu-south-1, eu-south-2, eu-central-1 |
+| `jp.amazon.nova-2-lite-v1:0` | ap-northeast-1, ap-northeast-3 | ap-northeast-1, ap-northeast-3 |
+
+!!! warning "Geographic Profile 有 Source Region 限制"
+    Geographic inference profile **只能从其指定的 Source Region 调用**，不能跨区域使用。例如 `jp.anthropic.claude-sonnet-4-6` 只能从 ap-northeast-1 或 ap-northeast-3 调用，从 ap-southeast-1 调用会返回 `ValidationException: The provided model identifier is invalid`。Global profile 没有此限制，可从任意商用 Region 调用。详见 [官方文档](https://docs.aws.amazon.com/bedrock/latest/userguide/inference-profiles-support.html)。
+
+#### 本次测试的 Profile 组合
+
+| EC2 Region | Claude Sonnet 4.6 | Nova 2 Lite | 备注 |
+|------------|-------------------|-------------|------|
+| us-east-1 | global, us | global, us | |
+| us-west-2 | global, us | global, us | |
+| eu-central-1 | global, eu | global, eu | |
+| ap-northeast-1 | global, jp | global, jp | |
+| ap-southeast-1 | global | global | 无可用 Geographic Profile |
+| ap-southeast-2 | global, au | global | Nova 2 Lite 无 au. profile |
+
+每个 Region 测试 Global Profile 和该 Region 可用的 Geographic Profile（如有），对比「全球路由」和「就近路由」的延迟差异。ap-southeast-1 不在任何 Geographic Profile 的 Source Region 列表中，因此只能使用 Global Profile。
 
 ### 关键定价信息
 
@@ -176,7 +201,7 @@ aws ssm send-command --region us-east-1 \
 | us-west-2 | 881 / 2554 | us: 904 / 2603 | -23ms | -49ms |
 | eu-central-1 | 947 / 2788 | eu: 766 / 2473 | +181ms | +315ms |
 | ap-northeast-1 | 988 / 2710 | jp: 663 / 2215 | +325ms | +496ms |
-| ap-southeast-1 | 1020 / 2806 | —（未测试 Geographic） | — | — |
+| ap-southeast-1 | 1020 / 2806 | —（无可用 Geographic Profile） | — | — |
 | ap-southeast-2 | 1114 / 2792 | au: 788 / 2405 | +326ms | +387ms |
 
 **Nova 2 Lite（TTFB / 总延迟，P50，单位 ms）**
@@ -187,8 +212,8 @@ aws ssm send-command --region us-east-1 \
 | us-west-2 | 344 / 1167 | us: 333 / 1154 | +12ms | +13ms |
 | eu-central-1 | 764 / 1551 | eu: 379 / 1214 | +384ms | +336ms |
 | ap-northeast-1 | 673 / 1494 | jp: 336 / 1042 | +336ms | +451ms |
-| ap-southeast-1 | 592 / 1351 | —（未测试 Geographic） | — | — |
-| ap-southeast-2 | 708 / 1557 | —（未测试 Geographic） | — | — |
+| ap-southeast-1 | 592 / 1351 | —（无可用 Geographic Profile） | — | — |
+| ap-southeast-2 | 708 / 1557 | —（无可用 Geographic Profile） | — | — |
 
 ### 关键发现
 
@@ -316,7 +341,7 @@ aws s3 rb s3://bedrock-benchmark-results-595842667825 --force
 | 调用源在美国 | **Global** ✅ | 延迟与 US Profile 几乎相同，还有 ~10% 折扣 |
 | 调用源在欧洲/亚太，延迟敏感 | **Geographic**（eu/jp/au） | 比 Global 快 12-43%，TTFB 可节省 180-384ms |
 | 调用源在欧洲/亚太，成本优先 | **Global** | 接受 200-500ms 额外延迟，换取 ~10% 折扣 |
-| 调用源无对应 Geographic Profile | **Global** | 如 ap-southeast-1（无 asean. profile），本次测试仅测了 Global |
+| 调用源不在任何 Geographic Profile 的 Source Region 中 | **Global**（唯一选择） | 如 ap-southeast-1，不在 jp./au. 等 profile 的 Source Region 列表中 |
 | 流式输出、对首 token 敏感 | **Geographic** | TTFB 差异比总延迟差异更大 |
 | 高并发、需要最大吞吐 | **Global** | 全球 Region 池更大，容量更充裕 |
 
