@@ -65,7 +65,7 @@ Amazon Bedrock 的 Cross-Region Inference Profile 允许你通过一个 inferenc
 - **Claude Sonnet 4.6**（第三方模型）：支持 global/us/eu/jp/au 五种 profile
 - **Nova 2 Lite**（AWS 自研模型）：支持 global/us/eu/jp 四种 profile
 
-从每个 EC2 Region 可用的 profile：
+本次测试中各 EC2 Region 使用的 profile 组合：
 
 | EC2 Region | Claude Sonnet 4.6 | Nova 2 Lite |
 |------------|-------------------|-------------|
@@ -73,8 +73,11 @@ Amazon Bedrock 的 Cross-Region Inference Profile 允许你通过一个 inferenc
 | us-west-2 | global, us | global, us |
 | eu-central-1 | global, eu | global, eu |
 | ap-northeast-1 | global, jp | global, jp |
-| ap-southeast-1 | global（仅） | global（仅） |
-| ap-southeast-2 | global, au | global（仅） |
+| ap-southeast-1 | global | global |
+| ap-southeast-2 | global, au | global |
+
+!!! note "关于 Profile 的可用性"
+    所有 inference profile（global、us、eu、jp、au 等）都可以从 **任何 Region** 通过 SDK 指定 model ID 调用，不受 EC2 所在 Region 限制。上表列出的是本次测试选择的 profile 组合——我们在每个 Region 测试了 Global Profile 和该地理区域对应的 Geographic Profile（如有），以对比「就近路由」和「全球路由」的延迟差异。ap-southeast-1 仅测试了 Global，因为新加坡没有对应的 Geographic Profile。
 
 ### 关键定价信息
 
