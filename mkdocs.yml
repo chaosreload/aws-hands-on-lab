@@ -106,6 +106,7 @@ nav:
       - MCP Server 实战：从安装到部署: ai-ml/bedrock-agentcore-mcp-server.md
       - VPC + PrivateLink + CFN：企业级部署: bedrock/agentcore-vpc-privatelink-cfn-tagging.md
       - Browser OS-Level Actions：突破 CDP 限制: bedrock/agentcore-browser-os-actions.md
+      - Agent Registry 实测：用 CLI 走通 Agent 资产治理全生命周期: ai-ml/agentcore-agent-registry.md
 - AI/ML:
   - ai-ml/index.md
   - Nova:
