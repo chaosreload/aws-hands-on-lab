@@ -511,6 +511,163 @@ aws bedrock-agentcore-control create-registry \
 # → 成功创建第二个同名 Registry
 ```
 
+## 实战场景：Agent 动态发现工具
+
+前面的步骤演示了 Registry 的管理操作。但真正的价值在于：**你的 Agent 怎么用上它？**
+
+本节用一个 Python 脚本模拟 Agent 的行为——收到用户请求后，去 Registry 搜索合适的工具，拿到 tool schema，构造调用。然后展示如何在 Claude Code 中通过 MCP 直接对接。
+
+### Python Agent 动态发现 Demo
+
+假设 Registry 中已经注册了 `weather-forecast-server`（手动注册）和 `AWSDocumentationMCPProdGateway`（URL 自动发现），且都已 APPROVED。
+
+```python
+#!/usr/bin/env python3
+"""Agent 通过 Registry 动态发现并选择工具"""
+import boto3
+import json
+
+REGION = 'us-west-2'
+REGISTRY_ID = '<your-registry-id>'
+
+session = boto3.Session(region_name=REGION)
+client = session.client('bedrock-agentcore', region_name=REGION)
+
+def discover_tools(user_query: str) -> list:
+    """Agent 根据用户意图搜索 Registry，返回匹配的工具列表"""
+    response = client.search_registry_records(
+        registryIds=[REGISTRY_ID],
+        searchQuery=user_query,
+        maxResults=5
+    )
+    return response.get('registryRecords', [])
+
+
+def extract_tools_from_record(record: dict) -> list:
+    """从 Registry Record 中解析出可用的 tool 定义"""
+    mcp = record.get('descriptors', {}).get('mcp', {})
+    tools_content = mcp.get('tools', {}).get('inlineContent', '{}')
+    return json.loads(tools_content).get('tools', [])
+
+
+# === 场景 1: 用户说「帮我查一下上海今天的天气」 ===
+print("用户: 帮我查一下上海今天的天气")
+print("Agent: 搜索 Registry 寻找天气相关工具...\n")
+
+results = discover_tools("weather forecast temperature")
+for r in results:
+    tools = extract_tools_from_record(r)
+    print(f"  发现: {r['name']} ({r['descriptorType']})")
+    for t in tools:
+        print(f"    → {t['name']}: {t['description'][:60]}")
+
+# Agent 选择最佳匹配，构造调用
+best = results[0]
+tools = extract_tools_from_record(best)
+print(f"\nAgent 选择 {best['name']}，调用 {tools[0]['name']}")
+print(f"参数: {json.dumps({'city': 'Shanghai', 'units': 'celsius'})}")
+# → 实际场景中 Agent 连接该 MCP Server 的 endpoint 执行调用
+
+
+# === 场景 2: 用户说「S3 跨区域复制怎么配？」 ===
+print("\n" + "=" * 50)
+print("用户: S3 跨区域复制怎么配？")
+print("Agent: 搜索能查 AWS 文档的工具...\n")
+
+results = discover_tools("AWS documentation search")
+best = results[0]
+tools = extract_tools_from_record(best)
+print(f"  发现: {best['name']}")
+print(f"  可用 tools: {', '.join(t['name'] for t in tools)}")
+print(f"\nAgent 选择 read_documentation → 查询 S3 CRR 文档")
+
+
+# === 场景 3: 用 metadata filter 精确筛选 ===
+print("\n" + "=" * 50)
+print("Agent: 只搜索 MCP 类型的工具\n")
+
+response = client.search_registry_records(
+    registryIds=[REGISTRY_ID],
+    searchQuery='tools',
+    filters={"descriptorType": {"$eq": "MCP"}}
+)
+for r in response.get('registryRecords', []):
+    print(f"  {r['name']} ({r['descriptorType']})")
+```
+
+实际运行输出：
+
+```
+用户: 帮我查一下上海今天的天气
+Agent: 搜索 Registry 寻找天气相关工具...
+
+  发现: weather-forecast-server (MCP)
+    → get_weather: Get current weather for a city. Returns temperature, humidit
+    → get_forecast: Get 5-day weather forecast for a city with daily high/low te
+
+Agent 选择 weather-forecast-server，调用 get_weather
+参数: {"city": "Shanghai", "units": "celsius"}
+
+==================================================
+用户: S3 跨区域复制怎么配？
+Agent: 搜索能查 AWS 文档的工具...
+
+  发现: AWSDocumentationMCPProdGateway
+  可用 tools: aws___get_regional_availability, aws___list_regions, aws___read_documentation, aws___recommend, aws___retrieve_agent_sop, aws___search_documentation
+
+Agent 选择 read_documentation → 查询 S3 CRR 文档
+
+==================================================
+Agent: 只搜索 MCP 类型的工具
+
+  weather-forecast-server (MCP)
+  AWSDocumentationMCPProdGateway (MCP)
+```
+
+核心逻辑只有 3 步：
+
+1. **搜索**: `search_registry_records(searchQuery=用户意图)` → 拿到匹配的 Record 列表
+2. **解析**: 从 Record 的 `descriptors.mcp.tools.inlineContent` 提取 tool schema
+3. **调用**: Agent 根据 tool schema 构造参数，连接 MCP Server endpoint 执行
+
+Agent 不需要硬编码任何 MCP Server 地址或 tool 定义——全部从 Registry 动态获取。
+
+### Claude Code / Kiro MCP 集成
+
+Registry 本身是 MCP Server，可以直接接入 Claude Code 或 Kiro 等 MCP 客户端。需要 [mcp-proxy-for-aws](https://github.com/awslabs/mcp-proxy-for-aws) 做 SigV4 认证桥接：
+
+```bash
+pip install mcp-proxy-for-aws
+```
+
+在项目根目录创建 `.mcp.json`：
+
+```json
+{
+  "mcpServers": {
+    "agent-registry": {
+      "command": "mcp-proxy-for-aws",
+      "args": [
+        "--endpoint",
+        "https://bedrock-agentcore.us-west-2.amazonaws.com/registry/<registryId>/mcp",
+        "--region", "us-west-2"
+      ]
+    }
+  }
+}
+```
+
+配置后，Claude Code 会自动发现 `search_registry_records` 工具。你可以对 Claude Code 说：
+
+> "帮我找一个能处理 PDF 的工具"
+
+Claude Code 会自动调用 Registry 搜索，返回组织内已注册的相关 MCP Server。
+
+!!! tip "适用场景"
+    - **开发时工具发现**: 在 IDE 中直接搜索组织内已有工具，避免重复开发
+    - **Agent 初始化**: Agent 启动时拉取一次可用工具列表并缓存（搜索延迟 ~100 秒不适合实时查询）
+    - **多 Agent 协作**: Agent A 搜索 Registry 发现 Agent B 的 A2A endpoint，直接发起 Agent-to-Agent 调用
+
 ## 测试结果
 
 | # | 测试场景 | 结果 | 关键数据 |
