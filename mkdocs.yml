@@ -62,6 +62,7 @@ nav:
   - bedrock/index.md
   
   - Feature Guides:
+    - Amazon Bedrock Cross-Region Inference Profile 实测：6 个 Region 延迟对比与路由策略选择指南: bedrock/bedrock-cross-region-inference-benchmark.md
     - Guardrails 功能决策指南：6 种安全策略的选型与实测: bedrock/bedrock-guardrails.md
   
   - What's New 实测:
