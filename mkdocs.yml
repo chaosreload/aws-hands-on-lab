@@ -58,20 +58,21 @@ markdown_extensions:
     permalink: true
 nav:
 - 首页: index.md
-- Bedrock:
-  - bedrock/index.md
-  
+- AI/ML:
+  - ai-ml/index.md
   - Feature Guides:
-    - Amazon Bedrock Cross-Region Inference Profile 实测：6 个 Region 延迟对比与路由策略选择指南: bedrock/bedrock-cross-region-inference-benchmark.md
-    - Guardrails 功能决策指南：6 种安全策略的选型与实测: bedrock/bedrock-guardrails.md
-  
+    - Cross-Region Inference 实测：6 个 Region 延迟对比与路由策略选择指南: ai-ml/bedrock-cross-region-inference-benchmark.md
+    - Guardrails 功能决策指南：6 种安全策略的选型与实测: ai-ml/bedrock-guardrails.md
+    - Zeroboot EC2 Benchmark：亚毫秒 VM Sandbox: ai-ml/zeroboot-ec2-benchmark.md
+    - Zeroboot vs E2B：AI Agent Sandbox 对比: ai-ml/zeroboot-vs-e2b.md
+    - Nova 2 Lite Benchmark — Extended Thinking 推理对比: ai-ml/nova2-benchmark.md
   - What's New 实测:
-    - 核心功能:
-      - Responses API 实战：OpenAI 兼容端点动手指南: bedrock/bedrock-responses-api.md
-      - Server-Side Custom Tools 实测：用 Lambda 实现服务端工具调用: bedrock/bedrock-server-side-custom-tools.md
-      - Citations API 实战：让 AI 回答可追溯到源文档: bedrock/bedrock-citations-api-pdf-claude.md
-      - Count Tokens API 实测：推理前精确预估 Token 用量与成本: bedrock/bedrock-count-tokens-api.md
-      - IAM 成本分摊实测：按用户和角色追踪 GenAI 推理费用: bedrock/bedrock-iam-cost-allocation.md
+    - Bedrock 核心功能:
+      - Responses API 实战：OpenAI 兼容端点动手指南: ai-ml/bedrock-responses-api.md
+      - Server-Side Custom Tools 实测：用 Lambda 实现服务端工具调用: ai-ml/bedrock-server-side-custom-tools.md
+      - Citations API 实战：让 AI 回答可追溯到源文档: ai-ml/bedrock-citations-api-pdf-claude.md
+      - Count Tokens API 实测：推理前精确预估 Token 用量与成本: ai-ml/bedrock-count-tokens-api.md
+      - IAM 成本分摊实测：按用户和角色追踪 GenAI 推理费用: ai-ml/bedrock-iam-cost-allocation.md
       - Prompt Caching 1h TTL 实测：Claude Code 场景下费用对比: ai-ml/bedrock-prompt-caching-1h-ttl.md
       - Model Distillation 实测：从数据准备到踩坑全记录: ai-ml/bedrock-model-distillation.md
       - Prompt Optimization 实测：一键优化 Prompt 的效果到底如何？: ai-ml/bedrock-prompt-optimization.md
@@ -84,7 +85,7 @@ nav:
       - Multi-Agent 协作实战：Supervisor + Collaborator: ai-ml/bedrock-multi-agent-collaboration.md
       - Agents CloudWatch 指标：13 个运行时指标全解析: ai-ml/bedrock-agents-cloudwatch-metrics.md
       - Powertools for Lambda 简化 Agent 开发: ai-ml/powertools-bedrock-agents-function-utility.md
-    - Knowledge Bases:
+    - Knowledge Bases & RAG:
       - GraphRAG 实战：用图增强 RAG 实现跨文档推理: ai-ml/bedrock-knowledge-bases-graphrag.md
       - 多模态检索实战：图片、音频、视频的统一 RAG 工作流: ai-ml/multimodal-retrieval-kb.md
     - Data Automation:
@@ -105,34 +106,28 @@ nav:
       - Browser Proxy 实测：稳定出口 IP: ai-ml/agentcore-browser-proxy.md
       - Browser Bot Auth 实测：加密签名认证: ai-ml/agentcore-browser-web-bot-auth.md
       - MCP Server 实战：从安装到部署: ai-ml/bedrock-agentcore-mcp-server.md
-      - VPC + PrivateLink + CFN：企业级部署: bedrock/agentcore-vpc-privatelink-cfn-tagging.md
-      - Browser OS-Level Actions：突破 CDP 限制: bedrock/agentcore-browser-os-actions.md
+      - VPC + PrivateLink + CFN：企业级部署: ai-ml/agentcore-vpc-privatelink-cfn-tagging.md
+      - Browser OS-Level Actions：突破 CDP 限制: ai-ml/agentcore-browser-os-actions.md
       - Agent Registry 实测：用 CLI 走通 Agent 资产治理全生命周期: ai-ml/agentcore-agent-registry.md
-- AI/ML:
-  - ai-ml/index.md
-  - Nova:
-    - Nova Multimodal Embeddings 实测：首个统一多模态 Embedding 模型: ai-ml/nova-multimodal-embeddings.md
-    - Nova Pro Latency-Optimized Inference 实测: ai-ml/nova-pro-latency-optimized.md
-    - Nova Sonic 实测：双向流式语音对话: ai-ml/nova-sonic-speech-to-speech.md
-    - Nova 2 Sonic 实测：跨模态对话 + Polyglot 语音: ai-ml/nova2-sonic-crossmodal-polyglot.md
-    - Nova Reel 1.1 实战：文字到 2 分钟 AI 视频: ai-ml/nova-reel-11-video-generation.md
-    - Nova 2 Lite Benchmark — Extended Thinking 推理对比: ai-ml/nova2-benchmark.md
-    - Nova 2 Omni Preview — 受限预览: ai-ml/nova2-omni-preview.md
-    - Nova 自定义模型 On-Demand Deployment: ai-ml/nova-custom-on-demand-deployment.md
-    - Nova Act 实测：自然语言驱动浏览器自动化: ai-ml/nova-act-browser-automation.md
-  - Q Developer:
-    - Q Developer Chat Agentic 能力：Console AI 运维助手: ai-ml/q-developer-chat-agentic.md
-    - Q Developer CLI Agent：终端 AI 编程助手: ai-ml/q-developer-cli-agent.md
-  - Agent Frameworks & Tools:
-    - Strands Agents TypeScript SDK 实测: ai-ml/strands-agents-typescript.md
-    - MCP Server for Amazon MSK：自然语言管理 Kafka: ai-ml/msk-mcp-server.md
-    - Spark Upgrade Agent：AI + MCP 自动化 Spark 升级: ai-ml/spark-upgrade-agent-emr.md
-    - AWS MCP Server 实测：一键部署 ECS 和 Lambda: ai-ml/mcp-serverless-containers.md
-    - API Gateway 变成 MCP 工具: ai-ml/api-gateway-mcp-proxy.md
-    - Neuron DRA Driver：EKS Trainium 拓扑感知调度: ai-ml/neuron-eks-dra-driver.md
-  - Sandbox & Runtime:
-    - Zeroboot EC2 Benchmark：亚毫秒 VM Sandbox: ai-ml/zeroboot-ec2-benchmark.md
-    - Zeroboot vs E2B：AI Agent Sandbox 对比: ai-ml/zeroboot-vs-e2b.md
+    - Nova:
+      - Nova Multimodal Embeddings 实测：首个统一多模态 Embedding 模型: ai-ml/nova-multimodal-embeddings.md
+      - Nova Pro Latency-Optimized Inference 实测: ai-ml/nova-pro-latency-optimized.md
+      - Nova Sonic 实测：双向流式语音对话: ai-ml/nova-sonic-speech-to-speech.md
+      - Nova 2 Sonic 实测：跨模态对话 + Polyglot 语音: ai-ml/nova2-sonic-crossmodal-polyglot.md
+      - Nova Reel 1.1 实战：文字到 2 分钟 AI 视频: ai-ml/nova-reel-11-video-generation.md
+      - Nova 2 Omni Preview — 受限预览: ai-ml/nova2-omni-preview.md
+      - Nova 自定义模型 On-Demand Deployment: ai-ml/nova-custom-on-demand-deployment.md
+      - Nova Act 实测：自然语言驱动浏览器自动化: ai-ml/nova-act-browser-automation.md
+    - Q Developer:
+      - Q Developer Chat Agentic 能力：Console AI 运维助手: ai-ml/q-developer-chat-agentic.md
+      - Q Developer CLI Agent：终端 AI 编程助手: ai-ml/q-developer-cli-agent.md
+    - Agent Frameworks & Tools:
+      - Strands Agents TypeScript SDK 实测: ai-ml/strands-agents-typescript.md
+      - MCP Server for Amazon MSK：自然语言管理 Kafka: ai-ml/msk-mcp-server.md
+      - Spark Upgrade Agent：AI + MCP 自动化 Spark 升级: ai-ml/spark-upgrade-agent-emr.md
+      - AWS MCP Server 实测：一键部署 ECS 和 Lambda: ai-ml/mcp-serverless-containers.md
+      - API Gateway 变成 MCP 工具: ai-ml/api-gateway-mcp-proxy.md
+      - Neuron DRA Driver：EKS Trainium 拓扑感知调度: ai-ml/neuron-eks-dra-driver.md
 - Compute:
   - compute/index.md
   - Lambda MI + Rust 性能对比: compute/lambda-managed-instances-rust.md
