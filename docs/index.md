@@ -13,17 +13,16 @@
 
 | 分类 | 说明 |
 |------|------|
-| [Bedrock](bedrock/index.md) | Amazon Bedrock 产品功能指南与 AgentCore 实测 |
-| [AI/ML](ai-ml/index.md) | Nova、Q Developer、Agent Frameworks 等 AI/ML 服务 |
-| [Compute](compute/index.md) | EC2、Lambda、ECS、EKS 等计算服务 |
-| [Networking](networking/index.md) | VPC、CloudFront、Route 53 等网络服务 |
-| [Storage](storage/index.md) | S3、EBS、EFS 等存储服务 |
-| [Database](database/index.md) | RDS、DynamoDB、Aurora、OpenSearch 等数据库服务 |
+| [AI/ML](ai-ml/index.md) | Bedrock、AgentCore、Nova、Q Developer、Agent Frameworks 等 AI/ML 服务 |
+| [Compute](compute/index.md) | EC2、Lambda、ECS、Lightsail 等计算服务 |
+| [Networking](networking/index.md) | VPC、ALB、Route Server 等网络服务 |
+| [Storage](storage/index.md) | S3、DataSync 等存储服务 |
+| [Database](database/index.md) | RDS、Aurora、DynamoDB、OpenSearch、ElastiCache 等数据库服务 |
 | [Analytics](analytics/) | OpenSearch 分析、Flink 等 |
-| [Security](security/index.md) | IAM、KMS、WAF、Inspector 等安全服务 |
 | [Cloud Operations](cloud-ops/index.md) | CloudWatch、Systems Manager、FIS 等运维服务 |
-| [Containers](containers/index.md) | ECR、ECS、EKS 容器服务 |
-| [Serverless](serverless/index.md) | API Gateway、Lambda、EventBridge 等无服务器服务 |
+| [Security](security/index.md) | IAM、KMS、WAF、Inspector、CloudTrail 等安全服务 |
+| [Containers](containers/index.md) | ECR、EKS 容器服务 |
+| [Serverless](serverless/index.md) | API Gateway、Lambda、EventBridge、SNS 等无服务器服务 |
 
 ## 关于
 
