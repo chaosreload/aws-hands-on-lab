@@ -1,3 +1,10 @@
+---
+tags:
+  - AgentCore
+  - Storage
+  - What's New
+---
+
 # Amazon Bedrock AgentCore Runtime Session Storage 实测：跨 Stop/Resume 的持久化文件系统
 
 !!! info "Lab 信息"

@@ -1,3 +1,10 @@
+---
+tags:
+  - Bedrock
+  - Agent
+  - What's New
+---
+
 # Amazon Bedrock Server-Side Custom Tools 实测：用 Lambda 实现 MCP 协议的服务端工具调用
 
 !!! info "Lab 信息"

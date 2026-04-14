@@ -1,3 +1,8 @@
+---
+tags:
+  - Compute
+---
+
 # Amazon ECS Managed Instances 实战：全托管 EC2 容器计算的新选择
 
 !!! info "Lab 信息"

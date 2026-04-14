@@ -1,3 +1,10 @@
+---
+tags:
+  - Nova
+  - Embedding
+  - What's New
+---
+
 # Amazon Nova Multimodal Embeddings 实测：首个统一多模态 Embedding 模型
 
 !!! info "Lab 信息"

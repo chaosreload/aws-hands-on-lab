@@ -1,3 +1,8 @@
+---
+tags:
+  - Database
+---
+
 # RDS Blue/Green Deployments + RDS Proxy 实测：Switchover 恢复时间从 13 秒降到 500 毫秒
 
 !!! info "Lab 信息"

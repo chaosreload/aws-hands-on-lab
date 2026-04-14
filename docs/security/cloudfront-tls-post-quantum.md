@@ -1,3 +1,8 @@
+---
+tags:
+  - Security
+---
+
 # Amazon CloudFront 后量子 TLS 实测：零配置启用量子安全加密
 
 !!! info "Lab 信息"

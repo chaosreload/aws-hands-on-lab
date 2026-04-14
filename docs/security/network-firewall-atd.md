@@ -1,3 +1,8 @@
+---
+tags:
+  - Security
+---
+
 # AWS Network Firewall Active Threat Defense 实战：基于 MadPot 威胁情报自动阻断恶意流量
 
 !!! info "Lab 信息"

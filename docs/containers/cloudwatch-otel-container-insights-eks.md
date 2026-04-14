@@ -1,3 +1,8 @@
+---
+tags:
+  - Containers
+---
+
 # CloudWatch OTel Container Insights 实战：用 PromQL 解锁 EKS 可观测性新维度
 
 !!! info "Lab 信息"

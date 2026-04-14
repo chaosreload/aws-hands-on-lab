@@ -1,3 +1,9 @@
+---
+tags:
+  - Nova
+  - What's New
+---
+
 # Amazon Nova 2 Omni Preview — 多模态推理 + 图像生成 All-in-One（受限预览）
 
 !!! info "Lab 信息"

@@ -1,3 +1,8 @@
+---
+tags:
+  - Compute
+---
+
 # EC2 Image Builder 集成 Lambda 和 Step Functions：工作流自动化实践
 
 !!! info "Lab 信息"

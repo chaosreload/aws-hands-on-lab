@@ -1,3 +1,8 @@
+---
+tags:
+  - Networking
+---
+
 # Amazon VPC Route Server 动态路由实战：BGP 自动 Failover + BFD 快速切换
 
 !!! info "Lab 信息"

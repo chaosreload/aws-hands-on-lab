@@ -1,3 +1,8 @@
+---
+tags:
+  - Compute
+---
+
 # Amazon EC2 I7i 存储优化实例实测：NVMe 性能提升 50% 的真实数据
 
 !!! info "Lab 信息"

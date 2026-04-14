@@ -1,5 +1,9 @@
 ---
 description: "Deploy AWS Neuron DRA driver on EKS for topology-aware Trainium device scheduling with CEL filtering and per-workload LNC config."
+tags:
+  - Trainium
+  - EKS
+  - What's New
 ---
 # Neuron DRA Driver：EKS 上 Trainium 设备的拓扑感知调度实战
 

@@ -1,3 +1,10 @@
+---
+tags:
+  - AgentCore
+  - Browser
+  - What's New
+---
+
 # Amazon Bedrock AgentCore Browser Proxy 实测：用自有代理实现稳定出口 IP 与精准流量路由
 
 !!! info "Lab 信息"

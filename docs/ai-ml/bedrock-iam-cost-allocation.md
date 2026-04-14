@@ -1,3 +1,10 @@
+---
+tags:
+  - Bedrock
+  - Cost
+  - What's New
+---
+
 # Amazon Bedrock IAM 成本分摊实测：按用户和角色追踪 GenAI 推理费用
 
 !!! info "Lab 信息"

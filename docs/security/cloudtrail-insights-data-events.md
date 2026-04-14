@@ -1,3 +1,8 @@
+---
+tags:
+  - Security
+---
+
 # CloudTrail Insights for Data Events 实战：自动检测数据访问异常
 
 !!! info "Lab 信息"

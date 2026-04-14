@@ -1,3 +1,11 @@
+---
+tags:
+  - Bedrock
+  - RAG
+  - Knowledge Bases
+  - What's New
+---
+
 # Amazon Bedrock Knowledge Bases 多模态检索实战：图片、音频、视频的统一 RAG 工作流
 
 !!! info "Lab 信息"

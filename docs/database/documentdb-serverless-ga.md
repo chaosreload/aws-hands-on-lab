@@ -1,3 +1,8 @@
+---
+tags:
+  - Database
+---
+
 # Amazon DocumentDB Serverless 实战：自动扩缩的文档数据库 + 向量搜索
 
 !!! info "Lab 信息"

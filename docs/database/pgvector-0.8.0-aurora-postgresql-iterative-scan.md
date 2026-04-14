@@ -1,3 +1,8 @@
+---
+tags:
+  - Database
+---
+
 # Aurora PostgreSQL pgvector 0.8.0 实测：迭代索引扫描如何解决向量搜索 Overfiltering 问题
 
 !!! info "Lab 信息"

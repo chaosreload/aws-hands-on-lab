@@ -1,3 +1,8 @@
+---
+tags:
+  - Networking
+---
+
 # ALB Target Optimizer 实战：精确控制后端并发请求数
 
 !!! info "Lab 信息"

@@ -1,3 +1,8 @@
+---
+tags:
+  - Storage
+---
+
 # S3 Files vs S3 File Gateway vs Mountpoint CSI 实测：三种 S3 挂载方案全面对比
 
 !!! info "Lab 信息"

@@ -1,3 +1,9 @@
+---
+tags:
+  - AgentCore
+  - What's New
+---
+
 # AWS Agent Registry 实测：用 CLI 走通 Agent 资产治理全生命周期
 
 !!! info "Lab 信息"

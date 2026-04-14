@@ -1,3 +1,8 @@
+---
+tags:
+  - Database
+---
+
 # Amazon OpenSearch Service Agentic Search 实战：自然语言驱动搜索
 
 !!! info "Lab 信息"

@@ -1,3 +1,11 @@
+---
+tags:
+  - AgentCore
+  - Networking
+  - CloudFormation
+  - What's New
+---
+
 # Amazon Bedrock AgentCore 企业级部署：VPC 连接、PrivateLink、CloudFormation 与资源标签实战
 
 !!! info "Lab 信息"

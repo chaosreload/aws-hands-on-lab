@@ -1,3 +1,9 @@
+---
+tags:
+  - Compute
+  - Lightsail
+---
+
 # Amazon Lightsail Compute-Optimized 实测：与 EC2 c7i 的性能、成本、功能全面对比
 
 !!! info "Lab 信息"

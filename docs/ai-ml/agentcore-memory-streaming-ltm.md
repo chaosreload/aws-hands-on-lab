@@ -1,3 +1,10 @@
+---
+tags:
+  - AgentCore
+  - Memory
+  - What's New
+---
+
 # Amazon Bedrock AgentCore Memory：使用 Streaming Notifications 实时追踪长期记忆变更
 
 !!! info "Lab 信息"

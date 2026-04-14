@@ -1,3 +1,8 @@
+---
+tags:
+  - Security
+---
+
 # AWS KMS 导入密钥 On-Demand 轮换实战：无需更改 Key ID 的密钥材料原地轮换
 
 !!! info "Lab 信息"

@@ -1,3 +1,8 @@
+---
+tags:
+  - Analytics
+---
+
 # Amazon OpenSearch Serverless Zstd 压缩实测：LZ4 vs Zstandard 索引压缩全面对比
 
 !!! info "Lab 信息"

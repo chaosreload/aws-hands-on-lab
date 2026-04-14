@@ -1,3 +1,8 @@
+---
+tags:
+  - Cloud Operations
+---
+
 # AWS DevOps Agent 深度解析：Frontier Agent 如何革新运维事件响应
 
 !!! info "Lab 信息"

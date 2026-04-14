@@ -1,3 +1,10 @@
+---
+tags:
+  - Bedrock
+  - RAG
+  - What's New
+---
+
 # Amazon Bedrock Citations API 实战：让 AI 回答可追溯到源文档
 
 !!! info "Lab 信息"

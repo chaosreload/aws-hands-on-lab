@@ -1,3 +1,8 @@
+---
+tags:
+  - Analytics
+---
+
 # Amazon OpenSearch Serverless Derived Source 实测：存储节省 26%，Serverless 场景下的实操验证
 
 !!! info "Lab 信息"

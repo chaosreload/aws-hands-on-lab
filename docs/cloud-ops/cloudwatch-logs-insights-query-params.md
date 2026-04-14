@@ -1,3 +1,8 @@
+---
+tags:
+  - Cloud Operations
+---
+
 # CloudWatch Logs Insights 参数化查询实测：告别重复查询模板的新方式
 
 !!! info "Lab 信息"

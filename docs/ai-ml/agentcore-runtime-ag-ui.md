@@ -1,3 +1,10 @@
+---
+tags:
+  - AgentCore
+  - AG-UI
+  - What's New
+---
+
 # Amazon Bedrock AgentCore Runtime AG-UI 协议实战：标准化 Agent-Frontend 事件流交互
 
 !!! info "Lab 信息"

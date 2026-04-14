@@ -1,3 +1,10 @@
+---
+tags:
+  - AgentCore
+  - Browser
+  - What's New
+---
+
 # Amazon Bedrock AgentCore Browser Profiles：跨 Session 复用认证状态实战
 
 !!! info "Lab 信息"

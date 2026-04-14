@@ -1,3 +1,8 @@
+---
+tags:
+  - Security
+---
+
 # AWS CloudTrail MCP Server 实战：用自然语言查询 AWS 安全事件
 
 !!! info "Lab 信息"

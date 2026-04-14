@@ -1,3 +1,8 @@
+---
+tags:
+  - Database
+---
+
 # Amazon DocumentDB 8.0 全面实测：压缩、查询优化与新特性动手验证
 
 !!! info "Lab 信息"

@@ -1,3 +1,8 @@
+---
+tags:
+  - Containers
+---
+
 # Amazon ECR Blob Mounting 实战：跨 Repository 共享 Image Layer 优化存储与推送性能
 
 !!! info "Lab 信息"

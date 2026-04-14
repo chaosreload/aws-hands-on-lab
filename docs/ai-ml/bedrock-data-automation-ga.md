@@ -1,3 +1,10 @@
+---
+tags:
+  - Bedrock
+  - Data Automation
+  - What's New
+---
+
 # Amazon Bedrock Data Automation 实战：从文档解析到多模态智能处理
 
 !!! info "Lab 信息"

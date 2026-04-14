@@ -1,3 +1,10 @@
+---
+tags:
+  - Bedrock
+  - Security
+  - Feature Guide
+---
+
 # Amazon Bedrock Guardrails 功能决策指南：6 种安全策略的选型与实测
 
 !!! abstract "Feature Guide"

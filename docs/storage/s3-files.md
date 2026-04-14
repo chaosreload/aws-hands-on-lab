@@ -1,3 +1,8 @@
+---
+tags:
+  - Storage
+---
+
 # Amazon S3 Files 实测：首个云对象存储的原生文件系统访问全面解析
 
 !!! info "Lab 信息"

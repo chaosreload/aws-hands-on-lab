@@ -1,3 +1,10 @@
+---
+tags:
+  - AgentCore
+  - Browser
+  - What's New
+---
+
 # AgentCore Browser OS-Level Actions 实测：突破 CDP 限制的 8 种操作全解析
 
 !!! info "Lab 信息"

@@ -1,3 +1,9 @@
+---
+tags:
+  - Q Developer
+  - What's New
+---
+
 # Amazon Q Developer CLI Agent 实战：终端中的 AI 编程助手（现已演进为 Kiro CLI）
 
 !!! info "Lab 信息"

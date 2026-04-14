@@ -1,3 +1,8 @@
+---
+tags:
+  - Database
+---
+
 # Amazon ElastiCache Bloom Filter 实测：比 Set 省 98% 内存的概率型数据结构
 
 !!! info "Lab 信息"

@@ -1,3 +1,10 @@
+---
+tags:
+  - Bedrock
+  - Agent
+  - What's New
+---
+
 # Amazon Bedrock 多 Agent 协作实战：Supervisor + Collaborator 编排模式深度测试
 
 !!! info "Lab 信息"

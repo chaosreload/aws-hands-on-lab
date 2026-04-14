@@ -1,3 +1,8 @@
+---
+tags:
+  - Security
+---
+
 # Amazon Inspector Agentless 扫描与 Windows KB Findings 实战
 
 !!! info "Lab 信息"

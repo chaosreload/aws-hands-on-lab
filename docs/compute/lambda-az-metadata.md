@@ -1,5 +1,7 @@
 ---
 description: "Test AWS Lambda AZ metadata endpoint for same-AZ routing to ElastiCache Redis — measure 51% latency reduction with AZ-aware routing."
+tags:
+  - Compute
 ---
 # Lambda AZ Metadata：同 AZ 路由实测，Redis 延迟降低 51%
 

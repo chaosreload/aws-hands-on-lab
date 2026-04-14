@@ -1,3 +1,8 @@
+---
+tags:
+  - Serverless
+---
+
 # AWS Lambda Response Streaming 200 MB 实测：从入门到边界探索
 
 !!! info "Lab 信息"

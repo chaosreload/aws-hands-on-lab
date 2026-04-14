@@ -1,3 +1,10 @@
+---
+tags:
+  - MCP
+  - API Gateway
+  - What's New
+---
+
 # 动手实践：将 API Gateway REST API 变成 AI Agent 可调用的 MCP 工具
 
 !!! info "Lab 信息"

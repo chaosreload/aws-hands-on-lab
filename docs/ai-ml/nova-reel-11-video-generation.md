@@ -1,3 +1,10 @@
+---
+tags:
+  - Nova
+  - Video
+  - What's New
+---
+
 # Amazon Nova Reel 1.1 实战：从文字到 2 分钟 AI 视频
 
 !!! info "Lab 信息"

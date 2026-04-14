@@ -1,3 +1,10 @@
+---
+tags:
+  - Bedrock
+  - Prompt
+  - What's New
+---
+
 # Amazon Bedrock Prompt Optimization 实测：一键优化 Prompt 的效果到底如何？
 
 !!! info "Lab 信息"

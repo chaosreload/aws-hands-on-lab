@@ -1,3 +1,9 @@
+---
+tags:
+  - Q Developer
+  - What's New
+---
+
 # Amazon Q Developer Chat 全新 Agentic 能力：Console 中的 AI 运维助手实战
 
 !!! info "Lab 信息"

@@ -1,3 +1,8 @@
+---
+tags:
+  - Analytics
+---
+
 # Amazon OpenSearch Ingestion 批量 AI 推理实战：用 SageMaker 批量生成向量嵌入
 
 !!! info "Lab 信息"

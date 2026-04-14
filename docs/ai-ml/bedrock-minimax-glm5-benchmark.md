@@ -1,5 +1,9 @@
 ---
 description: "Benchmark MiniMax M2.5 vs GLM 5 on Amazon Bedrock — agentic tool calling, multi-step reasoning, and token efficiency compared."
+tags:
+  - Bedrock
+  - Benchmark
+  - What's New
 ---
 # Bedrock 新模型实测：MiniMax M2.5 vs GLM 5 — Agentic 能力横评
 

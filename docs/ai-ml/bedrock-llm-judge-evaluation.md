@@ -1,3 +1,10 @@
+---
+tags:
+  - Bedrock
+  - Evaluation
+  - What's New
+---
+
 # Amazon Bedrock Model Evaluation：用 LLM-as-a-Judge 评估模型质量
 
 !!! info "Lab 信息"

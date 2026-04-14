@@ -1,3 +1,8 @@
+---
+tags:
+  - Serverless
+---
+
 # Amazon SNS 消息过滤新运算符实战：Wildcard、Anything-but Wildcard 与 Anything-but Prefix
 
 !!! info "Lab 信息"

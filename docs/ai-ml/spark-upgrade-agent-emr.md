@@ -1,3 +1,10 @@
+---
+tags:
+  - MCP
+  - EMR
+  - What's New
+---
+
 # Apache Spark Upgrade Agent：用 AI + MCP 自动化 Spark 版本升级
 
 !!! info "Lab 信息"

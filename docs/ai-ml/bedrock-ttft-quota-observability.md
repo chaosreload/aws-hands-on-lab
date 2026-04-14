@@ -1,5 +1,9 @@
 ---
 description: "Verify new Amazon Bedrock CloudWatch metrics: TimeToFirstToken latency and EstimatedTPMQuotaUsage with output token burn multiplier."
+tags:
+  - Bedrock
+  - Observability
+  - What's New
 ---
 # 实测 Amazon Bedrock 新 CloudWatch Metrics：TimeToFirstToken 和 EstimatedTPMQuotaUsage
 

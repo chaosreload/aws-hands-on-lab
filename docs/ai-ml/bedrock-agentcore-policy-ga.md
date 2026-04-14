@@ -1,5 +1,9 @@
 ---
 description: "Hands-on lab for Amazon Bedrock AgentCore Policy GA — enforce Cedar authorization policies on agent tool calls at the Gateway layer."
+tags:
+  - AgentCore
+  - Security
+  - What's New
 ---
 # Amazon Bedrock AgentCore Policy 实战：用 Cedar 策略语言精准控制 Agent 工具调用
 

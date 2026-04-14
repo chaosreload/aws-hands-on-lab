@@ -1,3 +1,8 @@
+---
+tags:
+  - Cloud Operations
+---
+
 # CloudWatch Pipelines 合规治理实测：Keep Original + IAM 条件键 + 变换元数据三大功能全解析
 
 !!! info "Lab 信息"

@@ -1,3 +1,10 @@
+---
+tags:
+  - Bedrock
+  - Cost
+  - What's New
+---
+
 # Amazon Bedrock Intelligent Prompt Routing 实测：自动路由省成本的正确打开方式
 
 !!! info "Lab 信息"

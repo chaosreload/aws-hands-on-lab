@@ -1,3 +1,10 @@
+---
+tags:
+  - Bedrock
+  - API
+  - What's New
+---
+
 # Amazon Bedrock API Keys：告别繁琐 IAM 配置，一键调用大模型
 
 !!! info "Lab 信息"

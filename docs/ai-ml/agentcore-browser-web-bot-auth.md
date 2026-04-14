@@ -1,3 +1,11 @@
+---
+tags:
+  - AgentCore
+  - Browser
+  - Security
+  - What's New
+---
+
 # Amazon Bedrock AgentCore Browser Web Bot Auth 实测：用加密签名让 AI Agent "证明自己是好 Bot"
 
 !!! info "Lab 信息"

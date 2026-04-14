@@ -1,3 +1,11 @@
+---
+tags:
+  - Bedrock
+  - Agent
+  - Lambda
+  - What's New
+---
+
 # 用 Powertools for Lambda 简化 Bedrock Agent 开发：代码量减少 44% 的实战验证
 
 !!! info "Lab 信息"

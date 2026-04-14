@@ -1,3 +1,9 @@
+---
+tags:
+  - AgentCore
+  - What's New
+---
+
 # Amazon Bedrock AgentCore GA 全景实战：从零到生产的完整体验
 
 !!! info "Lab 信息"

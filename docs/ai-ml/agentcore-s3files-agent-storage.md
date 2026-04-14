@@ -1,3 +1,11 @@
+---
+tags:
+  - AgentCore
+  - Storage
+  - S3
+  - What's New
+---
+
 # AgentCore Runtime + S3 Files 实测：AI Agent 文件存储无限扩展的三种方案对比
 
 !!! info "Lab 信息"

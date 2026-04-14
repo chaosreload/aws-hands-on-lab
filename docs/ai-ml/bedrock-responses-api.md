@@ -1,3 +1,10 @@
+---
+tags:
+  - Bedrock
+  - API
+  - What's New
+---
+
 # Amazon Bedrock Responses API 实战：OpenAI 兼容端点动手指南
 
 !!! info "Lab 信息"

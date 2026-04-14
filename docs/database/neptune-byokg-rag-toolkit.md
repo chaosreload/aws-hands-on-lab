@@ -1,3 +1,8 @@
+---
+tags:
+  - Database
+---
+
 # Amazon Neptune BYOKG-RAG Toolkit 实战：用已有知识图谱构建 GraphRAG 问答系统
 
 !!! info "Lab 信息"

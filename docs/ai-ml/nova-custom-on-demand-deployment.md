@@ -1,3 +1,10 @@
+---
+tags:
+  - Nova
+  - Fine-tuning
+  - What's New
+---
+
 # Amazon Nova 自定义模型 On-Demand Deployment 解析：按需推理的新选择
 
 !!! info "Lab 信息"

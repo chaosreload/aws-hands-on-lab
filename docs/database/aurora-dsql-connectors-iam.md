@@ -1,3 +1,8 @@
+---
+tags:
+  - Database
+---
+
 # Aurora DSQL Connectors 实战：用 Python 和 Node.js 三行代码连接分布式 SQL 数据库
 
 !!! info "Lab 信息"

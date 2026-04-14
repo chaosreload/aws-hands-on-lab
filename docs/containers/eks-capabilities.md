@@ -1,3 +1,8 @@
+---
+tags:
+  - Containers
+---
+
 # Amazon EKS Capabilities 实战：全托管 Kubernetes 平台能力（ACK + KRO + Argo CD）
 
 !!! info "Lab 信息"

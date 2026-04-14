@@ -1,3 +1,10 @@
+---
+tags:
+  - Agent Framework
+  - Strands
+  - What's New
+---
+
 # Strands Agents TypeScript SDK 实测：与 Python SDK 的全面对比
 
 !!! info "Lab 信息"

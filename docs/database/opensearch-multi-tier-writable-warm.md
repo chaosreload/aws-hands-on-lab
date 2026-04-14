@@ -1,3 +1,8 @@
+---
+tags:
+  - Database
+---
+
 # Amazon OpenSearch Service 多层存储实战：可写 Warm 层取代 UltraWarm 的全新架构
 
 !!! info "Lab 信息"

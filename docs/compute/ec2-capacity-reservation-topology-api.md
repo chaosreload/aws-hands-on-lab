@@ -1,3 +1,8 @@
+---
+tags:
+  - Compute
+---
+
 # EC2 Capacity Reservation Topology API：启动实例前掌握 GPU 容量的网络拓扑
 
 !!! info "Lab 信息"

@@ -1,3 +1,8 @@
+---
+tags:
+  - Serverless
+---
+
 # Amazon EventBridge 1MB 事件负载实测：边界探索与 Target 传递踩坑
 
 !!! info "Lab 信息"

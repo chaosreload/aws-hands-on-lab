@@ -1,3 +1,8 @@
+---
+tags:
+  - Serverless
+---
+
 # API Gateway REST API 响应流式传输实战：TTFB 降低 86%
 
 !!! info "Lab 信息"

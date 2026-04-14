@@ -1,3 +1,10 @@
+---
+tags:
+  - MCP
+  - MSK
+  - What's New
+---
+
 # MCP Server for Amazon MSK：用自然语言管理 Kafka 集群
 
 !!! info "Lab 信息"

@@ -1,3 +1,8 @@
+---
+tags:
+  - Database
+---
+
 # Amazon ElastiCache Memcached 水平自动扩缩实战
 
 !!! info "Lab 信息"

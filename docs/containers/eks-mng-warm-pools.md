@@ -1,3 +1,8 @@
+---
+tags:
+  - Containers
+---
+
 # EKS Managed Node Groups Warm Pools 实测：冷启动加速 37% 的原生方案
 
 !!! info "Lab 信息"

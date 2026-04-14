@@ -1,3 +1,11 @@
+---
+tags:
+  - Bedrock
+  - RAG
+  - Knowledge Bases
+  - What's New
+---
+
 # Amazon Bedrock Knowledge Bases GraphRAG 实战：用图增强 RAG 实现跨文档关联推理
 
 !!! info "Lab 信息"

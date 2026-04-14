@@ -1,3 +1,8 @@
+---
+tags:
+  - Analytics
+---
+
 # OpenSearch Service 统一可观测性实测：Prometheus Direct Query + AI Agent Tracing 全解析
 
 !!! info "Lab 信息"

@@ -1,3 +1,10 @@
+---
+tags:
+  - Bedrock
+  - Cost
+  - What's New
+---
+
 # Bedrock Prompt Caching 1 小时 TTL 实测：Claude Code 场景下费用对比
 
 !!! info "Lab 信息"

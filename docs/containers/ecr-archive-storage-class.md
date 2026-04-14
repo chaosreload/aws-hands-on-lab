@@ -1,3 +1,8 @@
+---
+tags:
+  - Containers
+---
+
 # Amazon ECR Archive 存储类：降低容器镜像存储成本的实战指南
 
 !!! info "Lab 信息"

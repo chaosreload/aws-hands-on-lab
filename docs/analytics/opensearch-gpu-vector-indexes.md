@@ -1,3 +1,8 @@
+---
+tags:
+  - Analytics
+---
+
 # Amazon OpenSearch Service GPU 加速与自动优化向量索引实战
 
 !!! info "Lab 信息"

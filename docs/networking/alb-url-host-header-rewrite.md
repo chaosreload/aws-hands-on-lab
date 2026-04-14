@@ -1,3 +1,8 @@
+---
+tags:
+  - Networking
+---
+
 # ALB 原生 URL 和 Host Header 重写：告别额外代理层
 
 !!! info "Lab 信息"

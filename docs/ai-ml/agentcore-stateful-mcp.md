@@ -1,3 +1,10 @@
+---
+tags:
+  - AgentCore
+  - MCP
+  - What's New
+---
+
 # Amazon Bedrock AgentCore Runtime Stateful MCP Server 实战：Elicitation、Sampling 与 Progress Notifications 深度测试
 
 !!! info "Lab 信息"

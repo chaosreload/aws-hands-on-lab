@@ -1,3 +1,8 @@
+---
+tags:
+  - Database
+---
+
 # Amazon RDS for PostgreSQL Zero-ETL 集成 Amazon Redshift 实战：近实时数据复制全流程验证
 
 !!! info "Lab 信息"

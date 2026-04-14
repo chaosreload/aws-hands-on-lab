@@ -1,5 +1,9 @@
 ---
 description: "Amazon Nova 2 Sonic 实测：跨模态输入、Polyglot 多语言语音、v1 对比的 Hands-on Lab"
+tags:
+  - Nova
+  - Streaming
+  - What's New
 ---
 # Amazon Nova 2 Sonic 实测：跨模态对话 + Polyglot 语音 + v1 对比
 

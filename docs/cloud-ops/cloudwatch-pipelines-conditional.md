@@ -1,3 +1,8 @@
+---
+tags:
+  - Cloud Operations
+---
+
 # CloudWatch Pipelines 条件处理实测：用 `when` 参数实现日志的精准手术刀
 
 !!! info "Lab 信息"

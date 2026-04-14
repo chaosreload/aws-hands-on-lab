@@ -1,3 +1,8 @@
+---
+tags:
+  - Cloud Operations
+---
+
 # AWS Systems Manager Just-in-Time Node Access：零常驻权限的节点访问管理
 
 !!! info "Lab 信息"

@@ -1,3 +1,8 @@
+---
+tags:
+  - Database
+---
+
 # Amazon ElastiCache 向量搜索实战：Valkey 8.2 向量索引、混合搜索与性能调优
 
 !!! info "Lab 信息"

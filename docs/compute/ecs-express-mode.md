@@ -1,3 +1,8 @@
+---
+tags:
+  - Compute
+---
+
 # Amazon ECS Express Mode 实战：一条命令部署生产级容器应用
 
 !!! info "Lab 信息"

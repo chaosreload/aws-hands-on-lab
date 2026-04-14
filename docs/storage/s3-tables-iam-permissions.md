@@ -1,5 +1,7 @@
 ---
 description: "Test S3 Tables with Glue Data Catalog IAM-only authorization — simplified Iceberg table permissions without Lake Formation."
+tags:
+  - Storage
 ---
 # S3 Tables + Glue Data Catalog：IAM-only 权限模式实测
 

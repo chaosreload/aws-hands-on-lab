@@ -1,3 +1,10 @@
+---
+tags:
+  - Bedrock
+  - API
+  - What's New
+---
+
 # Amazon Bedrock Count Tokens API 实测：推理前精确预估 Token 用量与成本
 
 !!! info "Lab 信息"

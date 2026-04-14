@@ -1,3 +1,10 @@
+---
+tags:
+  - Bedrock
+  - Data Automation
+  - What's New
+---
+
 # Amazon Bedrock Data Automation Blueprint 指令优化：用样本数据自动提升文档提取准确率
 
 !!! info "Lab 信息"

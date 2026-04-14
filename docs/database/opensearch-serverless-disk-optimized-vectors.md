@@ -1,3 +1,8 @@
+---
+tags:
+  - Database
+---
+
 # OpenSearch Serverless 磁盘优化向量实战：低成本向量搜索方案
 
 !!! info "Lab 信息"

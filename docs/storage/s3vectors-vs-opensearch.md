@@ -1,3 +1,8 @@
+---
+tags:
+  - Storage
+---
+
 # S3 Vectors vs OpenSearch Serverless：向量检索选型实测对比
 
 !!! info "Lab 信息"

@@ -1,5 +1,7 @@
 ---
 description: "Test EC2 nested virtualization with KVM and Firecracker microVMs on virtual instances — 54x cost reduction vs bare metal."
+tags:
+  - Compute
 ---
 # EC2 嵌套虚拟化实测：在虚拟实例上运行 KVM 和 Firecracker
 

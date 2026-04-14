@@ -1,3 +1,8 @@
+---
+tags:
+  - Security
+---
+
 # Amazon Inspector Code Security 实战：在开发阶段拦截代码与依赖漏洞
 
 !!! info "Lab 信息"

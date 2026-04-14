@@ -1,3 +1,8 @@
+---
+tags:
+  - Analytics
+---
+
 # Amazon OpenSearch Service Derived Source 实测：存储优化 51%，你需要知道的取舍
 
 !!! info "Lab 信息"

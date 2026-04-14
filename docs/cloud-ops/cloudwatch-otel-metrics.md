@@ -1,3 +1,8 @@
+---
+tags:
+  - Cloud Operations
+---
+
 # CloudWatch OpenTelemetry Metrics 实战：原生 OTel 指标摄入与 PromQL 查询全解析
 
 !!! info "Lab 信息"

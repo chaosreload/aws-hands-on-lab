@@ -1,3 +1,8 @@
+---
+tags:
+  - Cloud Operations
+---
+
 # CloudWatch Agent 采集 EBS 详细性能统计实战：精准定位存储性能瓶颈
 
 !!! info "Lab 信息"

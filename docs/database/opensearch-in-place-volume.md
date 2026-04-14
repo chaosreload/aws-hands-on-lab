@@ -1,5 +1,7 @@
 ---
 description: "Test OpenSearch Service in-place volume expansion from 10GB to 3TB on gp3 — skip Blue/Green deployment with zero downtime scaling."
+tags:
+  - Database
 ---
 # OpenSearch Service 原地扩容实测：10GB 直扩 3TB，告别 Blue/Green 部署
 

@@ -1,5 +1,9 @@
 ---
 description: "Hands-on test of Amazon Nova Act browser automation — natural language driven web tasks with CLI and Python SDK, v1.0 vs v1.1 compared."
+tags:
+  - Nova
+  - Browser
+  - What's New
 ---
 # Amazon Nova Act 实测：用自然语言驱动浏览器自动化的 AI Agent 服务
 

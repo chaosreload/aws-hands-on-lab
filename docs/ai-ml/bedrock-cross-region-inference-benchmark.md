@@ -1,3 +1,10 @@
+---
+tags:
+  - Bedrock
+  - Benchmark
+  - Feature Guide
+---
+
 # Amazon Bedrock Cross-Region Inference Profile 实测：6 个 Region 延迟对比与路由策略选择指南
 
 !!! info "Lab 信息"

@@ -1,3 +1,8 @@
+---
+tags:
+  - Database
+---
+
 # AWS DMS Serverless 自动存储扩展实测：134GB Full Load 验证
 
 !!! info "Lab 信息"

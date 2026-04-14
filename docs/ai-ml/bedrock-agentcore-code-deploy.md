@@ -1,3 +1,9 @@
+---
+tags:
+  - AgentCore
+  - What's New
+---
+
 # Amazon Bedrock AgentCore Runtime：使用 Direct Code Deployment 快速部署 AI Agent
 
 !!! info "Lab 信息"

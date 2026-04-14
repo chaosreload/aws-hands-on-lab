@@ -1,5 +1,7 @@
 ---
 description: "Test AWS Lambda Managed Instances with Rust on Graviton4 — benchmark parallel request handling and EC2-backed Lambda performance."
+tags:
+  - Compute
 ---
 # Lambda Managed Instances + Rust：实测 Graviton4 性能对比
 

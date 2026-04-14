@@ -1,3 +1,8 @@
+---
+tags:
+  - Storage
+---
+
 # Amazon S3 Vectors GA 实测：40 倍 Scale 提升 + Per-Index 加密 + 性能基准
 
 !!! info "Lab 信息"

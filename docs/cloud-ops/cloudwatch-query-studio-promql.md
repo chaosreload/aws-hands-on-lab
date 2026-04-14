@@ -1,3 +1,8 @@
+---
+tags:
+  - Cloud Operations
+---
+
 # CloudWatch Query Studio 实测：首次原生 PromQL 查询体验全解析
 
 !!! info "Lab 信息"

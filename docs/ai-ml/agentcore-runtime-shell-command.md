@@ -1,5 +1,8 @@
 ---
 description: "Hands-on test of AWS Bedrock AgentCore InvokeAgentRuntimeCommand API for shell execution inside agent containers with streaming output."
+tags:
+  - AgentCore
+  - What's New
 ---
 # Bedrock AgentCore Runtime：InvokeAgentRuntimeCommand 实测
 

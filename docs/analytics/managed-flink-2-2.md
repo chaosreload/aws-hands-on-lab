@@ -1,3 +1,8 @@
+---
+tags:
+  - Analytics
+---
+
 # Amazon Managed Service for Apache Flink 2.2 实战：首个大版本升级全面解析
 
 !!! info "Lab 信息"

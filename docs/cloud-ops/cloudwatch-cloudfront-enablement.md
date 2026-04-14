@@ -1,3 +1,8 @@
+---
+tags:
+  - Cloud Operations
+---
+
 # CloudWatch 自动启用规则实战：一条规则为所有 CloudFront Distribution 开启 Access Logs
 
 !!! info "Lab 信息"

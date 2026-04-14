@@ -1,3 +1,8 @@
+---
+tags:
+  - Cloud Operations
+---
+
 # AWS FIS 新场景实测：用 AZ Slowdown 和 Cross-AZ Packet Loss 模拟灰色故障
 
 !!! info "Lab 信息"

@@ -1,3 +1,10 @@
+---
+tags:
+  - Nova
+  - Benchmark
+  - What's New
+---
+
 # Amazon Nova 2 Lite Benchmark — Extended Thinking 推理能力实测对比
 
 !!! info "Lab 信息"

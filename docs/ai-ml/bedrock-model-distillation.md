@@ -1,3 +1,10 @@
+---
+tags:
+  - Bedrock
+  - Fine-tuning
+  - What's New
+---
+
 # Amazon Bedrock Model Distillation 实测：从数据准备到踩坑全记录
 
 !!! info "Lab 信息"

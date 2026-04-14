@@ -1,3 +1,8 @@
+---
+tags:
+  - Storage
+---
+
 # Amazon S3 Vectors (Preview) 实战：云原生向量存储初体验
 
 !!! info "Lab 信息"

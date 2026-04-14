@@ -1,3 +1,10 @@
+---
+tags:
+  - AgentCore
+  - MCP
+  - What's New
+---
+
 # Amazon Bedrock AgentCore MCP Server 实战：从安装到部署的完整开发体验
 
 !!! info "Lab 信息"

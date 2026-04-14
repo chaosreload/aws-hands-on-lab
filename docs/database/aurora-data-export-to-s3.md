@@ -1,3 +1,8 @@
+---
+tags:
+  - Database
+---
+
 # Aurora MySQL 数据导出到 S3 实测对比：Export Cluster Data vs Zero-ETL
 
 !!! info "Lab 信息"

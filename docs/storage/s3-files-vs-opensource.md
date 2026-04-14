@@ -1,3 +1,8 @@
+---
+tags:
+  - Storage
+---
+
 # S3 Files vs 开源方案实测：s3fs-fuse 和 fsspec 性能对比与选型
 
 !!! info "Lab 信息"

@@ -1,3 +1,8 @@
+---
+tags:
+  - Security
+---
+
 # AWS IAM 新增 VPC Endpoint Condition Keys 实战：可扩展的网络边界控制
 
 !!! info "Lab 信息"

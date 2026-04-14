@@ -1,3 +1,11 @@
+---
+tags:
+  - Bedrock
+  - RAG
+  - Evaluation
+  - What's New
+---
+
 # Amazon Bedrock RAG Evaluation 实测：用 LLM-as-a-Judge 自动评估你的 RAG 应用
 
 !!! info "Lab 信息"
