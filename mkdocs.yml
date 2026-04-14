@@ -124,6 +124,7 @@ nav:
     - Spark Upgrade Agent：AI + MCP 自动化 Spark 升级: ai-ml/spark-upgrade-agent-emr.md
     - AWS MCP Server 实测：一键部署 ECS 和 Lambda: ai-ml/mcp-serverless-containers.md
     - API Gateway 变成 MCP 工具: ai-ml/api-gateway-mcp-proxy.md
+    - Bedrock KB Retrieval MCP Server 实测：让 AI Agent 通过 MCP 协议查询知识库: ai-ml/bedrock-kb-retrieval-mcp-server.md
     - Neuron DRA Driver：EKS Trainium 拓扑感知调度: ai-ml/neuron-eks-dra-driver.md
 - Compute:
   - compute/index.md
