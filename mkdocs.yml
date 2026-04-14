@@ -35,8 +35,7 @@ theme:
     repo: fontawesome/brands/github
 plugins:
 - social
-- tags:
-    tags_file: ""
+- tags
 - search:
     lang:
     - zh
@@ -59,7 +58,9 @@ markdown_extensions:
 - toc:
     permalink: true
 nav:
-- 首页: index.md
+- 首页:
+  - index.md
+  - 标签索引: tags.md
 
 - AI/ML:
   - ai-ml/index.md
