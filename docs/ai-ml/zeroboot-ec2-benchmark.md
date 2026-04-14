@@ -43,7 +43,7 @@ zeroboot 需要 KVM（`/dev/kvm`），传统做法是租用 bare metal 实例。
 | c7i.metal-24xl | 96 vCPU, 192GB | **$4.608/hr** | 生产环境 |
 | c8i.xlarge | 4 vCPU, 8GB | **$0.192/hr** | 开发测试/Benchmark |
 
-**成本差 24 倍**。EC2 从 2024 年开始支持[嵌套虚拟化](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nested-virtualization.html)（Intel 实例），让我们可以在普通虚拟实例上运行 KVM。本文验证：嵌套虚拟化下 zeroboot 的性能是否依然成立。
+**成本差 24 倍**。EC2 从 2026 年 2 月开始支持[嵌套虚拟化](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nested-virtualization.html)（Intel 实例），让我们可以在普通虚拟实例上运行 KVM。本文验证：嵌套虚拟化下 zeroboot 的性能是否依然成立。
 
 ## 前置条件
 
