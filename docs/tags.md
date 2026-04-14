@@ -8,4 +8,4 @@ hide:
 
 按标签浏览所有文章。
 
-[TAGS]
+<!-- material/tags -->
