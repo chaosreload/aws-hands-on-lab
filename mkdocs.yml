@@ -184,6 +184,7 @@ nav:
   - Amazon Managed Service for Apache Flink 2.2 实战：首个大版本升级全面解析: analytics/managed-flink-2-2.md
   - OpenSearch Service 统一可观测性实测：Prometheus Direct Query + AI Agent Tracing 全解析: analytics/opensearch-prometheus-agent-tracing.md
   - Amazon OpenSearch Serverless Zstd 压缩实测：LZ4 vs Zstandard 索引压缩全面对比: analytics/opensearch-serverless-zstd-compression.md
+  - Amazon OpenSearch Serverless Derived Source 实测：存储节省 26%，Serverless 场景下的实操验证: analytics/opensearch-serverless-derived-source.md
 - Cloud Operations:
   - cloud-ops/index.md
   - CloudWatch Agent 采集 EBS 详细性能统计实战：精准定位存储性能瓶颈: cloud-ops/cw-agent-ebs-performance-stats.md
