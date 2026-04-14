@@ -58,8 +58,10 @@ markdown_extensions:
 - toc:
     permalink: true
 nav:
-- 首页: index.md
-- Tags: tags.md
+- 首页:
+  - index.md
+  - 标签索引: tags.md
+
 - AI/ML:
   - ai-ml/index.md
   - Feature Guides:
