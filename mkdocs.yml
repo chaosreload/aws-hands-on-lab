@@ -201,7 +201,7 @@ nav:
   - AWS Network Firewall Active Threat Defense 实战：基于 MadPot 威胁情报自动阻断恶意流量: security/network-firewall-atd.md
   - AWS IAM 新增 VPC Endpoint Condition Keys 实战：可扩展的网络边界控制: security/iam-vpc-endpoint-condition-keys.md
   - AWS KMS 导入密钥 On-Demand 轮换实战：无需更改 Key ID 的密钥材料原地轮换: security/kms-on-demand-rotation-imported-keys.md
-    - AWS Secrets Manager 实测：后量子 TLS 加密零配置启用与 CloudTrail 验证全解析: security/secrets-manager-pq-tls.md
+  - AWS Secrets Manager 实测：后量子 TLS 加密零配置启用与 CloudTrail 验证全解析: security/secrets-manager-pq-tls.md
   - CloudTrail Insights for Data Events 实战：自动检测数据访问异常: security/cloudtrail-insights-data-events.md
 - Containers:
   - containers/index.md
