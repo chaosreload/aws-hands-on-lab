@@ -210,6 +210,7 @@ nav:
   - Amazon EKS Capabilities 实战：全托管 Kubernetes 平台能力（ACK + KRO + Argo CD）: containers/eks-capabilities.md
   - CloudWatch OTel Container Insights 实战：用 PromQL 解锁 EKS 可观测性新维度: containers/cloudwatch-otel-container-insights-eks.md
   - EKS Managed Node Groups Warm Pools 实测：冷启动加速 37% 的原生方案: containers/eks-mng-warm-pools.md
+  - Amazon ECR Pull Through Cache Referrer 自动同步实测：让 cosign 在缓存镜像上直接验签: containers/ecr-pull-through-cache-referrers.md
 - Serverless:
   - serverless/index.md
   - API Gateway REST API 响应流式传输实战：TTFB 降低 86%: serverless/api-gateway-response-streaming.md
