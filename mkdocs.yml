@@ -138,6 +138,7 @@ nav:
   - EC2 Capacity Reservation Topology API：启动实例前掌握 GPU 容量的网络拓扑: compute/ec2-capacity-reservation-topology-api.md
   - EC2 Image Builder 集成 Lambda 和 Step Functions：工作流自动化实践: compute/ec2-image-builder-lambda-step-functions.md
   - Lambda S3 Files 实测：原生挂载 + 多函数共享 workspace 实战: compute/lambda-s3-files.md
+  - EC2 C8in/C8ib 实测：Granite Rapids CPU/内存/加密性能深度解析与选型决策: compute/ec2-c8in-c8ib-benchmark.md
 - Networking:
   - networking/index.md
   - ALB 原生 URL 和 Host Header 重写：告别额外代理层: networking/alb-url-host-header-rewrite.md
