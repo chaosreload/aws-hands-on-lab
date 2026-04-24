@@ -1,0 +1,52 @@
+---
+system-info:
+      stress-ng-version: 0.15.05
+      run-by: ec2-user
+      date-yyyy-mm-dd: 2026:04:18
+      time-hh-mm-ss: 10:00:20
+      epoch-secs: 1776506420
+      hostname: ip-10-200-1-8.ec2.internal
+      sysname: Linux
+      nodename: ip-10-200-1-8.ec2.internal
+      release: 6.1.166-197.305.amzn2023.x86_64
+      version: '#1 SMP PREEMPT_DYNAMIC Mon Mar 23 09:53:26 UTC 2026'
+      machine: x86_64
+      compiler: 'gcc 11.3.1'
+      uptime: 1826
+      totalram: 66331328512
+      freeram: 65172525056
+      sharedram: 3100672
+      bufferram: 2220032
+      totalswap: 0
+      freeswap: 0
+      pagesize: 4096
+      cpus: 32
+      cpus-online: 32
+      ticks-per-second: 100
+
+metrics:
+    - stressor: matrix
+      bogo-ops: 140640
+      bogo-ops-per-second-usr-sys-time: 4688.743635
+      bogo-ops-per-second-real-time: 4687.989419
+      wall-clock-time: 30.000068
+      user-time: 29.995242
+      system-time: 0.000000
+      cpu-usage-per-instance: 99.983914
+      max-rss: 2292
+      add-matrix-ops-per-sec: 504973.250689
+      copy-matrix-ops-per-sec: 686846.593705
+      div-matrix-ops-per-sec: 346846.702699
+      frobenius-matrix-ops-per-sec: 66410.882060
+      hadamard-matrix-ops-per-sec: 674369.866265
+      identity-matrix-ops-per-sec: 904089.129812
+      mean-matrix-ops-per-sec: 485700.528904
+      mult-matrix-ops-per-sec: 762642.135457
+      negate-matrix-ops-per-sec: 741491.183332
+      prod-matrix-ops-per-sec: 675.532918
+      sub-matrix-ops-per-sec: 612273.784805
+      square-matrix-ops-per-sec: 681.817418
+      trans-matrix-ops-per-sec: 154915.627983
+      zero-matrix-ops-per-sec: 896173.051709
+
+...

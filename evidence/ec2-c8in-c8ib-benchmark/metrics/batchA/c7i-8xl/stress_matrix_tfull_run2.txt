@@ -1,0 +1,21 @@
+stress-ng: info:  [30519] setting to a 60 second run per stressor
+stress-ng: info:  [30519] dispatching hogs: 32 matrix
+stress-ng: metrc: [30519] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [30519]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [30519] matrix          6137232     60.00   1919.78      0.02    102287.12        3196.81        99.99          2300
+stress-ng: metrc: [30519] miscellaneous metrics:
+stress-ng: metrc: [30519] matrix            351796.74 add matrix ops per sec (geometic mean of 32 instances)
+stress-ng: metrc: [30519] matrix            424685.18 copy matrix ops per sec (geometic mean of 32 instances)
+stress-ng: metrc: [30519] matrix            223117.52 div matrix ops per sec (geometic mean of 32 instances)
+stress-ng: metrc: [30519] matrix             58237.87 frobenius matrix ops per sec (geometic mean of 32 instances)
+stress-ng: metrc: [30519] matrix            442360.46 hadamard matrix ops per sec (geometic mean of 32 instances)
+stress-ng: metrc: [30519] matrix            565597.61 identity matrix ops per sec (geometic mean of 32 instances)
+stress-ng: metrc: [30519] matrix            351960.95 mean matrix ops per sec (geometic mean of 32 instances)
+stress-ng: metrc: [30519] matrix            513982.69 mult matrix ops per sec (geometic mean of 32 instances)
+stress-ng: metrc: [30519] matrix            521705.19 negate matrix ops per sec (geometic mean of 32 instances)
+stress-ng: metrc: [30519] matrix               464.74 prod matrix ops per sec (geometic mean of 32 instances)
+stress-ng: metrc: [30519] matrix            326191.69 sub matrix ops per sec (geometic mean of 32 instances)
+stress-ng: metrc: [30519] matrix               461.23 square matrix ops per sec (geometic mean of 32 instances)
+stress-ng: metrc: [30519] matrix             68468.82 trans matrix ops per sec (geometic mean of 32 instances)
+stress-ng: metrc: [30519] matrix            425330.60 zero matrix ops per sec (geometic mean of 32 instances)
+stress-ng: info:  [30519] successful run completed in 60.10s (1 min, 0.10 secs)

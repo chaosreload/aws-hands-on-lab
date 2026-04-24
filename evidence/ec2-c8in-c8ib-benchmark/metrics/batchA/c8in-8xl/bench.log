@@ -1,0 +1,44 @@
+[2026-04-18T09:58:19Z] Starting benchmarks on c8in.8xlarge (i-061825c152f68f7e6)
+vCPU count: 32
+[2026-04-18T09:58:26Z] Test 1a: stress-ng matrix single-thread
+[2026-04-18T09:59:56Z] Test 1b: stress-ng matrix all-thread
+[2026-04-18T10:02:56Z] Test 1c: stress-ng cpu (integer prime) all-thread
+[2026-04-18T10:05:56Z] Test 2: openssl speed AES-256-GCM
+[2026-04-18T10:06:26Z] Test 2b: openssl speed -multi sha256
+[2026-04-18T10:07:56Z] Test 3: STREAM
+[2026-04-18T10:08:00Z] All batch A tests complete
+total 160
+drwxrwxr-x.  2 ec2-user ec2-user   680 Apr 18 10:07 .
+drwxrwxrwt. 12 root     root       300 Apr 18 10:07 ..
+-rw-rw-r--.  1 ec2-user ec2-user  3006 Apr 18 09:58 cpuinfo_head.txt
+-rw-rw-r--.  1 ec2-user ec2-user     0 Apr 18 09:58 dmidecode_cpu.txt
+-rw-rw-r--.  1 ec2-user ec2-user  3246 Apr 18 09:58 lscpu.txt
+-rw-rw-r--.  1 ec2-user ec2-user  1765 Apr 18 10:06 openssl_aes_run1.txt
+-rw-rw-r--.  1 ec2-user ec2-user  1765 Apr 18 10:06 openssl_aes_run2.txt
+-rw-rw-r--.  1 ec2-user ec2-user  1764 Apr 18 10:06 openssl_aes_run3.txt
+-rw-rw-r--.  1 ec2-user ec2-user 15422 Apr 18 10:06 openssl_sha256_multi_run1.txt
+-rw-rw-r--.  1 ec2-user ec2-user 15422 Apr 18 10:07 openssl_sha256_multi_run2.txt
+-rw-rw-r--.  1 ec2-user ec2-user 15422 Apr 18 10:07 openssl_sha256_multi_run3.txt
+-rw-rw-r--.  1 ec2-user ec2-user   531 Apr 18 09:58 os-release.txt
+-rw-rw-r--.  1 ec2-user ec2-user  1765 Apr 18 10:07 stream_run1.txt
+-rw-rw-r--.  1 ec2-user ec2-user  1765 Apr 18 10:07 stream_run2.txt
+-rw-rw-r--.  1 ec2-user ec2-user  1765 Apr 18 10:08 stream_run3.txt
+-rw-rw-r--.  1 ec2-user ec2-user  2154 Apr 18 09:58 stress_matrix_t1_run1.txt
+-rw-rw-r--.  1 ec2-user ec2-user  1641 Apr 18 09:58 stress_matrix_t1_run1.yml
+-rw-rw-r--.  1 ec2-user ec2-user  2175 Apr 18 09:59 stress_matrix_t1_run2.txt
+-rw-rw-r--.  1 ec2-user ec2-user  1640 Apr 18 09:59 stress_matrix_t1_run2.yml
+-rw-rw-r--.  1 ec2-user ec2-user  2175 Apr 18 09:59 stress_matrix_t1_run3.txt
+-rw-rw-r--.  1 ec2-user ec2-user  1641 Apr 18 09:59 stress_matrix_t1_run3.yml
+-rw-rw-r--.  1 ec2-user ec2-user  2209 Apr 18 10:00 stress_matrix_tfull_run1.txt
+-rw-rw-r--.  1 ec2-user ec2-user  1644 Apr 18 10:00 stress_matrix_tfull_run1.yml
+-rw-rw-r--.  1 ec2-user ec2-user  2209 Apr 18 10:01 stress_matrix_tfull_run2.txt
+-rw-rw-r--.  1 ec2-user ec2-user  1644 Apr 18 10:01 stress_matrix_tfull_run2.yml
+-rw-rw-r--.  1 ec2-user ec2-user  2209 Apr 18 10:02 stress_matrix_tfull_run3.txt
+-rw-rw-r--.  1 ec2-user ec2-user  1644 Apr 18 10:02 stress_matrix_tfull_run3.yml
+-rw-rw-r--.  1 ec2-user ec2-user   602 Apr 18 10:03 stress_prime_tfull_run1.txt
+-rw-rw-r--.  1 ec2-user ec2-user  1001 Apr 18 10:03 stress_prime_tfull_run1.yml
+-rw-rw-r--.  1 ec2-user ec2-user   602 Apr 18 10:04 stress_prime_tfull_run2.txt
+-rw-rw-r--.  1 ec2-user ec2-user  1001 Apr 18 10:04 stress_prime_tfull_run2.yml
+-rw-rw-r--.  1 ec2-user ec2-user   602 Apr 18 10:05 stress_prime_tfull_run3.txt
+-rw-rw-r--.  1 ec2-user ec2-user  1001 Apr 18 10:05 stress_prime_tfull_run3.yml
+-rw-rw-r--.  1 ec2-user ec2-user   150 Apr 18 09:58 uname.txt

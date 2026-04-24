@@ -1,0 +1,9 @@
+Doing AES-256-GCM ops for 10s on 8192 size blocks: 16093245 AES-256-GCM ops in 10.00s
+version: 3.5.5
+built on: Mon Apr  6 00:00:00 2026 UTC
+options: bn(64,64)
+compiler: gcc -fPIC -pthread -m64 -Wa,--noexecstack -O2 -ftree-vectorize -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -m64 -march=x86-64-v2 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -O2 -ftree-vectorize -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1 -m64 -march=x86-64-v2 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -Wa,--noexecstack -Wa,--generate-missing-build-notes=yes -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1 -DOPENSSL_USE_NODELETE -DL_ENDIAN -DOPENSSL_PIC -DOPENSSL_BUILDING_OPENSSL -DZLIB -DNDEBUG -D_GNU_SOURCE -DPURIFY -DDEVRANDOM="\\"/dev/urandom\\"" -DOPENSSL_PEDANTIC_ZEROIZATION -DREDHAT_FIPS_VENDOR="\\"Amazon Linux 2023 - OpenSSL FIPS Provider\\"" -DREDHAT_FIPS_VERSION="\\"3.5.5-51fac8649af08cdf\\"" -DSYSTEM_CIPHERS_FILE="/etc/crypto-policies/back-ends/opensslcnf.config"
+CPUINFO: OPENSSL_ia32cap=0xfffab20b5f8bffff:0x1b407f7ef1bf27eb:0x00201c30bfc04400:0x0000000000084000:0x0007000100000000
+The 'numbers' are in 1000s of bytes per second processed.
+type           8192 bytes
+AES-256-GCM   13183586.30k
