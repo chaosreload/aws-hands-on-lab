@@ -109,6 +109,7 @@ nav:
     - VPC + PrivateLink + CFN：企业级部署: ai-ml/agentcore-vpc-privatelink-cfn-tagging.md
     - Browser OS-Level Actions：突破 CDP 限制: ai-ml/agentcore-browser-os-actions.md
     - Agent Registry 实测：用 CLI 走通 Agent 资产治理全生命周期: ai-ml/agentcore-agent-registry.md
+    - Managed Agent Harness 实测：config 替代编排代码的托管 agent runtime: ai-ml/agentcore-managed-agent-harness.md
     - Nova Multimodal Embeddings 实测：首个统一多模态 Embedding 模型: ai-ml/nova-multimodal-embeddings.md
     - Nova Pro Latency-Optimized Inference 实测: ai-ml/nova-pro-latency-optimized.md
     - Nova Sonic 实测：双向流式语音对话: ai-ml/nova-sonic-speech-to-speech.md
