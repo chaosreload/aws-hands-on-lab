@@ -172,6 +172,7 @@ nav:
   - Amazon RDS for PostgreSQL Zero-ETL 集成 Amazon Redshift 实战：近实时数据复制全流程验证: database/rds-postgres-zero-etl-redshift.md
   - RDS Blue/Green Deployments + RDS Proxy 实测：Switchover 恢复时间从 13 秒降到 500 毫秒: database/rds-proxy-blue-green.md
   - Aurora MySQL 数据导出到 S3 实测对比：Export Cluster Data vs Zero-ETL: database/aurora-data-export-to-s3.md
+  - Aurora Serverless v2 PV4 实测：scale-to-0 是真的，但"sub-second resume"不是: database/aurora-serverless-v2-pv4-scale-to-zero.md
 - Analytics:
   - Amazon OpenSearch Service Derived Source 实测：存储优化 51%，你需要知道的取舍: analytics/opensearch-derived-source.md
   - Amazon OpenSearch Ingestion 批量 AI 推理实战：用 SageMaker 批量生成向量嵌入: analytics/opensearch-ingestion-batch-ai-inference.md
