@@ -9,6 +9,15 @@ tags:
 
 # Amazon Bedrock Mantle OpenAI 兼容 API 实测：支持矩阵、Claude 走哪条路、Guardrail 生效端点
 
+!!! danger "⚠️ 此文结论有误，已废弃"
+    本文 2026-05-01 发布时的核心结论第 1 条（"OpenAI 兼容 API 只给 openai.* 家模型"）在 2026-05-02 补跑完整 40 × 3 API 支持矩阵后被证伪。实际情况是 Mantle 是多厂商模型 marketplace，Chat Completions API 对 38/40 模型开放。
+
+    **请直接阅读修正版**：[Bedrock Mantle API 支持矩阵实测](./bedrock-mantle-api-support-matrix.md)
+
+    原文保留作为勘误留档，以下结论请不要引用。
+
+
+
 !!! info "Lab 信息"
     - **难度**: ⭐⭐ 中级
     - **预估时间**: 40 分钟
