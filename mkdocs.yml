@@ -72,7 +72,7 @@ nav:
     - Nova 2 Lite Benchmark — Extended Thinking 推理对比: ai-ml/nova2-benchmark.md
   - What's New 实测:
     - Responses API 实战：OpenAI 兼容端点动手指南: ai-ml/bedrock-responses-api.md
-    - Mantle API 支持矩阵实测：40 × 3 枚举出三条 API 各挂了哪些模型: ai-ml/bedrock-mantle-api-support-matrix.md
+    - Mantle API 支持矩阵实测：三条 API × 40 款模型: ai-ml/bedrock-mantle-api-support-matrix.md
     - Mantle OpenAI 兼容 API 实测（已废弃 — 见修正版）: ai-ml/bedrock-mantle-openai-compatible.md
     - Server-Side Custom Tools 实测：用 Lambda 实现服务端工具调用: ai-ml/bedrock-server-side-custom-tools.md
     - Citations API 实战：让 AI 回答可追溯到源文档: ai-ml/bedrock-citations-api-pdf-claude.md

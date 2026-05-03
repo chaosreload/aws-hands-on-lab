@@ -7,7 +7,7 @@ tags:
   - What's New
 ---
 
-# Amazon Bedrock Mantle API 支持矩阵实测：40 × 3 枚举出三条 API 各挂了哪些模型
+# Amazon Bedrock Mantle API 支持矩阵实测：三条 API × 40 款模型
 
 !!! info "Lab 信息"
     - **难度**: ⭐⭐ 中级
